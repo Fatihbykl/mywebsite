@@ -1,0 +1,26 @@
+{% extends 'anasayfa-anonymous.html' %}
+{% load static %}
+{% block head %}
+    <title>Giriş Yap</title>
+{% endblock %}
+
+{% block body %}
+    <div class="login-wrap">
+        <h2>Login</h2>
+        <form method="post" action="{% url 'login' %}">
+            <div class="form">
+                <div class="input-container">
+                    <i class="fas fa-user icon"></i>
+                    {{ loginForm.username }}
+                </div>
+                <div class="input-container">
+                    <i class="fas fa-key icon"></i>
+                    {{ loginForm.password }}
+                </div>
+                <button type="submit">Giriş Yap</button>
+                <a href="{% url 'register' %}"><p> Hesabın yok mu? Üye ol </p></a>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

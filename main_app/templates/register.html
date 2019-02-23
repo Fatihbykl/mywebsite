@@ -1,0 +1,35 @@
+{% extends 'anasayfa-anonymous.html' %}
+{% load static %}
+
+{% block head %}
+    <meta charset="UTF-8">
+    <title>Kaydol</title>
+{% endblock %}
+{% block body %}
+    <div class="login-wrap">
+        <h2>Login</h2>
+        <form action="{% url 'register' %}" method="post">
+            <div class="form">
+                <div class="input-container">
+                    <i class="fas fa-user icon"></i>
+                    {{ registerForm.username }}
+                </div>
+                <div class="input-container">
+                    <i class="fas fa-envelope icon"></i>
+                    {{ registerForm.email }}
+                </div>
+                <div class="input-container">
+                    <i class="fas fa-key icon"></i>
+                    {{ registerForm.password }}
+                </div>
+                <div class="input-container">
+                    <i class="fas fa-key icon"></i>
+                    {{ registerForm.password_confirm }}
+                </div>
+                <button type="submit">Kayıt Ol</button>
+                <a href="{% url 'login' %}"><p> Zaten hesabın var mı? Giriş yap </p></a>
+            </div>
+        </form>
+    </div>
+    </div>
+{% endblock %}
