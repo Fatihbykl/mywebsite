@@ -1,0 +1,103 @@
+{% extends 'navbar-background.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'new.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'paginator.css' %}">
+
+    <style>
+        hr.second {
+            overflow: visible; /* For IE */
+            padding: 0;
+            border: none;
+            border-top: medium double #007bff;
+            color: #007bff;
+            text-align: center;
+        }
+
+        hr.second:after {
+            content: "§";
+            display: inline-block;
+            position: relative;
+            top: -0.7em;
+            font-size: 1.5em;
+            padding: 0 0.25em;
+            background: white;
+        }
+
+        a.link {
+            color: #EAEDF1;
+        }
+
+        a.link:hover {
+            color: #673AB7;
+            text-decoration: none;
+            transition-duration: 0.4s;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            {% for post in gonderi %}
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" style="padding-left: 40px">
+                    <div class="card mt-5 text-center">
+                        <div style="background-color: #00B4A4">
+                            <img class="" style="width: 100px;height: 100px;margin: 0 auto;border-radius: 50px"
+                                 src="/media/icons/indir.png" alt="Profil Fotoğrafı">
+                            <div style="color:#EAEDF1">
+                                <a class="link"
+                                   href="{% url 'profil' post.yayinlayan.username %}"><span
+                                        style="font-weight: bold;font-family: Roboto;">{{ post.yayinlayan.username }}</span></a>
+                            </div>
+                        </div>
+                        <hr style="width: 100%" class="second">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ post.baslik|upper }}</h6>
+                            <hr class="first-style">
+                            <p>
+                                {{ post.icerik|truncatechars:100 }}
+                            </p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <div class="row justify-content-center">
+                                <a class="btn" style="background: #00B4A4; color: #EAEDF1;" href="#collapseExample"
+                                   role="button"
+                                >Devamını Gör</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="pagination-wrapper">
+                    <div class="pagination">
+                        {% if gonderi.has_other_pages %}
+                            {% if gonderi.has_previous %}
+                                <a class="prev page-numbers" href="?page={{ gonderi.previous_page_number }}">&laquo;</a>
+                            {% else %}
+                                <a class="prev page-numbers disabled">&laquo;</a>
+                            {% endif %}
+                            {% for page in gonderi.paginator.page_range %}
+                                {% if gonderi.number == page %}
+                                    <span aria-current="page" class="page-numbers current">{{ page }}</span>
+                                {% else %}
+                                    <a href="?page={{ page }}"><span aria-current="page"
+                                                                     class="page-numbers">{{ page }}</span></a>
+                                {% endif %}
+                            {% endfor %}
+                            {% if gonderi.has_next %}
+                                <a class="next page-numbers" href="?page={{ gonderi.next_page_number }}">&raquo;</a>
+                            {% else %}
+                                <a class="next page-numbers disabled">&laquo;</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

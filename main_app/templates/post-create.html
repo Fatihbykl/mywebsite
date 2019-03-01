@@ -1,0 +1,28 @@
+{% extends 'navbar-background.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'input.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12" style="margin-top: 50px">
+                <form action="{% url 'post-create' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <span style="font-family: Roboto;color: dodgerblue;font-weight: bold">{{ createForm.baslik.label|upper }}</span>{{ createForm.baslik }}
+                            <span style="font-family: Roboto;color: dodgerblue;font-weight: bold">{{ createForm.icerik.label|upper }}</span>{{ createForm.icerik }}
+                            <input type="submit" class="btn btn-sm gonderi" value="Gönderi Oluştur">
+                        </div>
+                        <div class="col-lg-6">
+                            <img style="height: 370px;padding-left: 50px; margin-top: 5px" src="/media/icons/png1.png"
+                                 alt="Buldum">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
