@@ -41,28 +41,29 @@
     <div class="container-fluid">
         <div class="row">
             {% for post in gonderi %}
-                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" style="padding-left: 40px">
-                    <div class="card mt-5 text-center">
-                        <div style="background-color: #00B4A4">
-                            <img class="" style="width: 100px;height: 100px;margin: 0 auto;border-radius: 50px"
-                                 src="/media/icons/indir.png" alt="Profil Fotoğrafı">
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" style="padding-left: 30px">
+                    <div class="card mt-5 text-center" style="width: 95%;">
+                        <div style="background-color: #2C333A">
+                            <img style="width: 100px;height: 100px;margin: 0 auto;border-radius: 50px"
+                                 src="{{ post.yayinlayan. }}" alt="Profil Fotoğrafı">
                             <div style="color:#EAEDF1">
                                 <a class="link"
                                    href="{% url 'profil' post.yayinlayan.username %}"><span
-                                        style="font-weight: bold;font-family: Roboto;">{{ post.yayinlayan.username }}</span></a>
+                                        style="font-weight: bold;font-family: Roboto;">{{ post.yayinlayan.username }}</span></a><br>
+                                <span>{{ post.tarih }}</span>
                             </div>
                         </div>
                         <hr style="width: 100%" class="second">
-                        <div class="card-body">
+                        <div class="card-body" style="padding-top: 10px">
                             <h6 class="card-title">{{ post.baslik|upper }}</h6>
-                            <hr class="first-style">
+                            <hr class="first-style" style="margin-bottom: 5px;margin-top: 0">
                             <p>
                                 {{ post.icerik|truncatechars:100 }}
                             </p>
                         </div>
                         <div class="card-footer text-muted">
                             <div class="row justify-content-center">
-                                <a class="btn" style="background: #00B4A4; color: #EAEDF1;" href="#collapseExample"
+                                <a class="btn" style="background: #00B4A4; color: #EAEDF1;" href="{% url 'post-detail' post.slug %}"
                                    role="button"
                                 >Devamını Gör</a>
                             </div>

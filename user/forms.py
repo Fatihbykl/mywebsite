@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django import forms
+from .models import kullaniciProfili
 
 
 class registerForm(forms.ModelForm):
@@ -61,3 +62,17 @@ class loginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+
+class profilModel(forms.ModelForm):
+    class Meta:
+        model = kullaniciProfili
+        fields = ['ad', 'soyad', 'fav_film', 'fav_yonetmen', 'profilFoto']
+
+    def __init__(self, *args, **kwargs):
+        super(profilModel, self).__init__(*args, **kwargs)
+
+        self.fields['ad'].widget.attrs = {'class': 'textprofil', 'maxlength': '20'}
+        self.fields['soyad'].widget.attrs = {'class': 'textprofil', 'maxlength': '20'}
+        self.fields['fav_film'].widget.attrs = {'class': 'textprofil', 'maxlength': '200'}
+        self.fields['fav_yonetmen'].widget.attrs = {'class': 'textprofil', 'maxlength': '100'}

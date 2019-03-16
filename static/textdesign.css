@@ -1,0 +1,27 @@
+.textprofil {
+    border: .5px solid #0062CC;
+    border-left: 3px solid #0062CC;
+    width: 100%;
+    outline: none;
+}
+
+.textprofil:focus {
+        border: .5px solid #0DDBD2;
+    border-left: 3px solid #0DDBD2;
+    transition-duration: 0.4s;
+}
+
+.button3 {
+    background: #0062CC;
+    opacity: 0.5;
+    border-radius: 5px;
+    width: 150px;
+    color: white;
+}
+
+.button3:hover {
+    transition-duration: 0.4s;
+    opacity: 1;
+    background: #0062CC;
+    color: whitesmoke;
+}

@@ -1,10 +1,118 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'navbar-background.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'comments.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 offset-1" style="background-color: white; margin-top: 20px">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="" style="padding-top: 20px;float: left">
+                            <a href="#">
+                                <img class="media-object img-thumbnail"
+                                     src="/media/icons/images.png"
+                                     width="50px" height="50px" style="margin-right:8px; margin-top:-5px;">
+                            </a>
+                        </div>
+                        <h4 style="margin-bottom: 25px;padding-top: 25px"><a href="#"
+                                                                             style="text-decoration:none;"><strong>{{ post.yayinlayan }}</strong></a>
+                            –
+                            <small>
+                                <small><a href="#" style="text-decoration:none; color:grey;"><i><i
+                                        class="fa fa-clock-o"
+                                        aria-hidden="true"></i>
+                                    {{ post.tarih|timesince }} önce</i></a></small>
+                            </small>
+
+                        </h4>
+                        <hr>
+
+
+                        <div style="margin-left: 58px">
+                            <p>{{ post.icerik }}</p>
+                        </div>
+                        <hr>
+                        <div>
+                            <div class="btn-group-xs" style="float: right">
+                                <a class="btn btn-default btn-xs"><i class="fa fa-heart" aria-hidden="true"></i>
+                                    Like</a>
+                                <a class="btn btn-default btn-xs"><i class="fa fa-retweet" aria-hidden="true"></i>
+                                    Reshare</a>
+                                <a class="btn btn-default btn-xs"><i class="fa fa-comment" aria-hidden="true"></i>
+                                    Comment</a>
+                            </div>
+                            <div class="pull-left">
+                                <p class="text-muted" style="margin-left:5px;"><i class="fa fa-globe"
+                                                                                  aria-hidden="true"></i> Public</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="media">
+                            <div class="pull-left">
+                                <a href="#">
+                                    <img class="media-object img-circle"
+                                         src="https://lut.im/7JCpw12uUT/mY0Mb78SvSIcjvkf.png" width="35px" height="35px"
+                                         style="margin-left:3px; margin-right:-5px;">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <textarea class="form-control" rows="1" placeholder="Comment"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+        </div>
+        <div class="row">
+            <div class="col-lg-9 offset-1">
+                <hr>
+                <h1 class="text-center">Yorumlar</h1>
+                {% for comment in post.get_comments %}
+                    <div class="media comment-box">
+                        <div class="media-left">
+                            <a href="#">
+                                <img class="img-responsive user-photo"
+                                     src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading" style="border-radius: 10px 10px 0 0;">
+                                <a style="font-size: 15px;color: #03658C;font-weight: bold">{{ comment.k_adi }}</a>
+                                {% if post.yayinlayan.username == comment.k_adi %}
+                                    <span class="sahip">Gönderi Sahibi</span>{% endif %}
+                                <small style="float: right;font-size: 14px">{{ comment.time|timesince }} önce</small>
+                            </h4>
+                            <p style="background-color: white;border-radius: 0 0 10px 10px;font-size: 20px">{{ comment.yorum|linebreaksbr }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9 offset-1">
+                <hr>
+                {% for i in yorumForm %}
+                    <div class="widget-area no-padding blank">
+                        <div class="status-upload">
+                            {% for text in yorumForm %}
+                                <form action="{% url 'comment' post.slug %}" method="post">
+                                    {% csrf_token %}
+                                    {{ text }}
+                                    <input class="yorumButonu" type="submit" value="Yorum Yap">
+                                </form>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    </div>
+                {% endfor %}
+        </div>
+    </div>
+
+    </div>
+{% endblock %}
