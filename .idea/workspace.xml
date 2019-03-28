@@ -2,7 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c0cda94-d12f-46eb-9fe1-a868422be2fa" name="Default Changelist" comment="migrations">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/css/bootstrap.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/css/bootstrap.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/js/bootstrap.bundle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/js/bootstrap.bundle.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/js/jquery.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/comments.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/formwithicon.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/input.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/navbar.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/new.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/paginator.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/profile.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/sidebar.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/styleform.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/textdesign.css" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -382,7 +399,7 @@
       <workItem from="1553154826616" duration="11562000" />
       <workItem from="1553170899872" duration="19043000" />
       <workItem from="1553234628167" duration="9017000" />
-      <workItem from="1553778690579" duration="851000" />
+      <workItem from="1553778690579" duration="1445000" />
     </task>
     <task id="LOCAL-00001" summary="migrations">
       <created>1551347927914</created>
@@ -395,7 +412,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="285170000" />
+    <option name="totallyTimeSpent" value="285764000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
