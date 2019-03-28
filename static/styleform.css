@@ -3,6 +3,19 @@
   margin: 0;
   padding: 0;
 }
+h3.fontchange {
+  font-size: 30px;
+  color: #BDBDBD;
+}
+
+@media (max-width: 425px) {
+  h3.fontchange{
+      font-size: 20px;
+  }
+  body.image {
+    background-size: unset;
+  }
+}
 
 
 html .login-wrap {
@@ -14,6 +27,13 @@ html .login-wrap {
   box-shadow: 3px 3px 10px #333;
   padding: 15px;
 }
+
+@media (max-width: 320px) {
+    html .login-wrap {
+      width: 300px;
+    }
+}
+
 html .login-wrap h2 {
   text-align: center;
   font-weight: 200;

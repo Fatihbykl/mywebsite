@@ -18,7 +18,8 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="profile-img">
-                    <img style="" src="{{ profil.profil.profilFoto }}"> <!--/media/avatar/1/ASCII.JPG-->
+                    <img alt="Profil Fotoğrafı" style="" src="/media/{{ bilgiler.profilFoto }}">
+                    <!--/media/avatar/1/ASCII.JPG-->
                     {% if request.user.username == profil.username %}
                         <form id="form3" action="{% url 'edit-profile' request.user.username %}"
                               method="post" enctype="multipart/form-data">
@@ -29,11 +30,10 @@
                                         Fotoğrafı Değiştir
                                         {{ editForm.profilFoto }}
                                     </div>
-                                    <div class="col-lg-6 file btn btn-lg btn-primary">
 
-                                        <input type="submit" value="Submıt">
-                                    </div>
                                 </div>
+                                <input type="submit" value="Submıt">
+
                             </div>
 
                         </form>
@@ -41,49 +41,42 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="profile-head">
-                    <h3 class="text-center" style="margin-top: 20px;">
-                        {% if request.user.username == profil.username %}
-                            Profiline Hoşgeldin {{ profil.username }}!
-                        {% else %}
 
-                        {% endif %}
-                    </h3>
-                    <ul class="nav nav-tabs" id="myTab" role="tablist" style="margin-top: 60px">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                               aria-controls="home" aria-selected="true">Hakkında</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="edit-tab" data-toggle="tab" href="#edit" role="tab"
-                               aria-controls="home" aria-selected="false">Profili Düzenle</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="password-tab" data-toggle="tab" href="#passwordChange"
-                               role="tab"
-                               aria-controls="home" aria-selected="false">Şifre Değiştir</a>
-                        </li>
-                    </ul>
-                </div>
             </div>
             <div class="col-md-2">
 
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4" style="margin-top: 28px;">
                 <div class="profile-work">
                     <hr>
-                    <p>WORK LINK</p>
-                    <p>Puan <strong>{{ bilgiler.puan }}</strong></p>
-                    <p>Gönderi Sayısı <strong>{{ bilgiler.post_count }}</strong></p>
-                    <p>Yorum Sayısı <strong>{{ bilgiler.comment_count }}</strong></p>
-                    <p>Bulduğu Film Sayısı <strong>{{ bilgiler.puan }}</strong></p>
-                    <p>Seviye <strong>{{ bilgiler.puan }}</strong></p>
+                    <p class="profileleft">Puan - <strong>{{ profil.role_user.puan }}</strong></p>
+                    <p class="profileleft">Gönderi Sayısı - <strong>{{ profil.profil.post_count }}</strong></p>
+                    <p class="profileleft">Yorum Sayısı - <strong>{{ profil.profil.comment_count }}</strong></p>
+                    <p class="profileleft">Bulduğu Film Sayısı - <strong>{{ bilgiler.puan }}</strong></p>
+                    <p class="profileleft">Seviye - <strong>{{ profil.role_user.get_role_display }}</strong></p>
                     <hr>
                 </div>
             </div>
             <div class="col-md-8">
+                <div class="profile-head">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active tabprofile" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                               aria-controls="home" aria-selected="true">Hakkında</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link tabprofile" id="edit-tab" data-toggle="tab" href="#edit" role="tab"
+                               aria-controls="home" aria-selected="false">Profili Düzenle</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link tabprofile" id="password-tab" data-toggle="tab" href="#passwordChange"
+                               role="tab"
+                               aria-controls="home" aria-selected="false">Şifre Değiştir</a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="tab-content profile-tab" id="myTabContent">
                     <div class="tab-pane fade" id="passwordChange" role="tabpanel"
                          aria-labelledby="password-tab">
@@ -124,20 +117,23 @@
                         </form>
                     </div>
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <div class="row" style="margin-bottom: 20px">
+                        <div class="row" style="margin-bottom: 20px;">
+
                             <div class="col-md-6">
                                 <label>Kullanıcı Adı</label>
+
                             </div>
                             <div class="col-md-6">
                                 <p>{{ profil.username }}</p>
                             </div>
+
                         </div>
                         <div class="row" style="margin-bottom: 20px">
                             <div class="col-md-6">
                                 <label>Adı</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ bilgiler.ad }}</p>
+                                <p>{{ profil.profil.ad }}</p>
                             </div>
                         </div>
                         <div class="row" style="margin-bottom: 20px">
@@ -145,7 +141,7 @@
                                 <label>Soyadı</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ bilgiler.soyad }}</p>
+                                <p>{{ profil.profil.soyad }}</p>
                             </div>
                         </div>
                         <div class="row" style="margin-bottom: 20px">
@@ -161,7 +157,7 @@
                                 <label>Favori Filmler</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ bilgiler.fav_film }}</p>
+                                <p>{{ profil.profil.fav_film }}</p>
                             </div>
                         </div>
                         <div class="row" style="margin-bottom: 20px">
@@ -169,7 +165,7 @@
                                 <label>Favori Yönetmen</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ bilgiler.fav_yonetmen }}</p>
+                                <p>{{ profil.profil.fav_yonetmen }}</p>
                             </div>
                         </div>
                         <hr>

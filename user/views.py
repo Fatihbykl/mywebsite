@@ -4,8 +4,8 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from .models import kullaniciProfili
 from django.contrib.auth.models import User
 from django.contrib import messages
-from user.models import PasswordChange
-from main_app.models import Posts
+from user.models import PasswordChange, Roles
+from main_app.forms import ContactForms
 
 
 def register(request):
@@ -17,6 +17,7 @@ def register(request):
         user.set_password(password)
         user.save()
         kullaniciProfili.objects.create(profil=user)
+        Roles.objects.create(user=user, role='1', puan=0)
         user.save()
         kullaniciProfili.k_adi2 = username
         user = authenticate(request, username=username, password=password)
@@ -42,13 +43,12 @@ def Login(request):
 
 
 def profil(request, username):
+    contact = ContactForms(request.POST or None)
     passwordForm = PasswordChange(user=request.user, data=request.POST or None)
     profilForm = profilModel(request.POST or None)
     Profil = get_object_or_404(User, username=username)
-    bilgiler = get_object_or_404(kullaniciProfili, profil=Profil)
     return render(request, 'userprofile.html',
-                  context={'profil': Profil, 'editForm': profilForm, 'passForm': passwordForm,
-                           'bilgiler': bilgiler})
+                  context={'profil': Profil, 'editForm': profilForm, 'passForm': passwordForm, 'contactForm': contact})
 
 
 def Logout(request):
@@ -58,7 +58,6 @@ def Logout(request):
 
 def edit_profile(request, username):
     Profil = get_object_or_404(User, username=username)
-    bilgiler = get_object_or_404(kullaniciProfili, profil=Profil)
     editprof = profilModel(data=request.POST or None, files=request.FILES or None)
     if editprof.is_valid():
         ad = editprof.cleaned_data.get('ad', None)
@@ -67,18 +66,15 @@ def edit_profile(request, username):
         yonet = editprof.cleaned_data.get('fav_yonetmen', None)
         foto = editprof.cleaned_data.get('profilFoto', None)
 
-        if foto:
-            bilgiler.profilFoto = foto
-        editprof.save()
         if ad:
-            bilgiler.ad = ad
+            Profil.profil.ad = ad
         if soyad:
-            bilgiler.soyad = soyad
+            Profil.profil.soyad = soyad
         if film:
-            bilgiler.fav_film = film
+            Profil.profil.fav_film = film
         if yonet:
-            bilgiler.fav_yonetmen = yonet
-        bilgiler.save()
+            Profil.profil.fav_yonetmen = yonet
+        Profil.profil.save()
         return HttpResponseRedirect(reverse('profil', kwargs={'username': request.user.username}))
     return render(request, 'userprofile.html', context={'editForm': editprof})
 

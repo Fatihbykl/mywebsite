@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from unidecode import unidecode
-from django import forms
+from django.shortcuts import reverse
 
 
 class Posts(models.Model):
@@ -14,13 +14,19 @@ class Posts(models.Model):
                               verbose_name='İçerik')
     tarih = models.DateTimeField(auto_now=False, auto_now_add=True)
     slug = models.SlugField(null=True, unique=True, editable=False)
+    found = models.BooleanField(default=0)
+    report = models.ManyToManyField(User, related_name='report')
+    followers = models.ManyToManyField(User, related_name='followers')
 
     def __str__(self):
-        return '%s' % self.baslik
+        return 'Gönderi Başlığı : %s' % self.baslik
 
     class Meta:
         verbose_name_plural = 'Gönderiler'
         ordering = ['-id']
+
+    def get_absolute_url(self):
+        return reverse('post-detail', kwargs={'slug': self.slug})
 
     def get_slug(self):
         slug = slugify(unidecode(self.baslik))
@@ -31,27 +37,33 @@ class Posts(models.Model):
             new_slug = '%s-%s' % (slug, num)
         return new_slug
 
-    def save(self, *args, **kwargs):
+    def get_last_slug(self):
         if self.id is not None:
             self.slug = self.get_slug()
         else:
             cur_slug = Posts.objects.filter(slug=self.slug)
             if cur_slug != self.slug:
                 self.slug = self.get_slug()
-        super(Posts, self).save(*args, **kwargs)
 
     def get_comments(self):
         return self.comment.all()
 
 
 class Comments(models.Model):
-    post = models.ForeignKey(Posts, related_name='comment', on_delete=True)
+    post = models.ForeignKey(Posts, related_name='comment', on_delete=models.CASCADE)
     k_adi = models.CharField(max_length=50, editable=False, default=1)
+    sahip = models.ForeignKey(User, related_name='sahip', on_delete=models.CASCADE)
     yorum = models.TextField(max_length=1000, blank=False, null=True, verbose_name='Yorumunuz')
     time = models.DateTimeField(auto_now_add=True, auto_now=False)
+    likes = models.ManyToManyField(User, related_name='likes')
+    reports = models.ManyToManyField(User, related_name='reports')
+    that_movie = models.BooleanField(default=0)
 
     def __str__(self):
-        return self.post
+        return 'Başlık : {0} || Kullanıcı Adı: {1} || Beğeniler : {2} || Şikayetler : {3}'.format(self.post.baslik,
+                                                                                                  self.k_adi,
+                                                                                                  self.likes.all().count(),
+                                                                                                  self.reports.all().count())
 
     class Meta:
         verbose_name_plural = 'Yorumlar'
@@ -64,7 +76,7 @@ class ContactUs(models.Model):
     k_adi = models.CharField(max_length=50, editable=False, default=1)
 
     def __str__(self):
-        return '%s tarafından %s' % (self.k_adi, self.secenek)
+        return 'Gönderen : %s || Tipi : %s' % (self.k_adi, self.secenek)
 
     class Meta:
         verbose_name_plural = 'İletişim'

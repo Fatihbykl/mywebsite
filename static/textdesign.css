@@ -25,3 +25,7 @@
     background: #0062CC;
     color: whitesmoke;
 }
+
+p.profileleft {
+    font-size: 15px;
+}

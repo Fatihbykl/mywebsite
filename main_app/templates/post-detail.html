@@ -12,14 +12,15 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="" style="padding-top: 20px;float: left">
-                            <a href="#">
+                            <a href="{% url 'profil' post.yayinlayan.username %}">
                                 <img class="media-object img-thumbnail"
                                      src="/media/icons/images.png"
                                      width="50px" height="50px" style="margin-right:8px; margin-top:-5px;">
                             </a>
                         </div>
-                        <h4 style="margin-bottom: 25px;padding-top: 25px"><a href="#"
-                                                                             style="text-decoration:none;"><strong>{{ post.yayinlayan }}</strong></a>
+                        <h4 style="margin-bottom: 25px;padding-top: 25px"><a
+                                href="{% url 'profil' post.yayinlayan.username %}"
+                                style="text-decoration:none;"><strong>{{ post.yayinlayan }}</strong></a>
                             –
                             <small>
                                 <small><a href="#" style="text-decoration:none; color:grey;"><i><i
@@ -27,7 +28,6 @@
                                         aria-hidden="true"></i>
                                     {{ post.tarih|timesince }} önce</i></a></small>
                             </small>
-
                         </h4>
                         <hr>
 
@@ -35,32 +35,55 @@
                         <div style="margin-left: 58px">
                             <p>{{ post.icerik }}</p>
                         </div>
-                        <hr>
-                        <div>
-                            <div class="btn-group-xs" style="float: right">
-                                <a class="btn btn-default btn-xs"><i class="fa fa-heart" aria-hidden="true"></i>
-                                    Like</a>
-                                <a class="btn btn-default btn-xs"><i class="fa fa-retweet" aria-hidden="true"></i>
-                                    Reshare</a>
-                                <a class="btn btn-default btn-xs"><i class="fa fa-comment" aria-hidden="true"></i>
-                                    Comment</a>
-                            </div>
-                            <div class="pull-left">
-                                <p class="text-muted" style="margin-left:5px;"><i class="fa fa-globe"
-                                                                                  aria-hidden="true"></i> Public</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="media">
-                            <div class="pull-left">
-                                <a href="#">
-                                    <img class="media-object img-circle"
-                                         src="https://lut.im/7JCpw12uUT/mY0Mb78SvSIcjvkf.png" width="35px" height="35px"
-                                         style="margin-left:3px; margin-right:-5px;">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <textarea class="form-control" rows="1" placeholder="Comment"></textarea>
+                        <div class="container">
+                            <div class="social-cont">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <span class="inline"><i class="fa fa-thumbs-up up"></i> 150</span>
+                                        <span class="inline"><i class="fa fa-thumbs-down down"></i> 21</span>
+                                        <a style="padding-left: 0px" class=""
+                                           href="{% url 'report-post' post.slug %}">
+                                            <i title="Rapor Et"
+                                               class="fas fa-exclamation-triangle"></i>
+                                            {{ post.report.count }}
+                                        </a>
+                                        <a style="padding-left: 0px" class=""
+                                           href="{% url 'follow' post.slug %}">
+                                            <i title="Takip Et" class="far fa-star"></i>
+                                            {{ post.followers.count }}
+                                        </a>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="social">
+                                            <span class="text-right"><p>Share on Social</p></span>
+                                            <a class="social-icon facebook" target="blank" data-tooltip="Facebook"
+                                               href="http://www.facebook.com/SOJITRAHIREN">
+                                                <i class="fa fa-facebook"></i>
+                                            </a>
+
+                                            <a class="social-icon twitter" target="blank" data-tooltip="Twitter"
+                                               href="https://www.twitter.com/Sojitra_Hiren">
+                                                <i class="fa fa-twitter"></i>
+                                            </a>
+
+                                            <a class="social-icon linkedin" target="blank" data-tooltip="LinkedIn"
+                                               href="https://www.linkedin.com/in/hirensojitraamreli">
+                                                <i class="fa fa-linkedin"></i>
+                                            </a>
+
+                                            <a class="social-icon google-plus" target="blank" data-tooltip="Google +"
+                                               href="https://plus.google.com/+HirenSojitraa">
+                                                <i class="fa fa-google-plus"></i>
+                                            </a>
+
+                                            <a class="social-icon email" target="blank" data-tooltip="Contact e-Mail"
+                                               href="mailto:hirensojitra007@gmail.com">
+                                                <i class="fa fa-envelope-o"></i>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -74,21 +97,94 @@
                 <hr>
                 <h1 class="text-center">Yorumlar</h1>
                 {% for comment in post.get_comments %}
+                    {% if comment.that_movie %}
+                        <div class="media comment-box" style="border: 2px dashed greenyellow;">
+                            <div class="media-left">
+                                <a href="{% url 'profil' comment.sahip.username %}">
+                                    <img class="img-responsive user-photo"
+                                         src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <div class="media-heading">
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <a href="{% url 'profil' comment.sahip.username %}"
+                                               style="font-size: 15px;color: #03658C;font-weight: bold">{{ comment.k_adi }}</a>
+                                            {% if post.yayinlayan.username == comment.k_adi %}
+                                                <span class="sahip">Gönderi Sahibi</span>
+                                            {% endif %}
+                                            <span class="{{ comment.sahip.role_user.role }}">{{ comment.sahip.role_user.get_role_display }}</span>
+                                            <!--<small style="float: right;font-size: 14px">{{ comment.time|timesince }} önce
+                                        </small>-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a style="color:black;padding-left: 20px" class="float-right"
+                                               href="{% url 'like' post.slug comment.id %}"><i
+                                                    class="far fa-thumbs-up"></i>
+                                                <span class="float-right"
+                                                      style="padding-left: 7px;font-weight: bold">{{ comment.likes.count }}</span>
+                                            </a>
+                                            <a style="padding-left: 20px;color: black;"
+                                               href="{% url 'report' post.slug comment.id %}" class="float-right">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                                <span class="float-right"
+                                                      style="padding-left: 7px;font-weight: bold">{{ comment.reports.count }}</span>
+                                            </a>
+                                            <a class="float-right" href="{% url 'that-movie' post.slug comment.id %}"
+                                               style="padding-left: 20px">
+                                                <i class="fas fa-check"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p style="background-color: white;font-size: 20px">{{ comment.yorum|linebreaksbr }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% for comment in post.get_comments %}
                     <div class="media comment-box">
                         <div class="media-left">
-                            <a href="#">
+                            <a href="{% url 'profil' comment.sahip.username %}">
                                 <img class="img-responsive user-photo"
                                      src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
                             </a>
                         </div>
                         <div class="media-body">
-                            <h4 class="media-heading" style="border-radius: 10px 10px 0 0;">
-                                <a style="font-size: 15px;color: #03658C;font-weight: bold">{{ comment.k_adi }}</a>
-                                {% if post.yayinlayan.username == comment.k_adi %}
-                                    <span class="sahip">Gönderi Sahibi</span>{% endif %}
-                                <small style="float: right;font-size: 14px">{{ comment.time|timesince }} önce</small>
-                            </h4>
-                            <p style="background-color: white;border-radius: 0 0 10px 10px;font-size: 20px">{{ comment.yorum|linebreaksbr }}</p>
+                            <div class="media-heading">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <a href="{% url 'profil' comment.sahip.username %}"
+                                           style="font-size: 15px;color: #03658C;font-weight: bold">{{ comment.k_adi }}</a>
+                                        {% if post.yayinlayan.username == comment.k_adi %}
+                                            <span class="sahip">Gönderi Sahibi</span>{% endif %}
+                                        <span class="{{ comment.sahip.role_user.role }}">{{ comment.sahip.role_user.get_role_display }}</span>
+                                        <!--<small style="float: right;font-size: 14px">{{ comment.time|timesince }} önce
+                                        </small>-->
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a style="color:black;padding-left: 20px" class="float-right"
+                                           href="{% url 'like' post.slug comment.id %}"><i class="far fa-thumbs-up"></i>
+                                            <span class="float-right"
+                                                  style="padding-left: 7px;font-weight: bold">{{ comment.likes.count }}</span>
+                                        </a>
+                                        <a style="padding-left: 20px;color: black;"
+                                           href="{% url 'report' post.slug comment.id %}" class="float-right">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <span class="float-right"
+                                                  style="padding-left: 7px;font-weight: bold">{{ comment.reports.count }}</span>
+                                        </a>
+                                        {% if post.found == 0 %}
+                                            <a class="float-right" href="{% url 'that-movie' post.slug comment.id %}"
+                                               style="padding-left: 20px">
+                                                <i class="fas fa-check"></i>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="background-color: white;font-size: 20px">{{ comment.yorum|linebreaksbr }}</p>
                         </div>
                     </div>
                 {% endfor %}
@@ -104,7 +200,11 @@
                                 <form action="{% url 'comment' post.slug %}" method="post">
                                     {% csrf_token %}
                                     {{ text }}
-                                    <input class="yorumButonu" type="submit" value="Yorum Yap">
+                                    {% if post.found %}
+                                        <strong>Aranan film bulunduğu için yorumlar kapatılmıştır.</strong>
+                                    {% endif %}
+                                    <input {% if post.found %}disabled{% endif %} class="yorumButonu" type="submit"
+                                           value="Yorum Yap">
                                 </form>
                             {% endfor %}
                         </div>
@@ -114,5 +214,7 @@
         </div>
     </div>
 
-    </div>
+{% endblock %}
+
+{% block js %}
 {% endblock %}

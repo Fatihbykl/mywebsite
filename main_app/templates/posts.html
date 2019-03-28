@@ -44,8 +44,8 @@
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" style="padding-left: 30px">
                     <div class="card mt-5 text-center" style="width: 95%;">
                         <div style="background-color: #2C333A">
-                            <img style="width: 100px;height: 100px;margin: 0 auto;border-radius: 50px"
-                                 src="{{ post.yayinlayan. }}" alt="Profil Fotoğrafı">
+                            <img style="width: 100px;height: 100px;margin: 0 auto" class="img-thumbnail"
+                                 src="/media/{{ post.yayinlayan.profil.profilFoto }}" alt="Profil Fotoğrafı">
                             <div style="color:#EAEDF1">
                                 <a class="link"
                                    href="{% url 'profil' post.yayinlayan.username %}"><span

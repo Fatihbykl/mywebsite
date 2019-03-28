@@ -113,3 +113,10 @@
         text-align: center;
     }
 }
+
+@media (max-width: 376px) {
+    a.tabprofile {
+        font-size: 12px;
+    }
+}
+
