@@ -1,0 +1,98 @@
+{% extends 'userprofile.html' %}
+
+{% block tabs %}
+    <div class="user-info-right">
+        <!--
+        <div class="basic-info">
+            <h3 class="borderh3" style="text-align: center">Kişisel Bilgiler</h3>
+            <p class="data-row">
+                <span class="data-name">Ad</span>
+                <span class="data-value">{{ profil.profil.ad }}</span>
+            </p>
+            <p class="data-row">
+                <span class="data-name">Soyad</span>
+                <span class="data-value">{{ profil.profil.soyad }}</span>
+            </p>
+            <p class="data-row">
+                <span class="data-name">Doğum Tarihi</span>
+                <span class="data-value">{{ profil.profil.dogum_gunu }}</span>
+            </p>
+            <p class="data-row">
+                <span class="data-name">Cinsiyet</span>
+                <span class="data-value">{{ profil.profil.get_cinsiyet_display }}</span>
+            </p>
+            <p class="data-row">
+                <span class="data-name">Yaş</span>
+                <span class="data-value">{{ profil.profil.get_age }}</span>
+            </p>
+            <p class="data-row">
+                <span class="data-name">E-Mail</span>
+                <span class="data-value">{{ profil.email }}</span>
+            </p>
+        </div>
+        <div class="contact_info">
+            <h3 class="borderh3" style="text-align: center">Diğer Bilgiler</h3>
+            <p class="data-row">
+                <span class="data-name">Favori Filmler</span>
+                <span class="data-value">{{ profil.profil.fav_film }}</span>
+            </p>
+            <p class="data-row">
+                <span class="data-name">Favori Yönetmenler</span>
+                <span class="data-value">{{ profil.profil.fav_yonetmen }}</span>
+            </p>
+            <p class="data-row">
+                <span class="data-name">Son Giriş</span>
+                <span class="data-value">{{ profil.last_login }}</span>
+            </p>
+            <p class="data-row">
+                <span class="data-name">Kayıt Tarihi</span>
+                <span class="data-value">{{ profil.profil.date_joined }}</span>
+            </p>
+        </div>
+-->
+        <div class="profile-table">
+            <table>
+                <tr>
+                    <th>Ad</th>
+                    <td>{{ profil.profil.ad }}</td>
+                </tr>
+                <tr>
+                    <th>Soyad</th>
+                    <td>{{ profil.profil.soyad }}</td>
+                </tr>
+                <tr>
+                    <th>Cinsiyet</th>
+                    <td>{{ profil.profil.get_cinsiyet_display }}</td>
+                </tr>
+                <tr>
+                    <th>Doğum Tarihi</th>
+                    <td>{{ profil.profil.dogum_gunu }}</td>
+                </tr>
+                <tr>
+                    <th>Yaş</th>
+                    <td>{{ profil.profil.get_age }}</td>
+                </tr>
+                <tr>
+                    <th>E-posta</th>
+                    <td>{{ profil.email }}</td>
+                </tr>
+                <tr>
+                    <th>Favori Filmler</th>
+                    <td>{{ profil.profil.fav_film }}</td>
+                </tr>
+                <tr>
+                    <th>Favori Yönetmenler</th>
+                    <td>{{ profil.profil.fav_yonetmen }}</td>
+                </tr>
+                <tr>
+                    <th>Kayıt Tarihi</th>
+                    <td>{{ profil.profil.date_joined }}</td>
+                </tr>
+                <tr>
+                    <th>Son Giriş</th>
+                    <td>{{ profil.last_login }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

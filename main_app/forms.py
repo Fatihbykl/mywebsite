@@ -9,8 +9,8 @@ class PostsModel(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PostsModel, self).__init__(*args, **kwargs)
-        for field in self.fields:
-            self.fields[field].widget.attrs = {'class': 'text-style'}
+        self.fields['baslik'].widget.attrs = {'class': 'text-style', 'maxlength': '70'}
+        self.fields['icerik'].widget.attrs = {'class': 'text-style', 'maxlength': '2278'}
 
 
 class CommentModel(forms.ModelForm):

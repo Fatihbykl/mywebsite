@@ -3,13 +3,14 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from unidecode import unidecode
 from django.shortcuts import reverse
+from datetime import datetime
 
 
 class Posts(models.Model):
     yayinlayan = models.ForeignKey(User, related_name='yayinlayan', default=1, on_delete=True)
-    baslik = models.CharField(max_length=30, blank=False, help_text='İçeriğinize başlık ekleyin',
+    baslik = models.CharField(max_length=70, blank=False, help_text='İçeriğinize başlık ekleyin',
                               verbose_name='Başlık')
-    icerik = models.TextField(max_length=1500, blank=False,
+    icerik = models.TextField(max_length=2500, blank=False,
                               help_text='Filmi aklınızda kalan tüm ayrıntılarıyla anlatmaya çalışın',
                               verbose_name='İçerik')
     tarih = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -17,6 +18,7 @@ class Posts(models.Model):
     found = models.BooleanField(default=0)
     report = models.ManyToManyField(User, related_name='report')
     followers = models.ManyToManyField(User, related_name='followers')
+    views_count = models.IntegerField(default=0)
 
     def __str__(self):
         return 'Gönderi Başlığı : %s' % self.baslik
@@ -46,7 +48,7 @@ class Posts(models.Model):
                 self.slug = self.get_slug()
 
     def get_comments(self):
-        return self.comment.all()
+        return self.comment.all().order_by('-id')
 
 
 class Comments(models.Model):
@@ -80,3 +82,20 @@ class ContactUs(models.Model):
 
     class Meta:
         verbose_name_plural = 'İletişim'
+
+
+class Notifications(models.Model):
+    TYPE = (('comment', 'Yorum'), ('report', 'Rapor'), ('movieFound', 'Film Bulundu'),
+            ('like', 'Beğeni'), ('follow', 'Takip'))
+    user = models.ForeignKey(User, related_name='notifications', on_delete=models.CASCADE)
+    is_read = models.BooleanField(default=0)
+    created = models.DateTimeField(auto_now_add=True)
+    message = models.CharField(max_length=80)
+    notification_type = models.CharField(choices=TYPE, max_length=20, default='like')
+    which_post_slug = models.CharField(max_length=100, default='slug')
+
+    def __str__(self):
+        return "Kullanıcı: %s || Mesaj: %s || Tipi: %s" % self.user.username, self.message, self.notification_type
+
+    def get_all_notifications(self):
+        return self.objects.all()

@@ -2,12 +2,13 @@
 {% load static %}
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{% static 'input.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'leaderboard.css' %}">
 {% endblock %}
 
 {% block body %}
     <div class="container">
         <div class="row">
-            <div class="col-lg-12" style="margin-top: 50px">
+            <div class="col-lg-9" style="margin-top: 50px">
                 <form action="{% url 'post-create' %}" method="post">
                     {% csrf_token %}
                     <div class="row">
@@ -22,6 +23,17 @@
                         </div>
                     </div>
                 </form>
+            </div>
+            <div class="col-lg-3">
+                <div style="text-align: center" class="bulunamayan-gonderiler">
+                    <span>Bulunamayanlar</span>
+                    <hr style="border-width: 3px">
+                    {% for post in old_posts %}
+                        <span style="color: #2f3239"><b>{{ post.baslik }}</b></span><br>
+                        <span style="color: #848991">{{ post.icerik|truncatechars:100 }}</span><br>
+                        <hr>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

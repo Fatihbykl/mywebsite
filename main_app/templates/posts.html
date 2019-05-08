@@ -44,20 +44,20 @@
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" style="padding-left: 30px">
                     <div class="card mt-5 text-center" style="width: 95%;">
                         <div style="background-color: #2C333A">
-                            <img style="width: 100px;height: 100px;margin: 0 auto" class="img-thumbnail"
+                            <img style="width: 100px;height: 100px;margin: 0 auto; border: 2px groove whitesmoke;border-radius: 50%"
                                  src="/media/{{ post.yayinlayan.profil.profilFoto }}" alt="Profil Fotoğrafı">
                             <div style="color:#EAEDF1">
                                 <a class="link"
-                                   href="{% url 'profil' post.yayinlayan.username %}"><span
+                                   href="{% url 'profile-info' post.yayinlayan.username %}"><span
                                         style="font-weight: bold;font-family: Roboto;">{{ post.yayinlayan.username }}</span></a><br>
                                 <span>{{ post.tarih }}</span>
                             </div>
                         </div>
-                        <hr style="width: 100%" class="second">
+                        <!--<hr style="width: 100%" class="second">-->
                         <div class="card-body" style="padding-top: 10px">
-                            <h6 class="card-title">{{ post.baslik|upper }}</h6>
+                            <h6 class="card-title">{{ post.baslik|upper|truncatechars:52 }}</h6>
                             <hr class="first-style" style="margin-bottom: 5px;margin-top: 0">
-                            <p>
+                            <p style="margin-bottom: 0">
                                 {{ post.icerik|truncatechars:100 }}
                             </p>
                         </div>

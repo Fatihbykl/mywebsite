@@ -1,0 +1,87 @@
+{% extends 'userprofile.html' %}
+
+{% block tabs %}
+    <form method="post" class="edit-form" action="{% url 'settings' request.user.username %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Ad</label>
+            </div>
+            <div class="col-lg-8">
+                {{ editForm.ad }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Soyad</label>
+            </div>
+            <div class="col-lg-8">
+                {{ editForm.soyad }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Doğum Tarihi</label>
+            </div>
+            <div class="col-lg-8">
+                <div class="input-group date">
+                    {{ editForm.dogum_gunu }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Favori Filmler</label>
+            </div>
+            <div class="col-lg-8">
+                {{ editForm.fav_film }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Favori Yönetmenler</label>
+            </div>
+            <div class="col-lg-8">
+                {{ editForm.fav_yonetmen }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Cinsiyet</label>
+            </div>
+            <div class="col-lg-8">
+                {{ editForm.cinsiyet }}
+            </div>
+        </div>
+        <button style="float: right" type="submit">Kaydet</button>
+    </form>
+    <form class="edit-form" method="post" action="{% url 'passchange' %}" style="margin-bottom: 50px">
+        {% csrf_token %}
+        <hr style="margin-top: 40px;margin-bottom: 60px;border-width: 2px">
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Eski Şifre</label>
+            </div>
+            <div class="col-lg-8">
+                {{ passwordForm.old_password }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Yeni Şifre</label>
+            </div>
+            <div class="col-lg-8">
+                {{ passwordForm.new_password1 }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Yeni Şifre Tekrar</label>
+            </div>
+            <div class="col-lg-8">
+                {{ passwordForm.new_password2 }}
+            </div>
+        </div>
+        <button style="float: right" type="submit">Şifreyi Değiştir</button>
+    </form>
+{% endblock %}

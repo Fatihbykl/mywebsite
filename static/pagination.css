@@ -1,0 +1,11 @@
+.page-numbers {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: black;
+}
+
+.page-numbers:hover {
+    transition-duration: 0.5s;
+    background-color: #00B4A4;
+    color: white;
+}

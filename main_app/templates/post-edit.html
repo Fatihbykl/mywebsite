@@ -1,0 +1,40 @@
+{% extends 'navbar-background.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'input.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'leaderboard.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9" style="margin-top: 50px">
+                <form action="{% url 'edit-post' post.slug %}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <span style="font-family: Roboto;color: dodgerblue;font-weight: bold">{{ form.baslik.label|upper }}</span>{{ form.baslik }}
+                            <span style="font-family: Roboto;color: dodgerblue;font-weight: bold">{{ form.icerik.label|upper }}</span>{{ form.icerik }}
+                            <input type="submit" class="btn btn-sm gonderi" value="Düzenle">
+                        </div>
+                        <div class="col-lg-6">
+                            <img style="height: 370px;padding-left: 50px; margin-top: 5px" src="/media/icons/png1.png"
+                                 alt="Buldum!">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-3">
+                <div style="text-align: center" class="bulunamayan-gonderiler">
+                    <span>Bulunamayanlar</span>
+                    <hr style="border-width: 3px">
+                    {% for post in post_old %}
+                        <span style="color: #2f3239"><b>{{ post.baslik }}</b></span><br>
+                        <span style="color: #848991">{{ post.icerik|truncatechars:100 }}</span><br>
+                        <hr>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

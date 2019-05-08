@@ -18,12 +18,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from main_app.views import deneme
+from user.views import mark_as_read
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', deneme, name='main-page'),
     path('kullanici/', include('user.urls')),
     path('gonderiler/', include('main_app.urls')),
+    path('mesajlar/<pk>/', mark_as_read, name='messages'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

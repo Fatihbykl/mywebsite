@@ -1,37 +1,112 @@
+@font-face {
+    font-family: 'glegooregular';
+    src: url('/static/bootstrap/fonts/glegoo-regular-webfont.woff') format('woff2'),
+    url('/static/bootstrap/fonts/glegoo-regular-webfont.woff2') format('woff');
+    font-weight: normal;
+    font-style: normal;
 
-button.b {
-    background: rgba(0, 0, 0, 0);
-    color: black;
-    border: none;
-    padding: 6px 32px;
+}
+
+/* navbar */
+
+.navbar-brand span {
+    color: #fed136;
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    font-family: 'Kaushan Script', 'Helvetica Neue', Helvetica, Arial, cursive;
+}
+
+.navbar-brand {
+    color: #fff;
+    font-size: 25px;
+    font-family: 'Kaushan Script', 'Helvetica Neue', Helvetica, Arial, cursive;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+
+.nav-link {
+    padding: 7px 10px 7px 0 !important;
+    font-size: 120%;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: #fff;
+    font-family: 'Gothic A1', sans-serif;
+}
+
+.nav-link:hover {
+    color: #fed136;
+}
+
+.dropdown-menu {
+    border-top: 4px solid #fed136;
+    border-radius: 7px 7px 0 0;
+}
+
+.shrink {
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: #212529;
+}
+
+/* mobile view */
+@media (max-width: 500px) {
+    .navbar-nav {
+        background-color: #000;
+        border-top: 3px solid #fed136;
+        color: #fff;
+        z-index: 1;
+        margin-top: 5px;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+        padding: 0.7em 1em !important;
+        font-size: 100%;
+        font-weight: 500;
+    }
+
+}
+
+.dropdown-item {
+    padding: 0;
+}
+
+@media (max-width: 425px) {
+    .dropdown-menu {
+        width: 100%;
+    }
+}
+
+
+@media (min-width: 426px) {
+    .dropdown-menu {
+        width: 350px;
+    }
+}
+
+a:hover {
     text-decoration: none;
-    font-size: 13px;
-    transition-duration: 0.4s;
-    -webkit-transition-duration: 0.4s;
-    cursor: pointer;
-    width: 150px;
-    height: 40px;
-    text-align: center;
 }
 
-button.b:hover {
-    background: rgba(0, 0, 0, 0);
-    transition-duration: 0.4s;
-    color: #00B8A7;
+.dropdown-list {
+    padding: 7px 15px
 }
 
-button.a {
-    border: none;
-    font-size: 16px;
-    color: darkgrey;
-    background-color: #000000;
-    background-color: rgba(0, 0, 0, 0);
-    text-decoration: none solid rgba(255, 255, 255, 0.75);
-    outline: none;
+.dropdown-list img {
+    height: 20px;
+    margin-right: 7px;
 }
 
-button.a:hover {
-    cursor: pointer;
-    color: #CCCECB;
+.dropdown-list:hover {
+    background-color: white;
+}
+
+.dropdown-item:hover {
+    background-color: white;
+}
+
+body {
+    font-family: 'glegooregular', serif;
+    font-weight: 500;
 }
 

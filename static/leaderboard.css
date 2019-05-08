@@ -1,0 +1,119 @@
+/*
+* {
+  outline: none;
+  user-select: none;
+}
+*/
+
+.leaderboard {
+    background-color: #123;
+    color: #eee;
+    width: 300px;
+    border-radius: 5px;
+    top: 20%;
+    box-shadow: 2px 5px 15px rgba(17, 34, 51, 0.5);
+    text-align: left;
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 5em;
+}
+
+.leaderboard h2 {
+    padding: 15px 0;
+    margin: 0;
+    text-align: center;
+}
+
+.leaderboard p {
+    margin: 3px 10px;
+    text-align: right;
+    color: palegreen;
+}
+
+.leaderboard ol {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.leaderboard ol li {
+    counter-increment: leaderboard-num;
+    padding: 15px 20px;
+    position: relative;
+    transition-duration: 0.3s;
+}
+
+.leaderboard ol li:nth-of-type(1) {
+    background-color: #4d5e6f;
+}
+
+.leaderboard ol li:nth-of-type(2) {
+    background-color: #435465;
+}
+
+.leaderboard ol li:nth-of-type(3) {
+    background-color: #394a5b;
+}
+
+.leaderboard ol li:nth-of-type(4) {
+    background-color: #2f4051;
+}
+
+.leaderboard ol li:nth-of-type(5) {
+    background-color: #253647;
+}
+
+.leaderboard ol li:nth-of-type(6) {
+    background-color: #1b2c3d;
+}
+
+.leaderboard ol li .percent {;
+    float: right;
+}
+
+.leaderboard ol li:hover {
+    transform: scale(1.1);
+}
+
+.leaderboard ol:hover li:not(:hover) {
+    opacity: 0.3;
+}
+
+.leaderboard-icon {
+    width: 50px;
+    height: 50px;
+}
+
+.leaderboard-point {
+    float: right;
+    font-size: 15px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+}
+
+
+@media (max-width: 768px) {
+    .leaderboard {
+        width: 100%;
+    }
+
+    .leaderboard-point {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .leaderboard-icon {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+.bulunamayan-gonderiler {
+    width: 300px;
+    background-color: white;
+    height: 680px;
+    margin-top: 20px;
+    border-radius: 5px;
+    word-break: break-word;
+    padding: 10px;
+}

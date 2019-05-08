@@ -1,0 +1,107 @@
+.dropdown {
+    display: inline-block;
+    margin-left: 20px;
+    padding: 10px;
+}
+
+
+.notification-item {
+    padding: 10px;
+    margin: 5px;
+    background: #ccc;
+    border-radius: 4px;
+}
+
+.dropdown-item hr {
+    margin: 0;
+}
+
+.dropdown-item:active {
+    color: black;
+}
+
+.notify-body {
+    margin: 0;
+    padding: 10px;
+}
+
+.notif-content-comment {
+    border-left: 2px solid #49A0AE;
+}
+
+.notif-content-comment:hover, .notif-content-report:hover, .notif-content-like:hover, .notif-content-follow:hover, .notif-content-movie:hover {
+    background-color: rgba(0, 0, 0, .1);
+    transition-duration: 0.5s;
+}
+
+.notif-content-report {
+    border-left: 2px solid red;
+}
+
+
+.notif-content-like {
+    border-left: 2px solid mediumpurple;
+}
+
+.notif-content-follow {
+    border-left: 2px solid #E5AA17;
+}
+
+.notif-content-movie {
+    border-left: 2px solid #32BEA6;
+}
+
+.notif-icon {
+    font-size: 55px;
+    padding-top: 7px;
+}
+
+.notif-notfound {
+    border-left: 2px solid red;
+}
+
+.notify-body p {
+    color: #32383e;
+    font-weight: 500;
+}
+
+.notify-body small {
+    color: #6c757d;
+}
+
+.dropdown-item:active {
+    background-color: white;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow: visible;
+    font-family: glegooregular;
+}
+
+.col-lg-12 {
+    word-break: break-word;
+}
+
+.hover:hover {
+    background-color: rgba(0, 0, 0, .1);
+    transition-duration: 0.5s;
+}
+
+
+.delete-notification {
+    position: absolute;
+    left: 315px;
+    width: 30px;
+    text-align: center;
+    background-color: #F1EFE6;
+    border-radius: 5px;
+    opacity: .5;
+}
+
+.delete-notification:hover {
+    cursor: pointer;
+    transition-duration: .4s;
+    opacity: 1;
+}

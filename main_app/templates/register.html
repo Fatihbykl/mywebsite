@@ -10,6 +10,7 @@
         li {
             list-style-type: none;
         }
+
         small {
             font-weight: bold;
             color: red;
@@ -19,13 +20,14 @@
 {% block body %}
     <div class="login-wrap">
         <h2>Kayıt Formu</h2>
-        <form action="{% url 'register' %}" method="post">
+        <form id="register-form" action="{% url 'register' %}" method="post">
             {% csrf_token %}
             <div class="form">
                 <div class="input-container">
                     <i class="fas fa-user icon"></i>
                     {{ registerForm.username }}
                 </div>
+                <p style="color:#ff0000; font-size: 12.8px; font-weight: bold" id="message-username"></p>
                 <div class="input-container" style="margin: 0; padding: 0">
                     {% if registerForm.username.errors %}
                         <br>
@@ -36,6 +38,7 @@
                     <i class="fas fa-envelope icon"></i>
                     {{ registerForm.email }}
                 </div>
+                <p style="color:#ff0000; font-size: 12.8px; font-weight: bold" id="message-email"></p>
                 <div class="input-container" style="margin: 0; padding: 0">
                     {% if registerForm.email.errors %}
                         <br>
@@ -57,6 +60,7 @@
                     {{ registerForm.password_confirm }}
                 </div>
                 <div class="input-container" style="margin: 0; padding: 0">
+                    <p style="color:#ff0000; font-size: 12.8px; font-weight: bold" id="message-pass"></p>
                     {% if registerForm.password_confirm.errors %}
                         <br>
                         <small>{{ registerForm.password_confirm.errors }}</small>
@@ -67,5 +71,8 @@
             </div>
         </form>
     </div>
-    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{% static 'js/validation.js' %}"></script>
 {% endblock %}

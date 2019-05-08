@@ -1,12 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.utils.timezone import now
 from main_app.models import Posts, Comments
 import uuid
+import datetime
+from io import BytesIO
+from PIL import Image
+import sys
 
 
 def upload_to_directory(instance, filename):
-    return 'avatar/%s/%s' % (instance.id, filename)
+    return 'user_uploaded_images/%s/%s' % (instance.profil.username, filename)
 
 
 class Roles(models.Model):
@@ -32,30 +38,59 @@ class Roles(models.Model):
         verbose_name_plural = "Kullanıcı Ayarları"
 
     def __str__(self):
-        return "Puan ve Rütbe Bölümü"
+        return "Kullanıcı Adı : %s , Puanı : %s , Seviyesi : %s" % (
+        self.user.username, self.puan, self.get_role_display())
 
     def check_role(self):
-        if self.puan <= 5:
-            self.role = 1
-        elif self.puan <= 25:
-            self.role = 2
-        elif self.puan <= 50:
-            self.role = 3
-        elif self.puan <= 50:
-            self.role = 4
-        elif self.puan > 50:
-            self.role = 5
+        if not self.role == 6:
+            if self.puan <= 5:
+                self.role = 1
+            elif self.puan <= 25:
+                self.role = 2
+            elif self.puan <= 50:
+                self.role = 3
+            elif self.puan <= 50:
+                self.role = 4
+            elif self.puan > 50:
+                self.role = 5
+
+    def get_leaderboard(self):
+        points = Roles.objects.all()
+        list = []
+        for i in points:
+            list.append(i.puan)
+
+        list.sort(reverse=True)
+
+        obj_list = []
+        for j in list:
+            obj_list.append(Roles.objects.filter(puan=j))
+        return obj_list
 
 
 class kullaniciProfili(models.Model):
+    CHOOSE = (
+        (1, 'default_avatars/avatar.jpg'),
+        (2, 'default_avatars/javier.jpg'),
+        (3, 'default_avatars/joker.png'),
+        (4, 'default_avatars/pennywise.jpg'),
+        (5, 'default_avatars/scarface.jpg'),
+        (6, 'default_avatars/unknown.jpg'),
+        (7, 'default_avatars/yoda.jpg'),
+    )
+
     k_adi2 = models.CharField(max_length=30, editable=False, default=1)
     profil = models.OneToOneField(User, default=uuid.uuid1, on_delete=models.CASCADE, related_name='profil')
     ad = models.CharField(blank=True, max_length=30)
     soyad = models.CharField(blank=True, max_length=30)
-    profilFoto = models.ImageField(upload_to=upload_to_directory, default="/icons/indir.png", blank=True)
+    profilFoto = models.ImageField(upload_to=upload_to_directory, default="icons/indir.png", blank=True)
     fav_film = models.CharField(max_length=250, blank=True)
     fav_yonetmen = models.CharField(max_length=50, blank=True)
-
+    dogum_gunu = models.DateField(default=now())
+    cinsiyet = models.CharField(max_length=10, default='?', blank=True)
+    buldugu_film = models.IntegerField(default=0)
+    date_joined = models.DateField(default=now())
+    choose_photo = models.PositiveSmallIntegerField(choices=CHOOSE, blank=True, default=1)
 
     class Meta:
         verbose_name_plural = 'Kullanıcı Profilleri'
@@ -71,9 +106,18 @@ class kullaniciProfili(models.Model):
         count = Comments.objects.filter(k_adi=self.profil.username).count()
         return count
 
+    def get_age(self):
+        today = datetime.datetime.now()
+        birthday = self.dogum_gunu
+        age = today.year - birthday.year
+        if today.month < birthday.month:
+            age -= 1
+        elif today.month == birthday.month and today.day < birthday.day:
+            age -= 1
+        return age
 
-class PasswordChange(PasswordChangeForm):
-    def __init__(self, user, *args, **kwargs):
-        super(PasswordChange, self).__init__(user, *args, **kwargs)
-        for field in self.fields:
-            self.fields[field].widget.attrs = {'class': 'textprofil'}
+    def get_cinsiyet_display(self):
+        if self.cinsiyet == 'erkek':
+            return 'Erkek'
+        elif self.cinsiyet == 'kadin':
+            return 'Kadın'

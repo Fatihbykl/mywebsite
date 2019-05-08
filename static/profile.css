@@ -1,122 +1,370 @@
-.emp-profile {
-    padding: 3%;
-    margin-top: 3%;
-    margin-bottom: 3%;
-    border-radius: 0.5rem;
-    background: #fff;
+/* ===========
+   Profile
+ =============*/
+.card-box {
+    padding: 10px;
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.06), 0 2px 0 0 rgba(0, 0, 0, 0.02);
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    background-clip: padding-box;
+    margin-bottom: 20px;
+    background-color: #ffffff;
 }
 
-.profile-img {
+.header-title {
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 16px;
+    margin-bottom: 8px;
+}
+
+.social-links li a {
+    -webkit-border-radius: 50%;
+    background: #EFF0F4;
+    border-radius: 50%;
+    color: #7A7676;
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
     text-align: center;
+    width: 30px;
 }
 
-.profile-img img {
-    width: 70%;
-    height: 100%;
+/* ===========
+   Gallery
+ =============*/
+.portfolioFilter a {
+    -moz-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1);
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1);
+    -webkit-transition: all 0.3s ease-out;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1);
+    color: #333333;
+    padding: 5px 10px;
+    display: inline-block;
+    transition: all 0.3s ease-out;
 }
 
-.profile-img .file {
-    position: relative;
+.portfolioFilter a:hover {
+    background-color: #228bdf;
+    color: #ffffff;
+}
+
+.portfolioFilter a.current {
+    background-color: #228bdf;
+    color: #ffffff;
+}
+
+.thumb {
+    background-color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    width: 100%;
+}
+
+.thumb-img {
+    border-radius: 2px;
     overflow: hidden;
+    width: 100%;
+}
 
-    border: none;
+.gal-detail h4 {
+    margin: 16px auto 10px auto;
+    width: 80%;
+    white-space: nowrap;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gal-detail .ga-border {
+    height: 3px;
+    width: 40px;
+    background-color: #228bdf;
+    margin: 10px auto;
+}
+
+
+.tabs-vertical-env .tab-content {
+    background: #ffffff;
+    display: table-cell;
+    margin-bottom: 30px;
+    padding: 30px;
+    vertical-align: top;
+}
+
+.tabs-vertical-env .nav.tabs-vertical {
+    display: table-cell;
+    min-width: 120px;
+    vertical-align: top;
+    width: 150px;
+}
+
+.tabs-vertical-env .nav.tabs-vertical li.active > a {
+    background-color: #ffffff;
+    border: 0;
+}
+
+.tabs-vertical-env .nav.tabs-vertical li > a {
+    color: #333333;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.nav.nav-tabs > li.active > a {
+    background-color: #ffffff;
+    border: 0;
+}
+
+/*
+.nav.nav-tabs > li > a {
+    background-color: transparent;
     border-radius: 0;
-    font-size: 15px;
-    background: #212529b8;
-}
-
-.profile-img .file input {
-    position: absolute;
-    opacity: 0;
-    right: 0;
-    top: 0;
-}
-
-.profile-head h5 {
-    color: #333;
-}
-
-.profile-head h6 {
-    color: #0062cc;
-}
-
-.profile-edit-btn {
     border: none;
-    border-radius: 1.5rem;
-    width: 70%;
-    padding: 2%;
-    font-weight: 600;
-    color: #6c757d;
+    color: #333333 !important;
     cursor: pointer;
+    line-height: 50px;
+    font-weight: 500;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+*/
+.nav.nav-tabs > li > a:hover {
+    color: #228bdf !important;
 }
 
-.proile-rating {
-    font-size: 12px;
-    color: #818182;
-    margin-top: 5%;
-}
-
-.proile-rating span {
-    color: #495057;
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.profile-head .nav-tabs {
-    margin-bottom: 5%;
-}
-
-.profile-head .nav-tabs .nav-link {
-    font-weight: 600;
+/*
+.nav.tabs-vertical > li > a {
+    background-color: transparent;
+    border-radius: 0;
     border: none;
+    color: #333333 !important;
+    cursor: pointer;
+    line-height: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+*/
+.nav.tabs-vertical > li > a:hover {
+    color: #228bdf !important;
 }
 
-.profile-head .nav-tabs .nav-link.active {
+.tab-content {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    color: #777777;
+}
+
+.nav.nav-tabs > li:last-of-type a {
+    margin-right: 0px;
+}
+
+.nav.nav-tabs {
+    border-bottom: 0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.navtab-custom li {
+    margin-bottom: -2px;
+}
+
+.nav.nav-tabs + .tab-content {
+    background: #ffffff;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.progress.progress-sm .progress-bar {
+    font-size: 8px;
+    line-height: 5px;
+}
+
+.data-row .data-name, .data-row .data-value {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 5px;
+}
+
+.data-row .data-name {
+    width: 12em;
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    font-size: 0.9em;
+    vertical-align: top;
+}
+
+.profile .user-info-right {
+    border-left: 1px solid #ddd;
+    padding-left: 30px;
+}
+
+.custab {
+    /*border: 1px solid #ccc;*/
+    padding: 5px;
+}
+
+h3.borderh3 {
+    border-top: 2px dashed darkgrey;
+    border-bottom: 2px dashed darkgrey;
+    margin: 20px 0;
+    padding: 5px 0;
+}
+
+img.size {
+    height: 150px;
+    width: 150px;
+    border: 2px groove whitesmoke;
+    margin-top: 5px;
+}
+
+.clicked-tab {
     border: none;
-    border-bottom: 2px solid #0062cc;
+    background-color: white;
+    border-top: 2px solid #228bdf;
+
 }
 
-.profile-work {
-    padding: 14%;
-    margin-top: -15%;
+.tablink {
+    line-height: 50px;
+    font-weight: 500;
+    padding: 20px 0;
 }
 
-.profile-work p {
-    font-size: 12px;
-    color: #818182;
-    font-weight: 600;
-    margin-top: 10%;
-}
-
-.profile-work a {
+.tablink:focus {
     text-decoration: none;
-    color: #495057;
-    font-weight: 600;
-    font-size: 14px;
 }
 
-.profile-work ul {
-    list-style: none;
+.tablink:hover {
+    text-decoration: none;
 }
 
-.profile-tab label {
-    font-weight: 600;
-}
-
-.profile-tab p {
-    font-weight: 600;
-    color: #0062cc;
-}
-
-@media (max-width: 769px){
-    .row{
-        text-align: center;
+@media (max-width: 426px) {
+    a.tablink {
+        padding: 12px 0;
     }
 }
 
-@media (max-width: 376px) {
-    a.tabprofile {
-        font-size: 12px;
-    }
+.tab-button {
+    padding: 7px 0;
+    text-align: left;
 }
 
+.tab-button:hover {
+    background-color: whitesmoke;
+}
+
+table {
+    width: 100%;
+}
+
+th, tr {
+    padding: 15px 25px 25px 15px;
+}
+
+tr {
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
+
+.profile-table {
+    padding: 30px 15px;
+}
+
+.edit-form {
+    padding: 30px 50px 20px 30px;
+}
+
+/* User Rank Design */
+
+
+[class = "1"] {
+    padding: 4px 7px;
+    color: white;
+    text-transform: uppercase;
+    border-radius: 7px;
+    background-color: #5cb85c;
+}
+
+[class = "2"] {
+    padding: 4px 7px;
+    color: white;
+    text-transform: uppercase;
+    border-radius: 7px;
+    background-color: #5cb85c;
+}
+
+[class = "3"] {
+    padding: 4px 7px;
+    color: white;
+    text-transform: uppercase;
+    border-radius: 7px;
+    background-color: #5cb85c;
+}
+
+[class = "4"] {
+    padding: 4px 7px;
+    color: white;
+    text-transform: uppercase;
+    border-radius: 7px;
+    background-color: #5cb85c;
+}
+
+[class = "5"] {
+    padding: 4px 7px;
+    color: white;
+    text-transform: uppercase;
+    border-radius: 7px;
+    background-color: #5cb85c;
+}
+
+[class = "6"] {
+    padding: 4px 7px;
+    color: white;
+    text-transform: uppercase;
+    border-radius: 7px;
+    background-color: #5cb85c;
+}
+
+[class = "1"], [class = "2"], [class = "3"], [class = "4"], [class = "5"], [class = "6"], span.sahip {
+    width: 90px;
+    margin: auto;
+}
+
+/********************/
+
+.edit-form .row {
+    margin-bottom: 20px;
+}
+
+#photo {
+    display: none;
+    width: 100%;
+}
+
+#photo select {
+    width: 100%;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.photo-button {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 4px 16px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 15px;
+}

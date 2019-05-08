@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<!--[if IE 7]>
+<html class="ie ie7 no-js" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html class="ie ie8 no-js" lang="en-US">
+<![endif]-->
+<!--[if !(IE 7) | !(IE 8)  ]><!-->
+<html lang="en" class="no-js">
+
+<!-- seriessingle11:03-->
+<head>
+    <!-- Basic need -->
+    <title>{{ title }}</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <link rel="profile" href="#">
+
+    <!--Google Font-->
+    <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Dosis:400,700,500|Nunito:300,400,600'/>
+    <!-- Mobile specific meta -->
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone-no">
+
+    <!-- CSS files -->
+    <link rel="stylesheet" href="{% static 'movie/css/plugins.css' %}">
+    <link rel="stylesheet" href="{% static 'movie/css/style.css' %}">
+
+</head>
+<body>
+<!--preloading-->
+<div id="preloader">
+    <img class="logo" src="images/logo1.png" alt="" width="119" height="58">
+    <div id="status">
+        <span></span>
+        <span></span>
+    </div>
+</div>
+<!--end of preloading-->
+
+<div class="hero sr-single-hero sr-single" style="height: 416px">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-single movie-single movie_single">
+    <div class="container">
+        <div class="row ipad-width2">
+            <div class="col-md-4 col-sm-12 col-xs-12">
+                <div class="movie-img">
+                    <img src="{{ poster }}" alt="">
+                    <div class="movie-btn">
+                        <div class="btn-transform transform-vertical">
+                            <div>
+                                <a href="https://www.imdb.com/title/{{ imdb_id }}/" class="item item-1 yellowbtn">
+                                    Daha Fazla Bilgi
+                                </a>
+                            </div>
+                            <div>
+                                <a href="https://www.imdb.com/title/{{ imdb_id }}/" class="item item-2 yellowbtn"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-sm-12 col-xs-12">
+                <div class="movie-single-ct main-content">
+                    <h1 class="bd-hd">{{ title }} <span> {{ year }}</span></h1>
+                    <div class="movie-rate">
+                        <div class="rate"
+                             style="border-right: 1px solid #405266;padding-right: 20px;margin-right: 20px;">
+                            <img width="48px" src="/media/Icons8/imdb.png">
+                            <p><span>{{ imdb }}</span><br>
+                            </p>
+                        </div>
+                        <div class="rate"
+                             style="border-right: 1px solid #405266;padding-right: 20px;margin-right: 20px;">
+                            MetaScore -
+                            <i class="ion-android-star"></i>
+                            <p><span>{{ metascore }}</span><br>
+                            </p>
+                        </div>
+                        <div class="rate"
+                             style="border-right: 1px solid #405266;padding-right: 20px;margin-right: 20px;">
+                            <img src="/media/Icons8/rottentomatoes.png">
+                            <p><span>{{ tomato }}</span><br>
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="movie-tabs">
+                        <div class="tabs">
+                            <ul class="tab-links tabs-mv tabs-series">
+                                <li class="active"><a href="#overview">Genel Bakış</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="overview" class="tab active">
+                                    <div class="row">
+                                        <div class="col-md-8 col-sm-12 col-xs-12">
+                                            <p>{{ plot }}</p>
+                                            <!-- movie cast -->
+                                            <!--
+                                            <div class="mvsingle-item ov-item">
+                                                <a class="img-lightbox" data-fancybox-group="gallery"
+                                                   href="images/uploads/image41.jpg"><img
+                                                        src="images/uploads/image4.jpg" alt=""></a>
+                                                <a class="img-lightbox" data-fancybox-group="gallery"
+                                                   href="images/uploads/image51.jpg"><img
+                                                        src="images/uploads/image5.jpg" alt=""></a>
+                                                <a class="img-lightbox" data-fancybox-group="gallery"
+                                                   href="images/uploads/image61.jpg"><img
+                                                        src="images/uploads/image6.jpg" alt=""></a>
+                                                <div class="vd-it">
+                                                    <img class="vd-img" src="images/uploads/image7.jpg" alt="">
+                                                    <a class="fancybox-media hvr-grow"
+                                                       href="https://www.youtube.com/embed/o-0hcF97wy0"><img
+                                                            src="images/uploads/play-vd.png" alt=""></a>
+                                                </div>
+                                            </div>-->
+                                            <div class="title-hd-sm">
+                                                <h4>Oyuncular</h4>
+                                            </div>
+                                            <!-- movie cast -->
+                                            <div class="mvcast-item">
+                                                {% for actor in actors %}
+                                                <div class="cast-it">
+                                                    <div class="cast-left">
+                                                        <img src="images/uploads/cast1.jpg" alt="">
+                                                        <a href="#">{{ actor }}</a>
+                                                    </div>
+                                                    <p>... Robert Downey Jr.</p>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-xs-12 col-sm-12">
+                                            <div class="sb-it">
+                                                <h6>Yönetmen: </h6>
+                                                <p><a href="#">{{ director }}</a></p>
+                                            </div>
+                                            <div class="sb-it">
+                                                <h6>Yazar: </h6>
+                                                <p><a href="#">{{ writer }}</a></p>
+                                            </div>
+                                            <div class="sb-it">
+                                                <h6>Tür:</h6>
+                                                <p><a href="#">{{ genre }}</a>
+                                                </p>
+                                            </div>
+                                            <div class="sb-it">
+                                                <h6>Gösterim Tarihi:</h6>
+                                                <p>{{ released }}</p>
+                                            </div>
+                                            <div class="sb-it">
+                                                <h6>Film Süresi:</h6>
+                                                <p>{{ runtime }}</p>
+                                            </div>
+
+                                            <div class="ads">
+                                                <img src="images/uploads/ads1.png" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'movie/js/jquery.js' %}"></script>
+<script src="{% static 'movie/js/plugins.js' %}"></script>
+<script src="{% static 'movie/js/plugins2.js' %}"></script>
+<script src="{% static 'movie/js/custom.js' %}"></script>
+</body>
+
+<!-- seriessingle11:24-->
+</html>
