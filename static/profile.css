@@ -258,8 +258,14 @@ img.size {
 }
 
 .tab-button {
-    padding: 7px 0;
+    padding: 7px;
     text-align: left;
+    color: #6C757D;
+    font-weight: bold;
+}
+
+.tab-button a {
+    color: #6C757D;
 }
 
 .tab-button:hover {
@@ -327,6 +333,8 @@ tr {
     text-transform: uppercase;
     border-radius: 7px;
     background-color: #5cb85c;
+    width: 140px;
+    margin: auto;
 }
 
 [class = "6"] {
@@ -337,8 +345,8 @@ tr {
     background-color: #5cb85c;
 }
 
-[class = "1"], [class = "2"], [class = "3"], [class = "4"], [class = "5"], [class = "6"], span.sahip {
-    width: 90px;
+[class = "1"], [class = "2"], [class = "3"], [class = "4"], [class = "6"], span.sahip {
+    width: 110px;
     margin: auto;
 }
 
@@ -367,4 +375,25 @@ tr {
     border: none;
     border-radius: 5px;
     margin-top: 15px;
+}
+
+.profile-table td {
+    word-break: break-word;
+}
+
+/***************************/
+
+.profile-background-right {
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.06), 0 2px 0 0 rgba(0, 0, 0, 0.02);
+    background-color: white;
+    padding: 0;
+    min-height: 810px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+}
+
+@media screen and (max-width: 426px) {
+    #left-profile {
+        padding: 0;
+    }
 }

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Posts, Comments, ContactUs
+from .models import Posts, Comments, ContactUs, Reports
 
 
 class PostsModel(forms.ModelForm):
@@ -27,11 +27,27 @@ class CommentModel(forms.ModelForm):
 class ContactForms(forms.ModelForm):
     class Meta:
         model = ContactUs
-        fields = ['secenek', 'mesaj']
+        fields = ['ad', 'soyad', 'email', 'secenek', 'mesaj']
 
     def __init__(self, *args, **kwargs):
         super(ContactForms, self).__init__(*args, **kwargs)
-        self.fields['secenek'].widget.attrs = {'class': 'form-control'}
+        self.fields['secenek'].widget.attrs = {'class': 'form-control', 'style': 'margin-bottom:30px'}
         self.fields['mesaj'].widget.attrs = {'class': 'form-control',
-                                             'style': 'resize:none;height:200px;margin-top:30px',
+                                             'style': 'resize:none;height:200px;margin-bottom:30px',
                                              'placeholder': 'Mesajınız'}
+        self.fields['ad'].widget.attrs = {'class': 'form-control', 'style': 'margin-bottom:30px'}
+        self.fields['soyad'].widget.attrs = {'class': 'form-control', 'style': 'margin-bottom:30px'}
+        self.fields['email'].widget.attrs = {'class': 'form-control', 'style': 'margin-bottom:30px'}
+
+
+class ReportForms(forms.ModelForm):
+    class Meta:
+        model = Reports
+        fields = ['reason', 'comment']
+
+    def __init__(self, *args, **kwargs):
+        super(ReportForms, self).__init__(*args, **kwargs)
+        self.fields['reason'].widget.attrs = {'class': 'form-control'}
+        self.fields['comment'].widget.attrs = {'class': 'form-control',
+                                               'style': 'resize:none;height:200px;margin-bottom:30px',
+                                               'placeholder': 'Bu kullanıcıyı neden rapor ediyorsunuz?'}

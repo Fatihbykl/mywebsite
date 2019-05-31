@@ -73,13 +73,11 @@ YEARS = [i for i in range(1960, datetime.datetime.now().year)]
 
 
 class profilModel(forms.ModelForm):
-    SELECT = (('erkek', 'Erkek'), ('kadin', 'Kadın'))
     dogum_gunu = forms.DateTimeField(widget=forms.SelectDateWidget(years=YEARS))
-    cinsiyet = forms.CharField(widget=forms.RadioSelect(choices=SELECT), required=False)
 
     class Meta:
         model = kullaniciProfili
-        fields = ['ad', 'soyad', 'fav_film', 'fav_yonetmen', 'dogum_gunu', 'cinsiyet']
+        fields = ['ad', 'soyad', 'fav_film', 'fav_yonetmen', 'dogum_gunu']
 
     def __init__(self, *args, **kwargs):
         super(profilModel, self).__init__(*args, **kwargs)

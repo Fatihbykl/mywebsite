@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse, HttpResponseRedirect, get_object_or_404
 from .models import Posts, Comments, Notifications
-from .forms import PostsModel, CommentModel, ContactForms
+from .forms import PostsModel, CommentModel, ContactForms, ReportForms
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, JsonResponse, HttpResponse
 from user.models import Roles
@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import omdb
 import config
+from googletrans import Translator
 
 
 def deneme(request):
@@ -18,7 +19,6 @@ def deneme(request):
 
 def post_views(request):
     post_list = Posts.objects.all()
-    contact = ContactForms(request.POST or None)
     page = request.GET.get('page', 1)
     paginator = Paginator(post_list, 12)
     try:
@@ -28,25 +28,33 @@ def post_views(request):
     except EmptyPage:
         post = paginator.page(paginator.num_pages)
     if not request.user.is_authenticated:
-        return render(request, template_name='posts.html',
-                      context={'gonderi': post, 'contactForm': contact, })
-    notifications = Notifications.objects.filter(user=request.user).order_by('-created')[:5]
+        return render(request, template_name='posts.html', context={'gonderi': post})
+    notifications = Notifications.objects.filter(user=request.user, is_read=False).count()
+    mess_count = Notifications.objects.filter(user=request.user, is_read=False).count()
     return render(request, template_name='posts.html',
-                  context={'gonderi': post, 'contactForm': contact, 'msg': notifications})
+                  context={'gonderi': post, 'msg': notifications, 'msgCount': mess_count})
 
 
 @login_required(login_url='/kullanici/giris-yap')
 def post_create(request):
-    contact = ContactForms(request.POST or None)
     form = PostsModel(data=request.POST or None)
-    notifications = Notifications.objects.filter(user=request.user).order_by('-created')[:5]
+    notifications = Notifications.objects.filter(user=request.user, is_read=False).count()
     puan = get_object_or_404(Roles, user=request.user)
     eski_gonderi = Posts.objects.filter(found=0).order_by('tarih')[:5]
+    last_comments = Comments.objects.all().order_by('-id')[:5]
+    statistics = {
+        'comment': Comments.objects.all().count(),
+        'post': Posts.objects.all().count(),
+        'found': Posts.objects.filter(found=0).count(),
+        'users': User.objects.all().count(),
+    }
+    leaderboard = Roles().get_leaderboard_5()
+
     if form.is_valid():
         pk = form.save(commit=False)
         pk.yayinlayan = request.user
 
-        puan.puan += 5
+        puan.puan += 10
         puan.check_role()
         puan.save()
 
@@ -58,15 +66,28 @@ def post_create(request):
 
         return HttpResponseRedirect(reverse('post-detail', kwargs={'slug': pk.slug}))
     return render(request, 'post-create.html',
-                  context={'createForm': form, 'contactForm': contact, 'msg': notifications,
-                           'old_posts': eski_gonderi})
+                  context={'createForm': form, 'msg': notifications,
+                           'old_posts': eski_gonderi, 'last_comments': last_comments, 'statistics': statistics,
+                           'leaderboard_5': leaderboard})
 
 
 def post_detail(request, slug):
-    contact = ContactForms(request.POST or None)
     yorum = CommentModel(request.POST or None)
     post = get_object_or_404(Posts, slug=slug)
     eski_gonderi = Posts.objects.filter(found=0).order_by('tarih')[:5]
+    last_comments = Comments.objects.all().order_by('-id')[:5]
+    statistics = {
+        'comment': Comments.objects.all().count(),
+        'post': Posts.objects.all().count(),
+        'found': Posts.objects.filter(found=0).count(),
+        'users': User.objects.all().count(),
+    }
+    leaderboard = Roles().get_leaderboard_5()
+    report_form = ReportForms(data=request.POST or None)
+    try:
+        choosen_comment = Comments.objects.get(post=post, that_movie=True)
+    except:
+        choosen_comment = False
 
     try:
         request.session['post-%s' % slug]
@@ -76,20 +97,24 @@ def post_detail(request, slug):
         post.save()
     if not request.user.is_authenticated:
         return render(request, 'post-detail.html',
-                      context={'post': post, 'yorumForm': yorum, 'contactForm': contact, 'old_posts': eski_gonderi})
+                      context={'post': post, 'yorumForm': yorum,
+                               'old_posts': eski_gonderi,
+                               'last_comments': last_comments, 'statistics': statistics, 'leaderboard_5': leaderboard})
 
     user_role = get_object_or_404(Roles, user=request.user).role
-    notifications = Notifications.objects.filter(user=request.user).order_by('-created')[:5]
+    notifications = Notifications.objects.filter(user=request.user, is_read=False).count()
+    comment_count = Comments.objects.filter(post=post).count()
     return render(request, 'post-detail.html',
-                  context={'post': post, 'yorumForm': yorum, 'contactForm': contact, 'msg': notifications,
-                           'role': user_role,
-                           'old_posts': eski_gonderi})
+                  context={'post': post, 'yorumForm': yorum, 'msg': notifications,
+                           'role': user_role, 'reportForm': report_form, 'choosen_comment': choosen_comment,
+                           'old_posts': eski_gonderi, 'comment_count': comment_count,
+                           'last_comments': last_comments, 'statistics': statistics, 'leaderboard_5': leaderboard})
 
 
 @login_required(login_url='/kullanici/giris-yap')
-def comment(request, slug):
+def comment(request, slug, sug_movie, movie_href):
     if request.method == 'GET':
-        return HttpResponseBadRequest
+        return HttpResponseBadRequest()
     puan = get_object_or_404(Roles, user=request.user)
     yorum = CommentModel(request.POST or None)
     post = get_object_or_404(Posts, slug=slug)
@@ -97,8 +122,10 @@ def comment(request, slug):
         pk = yorum.save(commit=False)
         pk.post = post
         pk.sahip = request.user
+        pk.movie_tag = sug_movie
+        pk.movie_tag_href = movie_href
 
-        puan.puan += 2
+        puan.puan += 5
         puan.check_role()
         puan.save()
 
@@ -112,19 +139,48 @@ def comment(request, slug):
 
 
 def contact_us(request):
-    if request.method == 'GET':
-        return HttpResponseBadRequest
     contact = ContactForms(data=request.POST or None)
+    last_comments = Comments.objects.all().order_by('-id')[:5]
+    statistics = {
+        'comment': Comments.objects.all().count(),
+        'post': Posts.objects.all().count(),
+        'found': Posts.objects.filter(found=0).count(),
+        'users': User.objects.all().count(),
+    }
+    leaderboard = Roles().get_leaderboard_5()
+    eski_gonderi = Posts.objects.filter(found=0).order_by('tarih')[:5]
     if contact.is_valid():
+        if request.method == 'GET':
+            return HttpResponseBadRequest()
         pk = contact.save(commit=False)
-        pk.k_adi = request.user.username
-        baslik = contact.cleaned_data['secenek']
-        mesaj = contact.cleaned_data['mesaj']
-        pk.secenek = baslik
-        pk.mesaj = mesaj
-        pk.save()
+        if request.user.is_authenticated:
+            pk.k_adi = request.user.username
+            baslik = contact.cleaned_data['secenek']
+            mesaj = contact.cleaned_data['mesaj']
+            pk.secenek = baslik
+            pk.mesaj = mesaj
+            pk.email = request.user.email
+            pk.ad = request.user.profil.ad
+            pk.soyad = request.user.profil.soyad
+            pk.save()
+        else:
+            pk.secenek = contact.cleaned_data['secenek']
+            pk.mesaj = contact.cleaned_data['mesaj']
+            pk.ad = contact.cleaned_data['ad']
+            pk.soyad = contact.cleaned_data['soyad']
+            pk.email = contact.cleaned_data['email']
+            pk.save()
         return HttpResponseRedirect(reverse('gonderiler'))
-    return HttpResponseRedirect(reverse('gonderiler'))
+    if not request.user.is_authenticated:
+        return render(request, 'contact.html',
+                      context={'contactForm': contact, 'leaderboard_5': leaderboard, 'old_posts': eski_gonderi,
+                               'last_comments': last_comments,
+                               'statistics': statistics})
+    notifications = Notifications.objects.filter(user=request.user, is_read=False).count()
+    return render(request, 'contact.html',
+                  context={'contactForm': contact, 'leaderboard_5': leaderboard, 'old_posts': eski_gonderi,
+                           'last_comments': last_comments, 'msg': notifications,
+                           'statistics': statistics})
 
 
 def like(request, slug, id):
@@ -134,8 +190,12 @@ def like(request, slug, id):
     com = get_object_or_404(Comments, id=id)
     if user in com.likes.all():
         com.likes.remove(user)
+        com.is_liked = 0
+        com.save()
     else:
         com.likes.add(user)
+        com.is_liked = 1
+        com.save()
         if com.sahip != user:
             message = "<b>%s</b> yorumunu beğendi:<br>%s" % (user.username, com.yorum)
             Notifications.objects.create(user=com.sahip, message=message, notification_type='like',
@@ -144,41 +204,48 @@ def like(request, slug, id):
     return HttpResponse(like_count)
 
 
-@login_required(login_url='/kullanici/giris-yap')
-def report_post(request, slug):
-    user = request.user
-    post = get_object_or_404(Posts, slug=slug)
-    if user in post.report.all():
-        post.report.remove(user)
-    else:
-        post.report.add(user)
-        if post.report.all().count() > 10:
-            for admin in User.objects.filter(role_user__role=6):
-                msg = "Bu gönderi %s kez rapor edildi! Kontrol etmen gerekiyor." % post.report.all().count()
-                Notifications.objects.create(user=admin, message=msg,
-                                             notification_type='report', which_post_slug=post.slug)
-    report_count = post.report.all().count()
-    return HttpResponse(report_count)
-
-
 def report(request, slug, id):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
+    form = ReportForms(data=request.POST or None)
     user = request.user
     com = get_object_or_404(Comments, id=id)
-    if user in com.reports.all():
-        com.reports.remove(user)
-    else:
-        com.reports.add(user)
-        report_count = com.reports.all().count()
-        # --------> rapor sayısını düzelt
-        if report_count > 0:
-            for admin in User.objects.filter(role_user__role=6):
-                msg = "Bir yorum %s kez rapor edildi! Kontrol etmen gerekiyor.<br>-->%s" % (report_count, com.yorum)
-                Notifications.objects.create(user=admin, message=msg,
-                                             notification_type='report', which_post_slug=com.post.slug)
-    report_count = com.reports.all().count()
-    return HttpResponse(report_count)
+    post = get_object_or_404(Posts, slug=slug)
+    if form.is_valid():
+        pk = form.save(commit=False)
+        pk.reason = form.cleaned_data['reason']
+        pk.comment = form.cleaned_data['comment']
+        pk.which_post = slug
+        pk.which_user = com.sahip.username
+        pk.who = user.username
+        pk.save()
+
+        for admin in User.objects.filter(role_user__role=6):
+            msg = "Rapor Özeti:<br> Raporlayan: %s <br>Raporlanan: %s <br> Neden: %s <br> Açıklama: %s" % (
+            user.username, post.yayinlayan.username, pk.get_reason_display(), pk.comment)
+            Notifications.objects.create(user=admin, message=msg, notification_type='report', which_post_slug=com.post.slug)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def report_post(request, slug):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('login'))
+    form = ReportForms(data=request.POST or None)
+    user = request.user
+    post = get_object_or_404(Posts, slug=slug)
+    if form.is_valid():
+        pk = form.save(commit=False)
+        pk.reason = form.cleaned_data['reason']
+        pk.comment = form.cleaned_data['comment']
+        pk.which_post = slug
+        pk.which_user = post.yayinlayan.username
+        pk.who = user.username
+        pk.save()
+        for admin in User.objects.filter(role_user__role=6):
+            msg = "Rapor Özeti:<br> Raporlayan: %s <br>Raporlanan: %s <br> Neden: %s <br> Açıklama: %s" % (
+                user.username, post.yayinlayan.username, pk.get_reason_display(), pk.comment)
+            Notifications.objects.create(user=admin, message=msg, notification_type='report', which_post_slug=slug)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required(login_url='/kullanici/giris-yap')
@@ -188,7 +255,7 @@ def that_movie(request, slug, id):
     role = get_object_or_404(Roles, user=com.sahip)
     user = request.user
 
-    if post.yayinlayan == user:
+    if post.yayinlayan == user or request.user.role_user.role == 6:
         if com.that_movie == 0:
             com.that_movie = 1
             com.save()
@@ -196,7 +263,7 @@ def that_movie(request, slug, id):
             com.sahip.profil.buldugu_film += 1
             com.sahip.profil.save()
 
-            role.puan += 10
+            role.puan += 25
             role.check_role()
             role.save()
 
@@ -221,15 +288,15 @@ def that_movie(request, slug, id):
 def follow(request, slug):
     user = request.user
     post = get_object_or_404(Posts, slug=slug)
-    if user in post.followers.all():
-        post.followers.remove(user)
-    else:
-        post.followers.add(user)
-        message = "<b>%s</b> adlı kullanıcı gönderini takip ediyor." % user.username
-        Notifications.objects.create(user=post.yayinlayan, message=message, notification_type='follow',
-                                     which_post_slug=post.slug)
-    follow_count = post.followers.all().count()
-    return HttpResponse(follow_count)
+    if request.user != post.yayinlayan:
+        if user in post.followers.all():
+            post.followers.remove(user)
+        else:
+            post.followers.add(user)
+            message = "<b>%s</b> adlı kullanıcı gönderini takip ediyor." % user.username
+            Notifications.objects.create(user=post.yayinlayan, message=message, notification_type='follow',
+                                         which_post_slug=post.slug)
+    return HttpResponse('')
 
 
 @login_required(login_url='/kullanici/giris-yap')
@@ -244,11 +311,19 @@ def delete_post(request, slug):
 
 @login_required(login_url='/kullanici/giris-yap')
 def edit_post(request, slug):
-    contact = ContactForms(request.POST or None)
     mess = Notifications.objects.filter(user=request.user).order_by('-created')[:5]
     post = get_object_or_404(Posts, slug=slug)
     form = PostsModel(instance=post, data=request.POST or None)
     eski_gonderi = Posts.objects.filter(found=0).order_by('tarih')[:5]
+    last_comments = Comments.objects.all().order_by('-id')[:5]
+    statistics = {
+        'comment': Comments.objects.all().count(),
+        'post': Posts.objects.all().count(),
+        'found': Posts.objects.filter(found=0).count(),
+        'users': User.objects.all().count(),
+    }
+    leaderboard = Roles().get_leaderboard_5()
+
     if request.user == post.yayinlayan:
         if form.is_valid():
             form.save()
@@ -258,7 +333,8 @@ def edit_post(request, slug):
     elif request.user != post.yayinlayan:
         return HttpResponseForbidden()
     return render(request, 'post-edit.html', context={'form': form, 'post': post, 'msg': mess, 'post_old': eski_gonderi,
-                                                      'contactForm': contact})
+                                                      'last_comments': last_comments,
+                                                      'statistics': statistics, 'leaderboard_5': leaderboard})
 
 
 @login_required(login_url='/kullanici/giris-yap')
@@ -277,17 +353,22 @@ omdb.set_default('tomatoes', True)
 omdb.set_default('fullplot', True)
 
 
-def movie(request, movie_name):
-    movie = omdb.get(title=movie_name)
+def movie(request, imdb_id, movie_name):
+    t = Translator()
+    movie = omdb.get(imdbid=imdb_id)
     title = movie['title']
     year = movie['year']
-    released = movie['released']
-    runtime = movie['runtime']
-    genre = movie['genre']
+    released_en = movie['released'].split(' ')
+    released_t = t.translate(released_en[1], dest='tr').text.capitalize()
+    released = released_en[0] + " " + released_t + " " + released_en[2]
+    runtime = movie['runtime'].split(' ')[0]
+    genre_en = movie['genre']
+    genre = t.translate(genre_en, dest='tr').text.title()
     director = movie['director']
     writer = movie['writer']
     actors = movie['actors'].split(',')
-    plot = movie['plot']
+    plot_en = movie['plot']
+    plot = t.translate(plot_en, dest='tr').text
     country = movie['country']
     awards = movie['awards']
     poster = movie['poster']
@@ -312,3 +393,59 @@ def search_movie(request, movie_name):
         list.append(i['imdb_id'])
 
     return JsonResponse(list, safe=False)
+
+
+def scores(request):
+    last_comments = Comments.objects.all().order_by('-id')[:5]
+    statistics = {
+        'comment': Comments.objects.all().count(),
+        'post': Posts.objects.all().count(),
+        'found': Posts.objects.filter(found=0).count(),
+        'users': User.objects.all().count(),
+    }
+    r = Roles()
+    leaderboard = r.get_leaderboard_full()
+    eski_gonderi = Posts.objects.filter(found=0).order_by('tarih')[:5]
+    r_5 = r.get_leaderboard_5()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(leaderboard, 5)
+    try:
+        post = paginator.page(page)
+    except PageNotAnInteger:
+        post = paginator.page(1)
+    except EmptyPage:
+        post = paginator.page(paginator.num_pages)
+
+    if request.user.is_authenticated:
+        notifications = Notifications.objects.filter(user=request.user, is_read=False).count()
+        p = r.get_user_place(user=request.user)
+        return render(request, 'score.html',
+                      context={'leaderboard': post, 'leaderboard_5': r_5, 'last_comments': last_comments,
+                               'statistics': statistics, 'msg': notifications,
+                               'old_posts': eski_gonderi, 'user_place': p})
+
+    return render(request, 'score.html',
+                  context={'leaderboard': post, 'leaderboard_5': r_5, 'last_comments': last_comments,
+                           'statistics': statistics,
+                           'old_posts': eski_gonderi})
+
+
+def rules(request):
+    last_comments = Comments.objects.all().order_by('-id')[:5]
+    statistics = {
+        'comment': Comments.objects.all().count(),
+        'post': Posts.objects.all().count(),
+        'found': Posts.objects.filter(found=0).count(),
+        'users': User.objects.all().count(),
+    }
+    leaderboard = Roles().get_leaderboard_5()
+    eski_gonderi = Posts.objects.filter(found=0).order_by('tarih')[:5]
+    if request.user.is_authenticated:
+        notifications = Notifications.objects.filter(user=request.user, is_read=False).count()
+        return render(request, 'rules.html',
+                      context={'leaderboard_5': leaderboard, 'last_comments': last_comments, 'statistics': statistics,
+                               'old_posts': eski_gonderi, 'msg': notifications})
+
+    return render(request, 'rules.html',
+                  context={'leaderboard_5': leaderboard, 'last_comments': last_comments, 'statistics': statistics,
+                           'old_posts': eski_gonderi})

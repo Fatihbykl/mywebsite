@@ -5,36 +5,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'new.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'paginator.css' %}">
 
-    <style>
-        hr.second {
-            overflow: visible; /* For IE */
-            padding: 0;
-            border: none;
-            border-top: medium double #007bff;
-            color: #007bff;
-            text-align: center;
-        }
-
-        hr.second:after {
-            content: "§";
-            display: inline-block;
-            position: relative;
-            top: -0.7em;
-            font-size: 1.5em;
-            padding: 0 0.25em;
-            background: white;
-        }
-
-        a.link {
-            color: #EAEDF1;
-        }
-
-        a.link:hover {
-            color: #673AB7;
-            text-decoration: none;
-            transition-duration: 0.4s;
-        }
-    </style>
+    <title></title>
+    <meta name="description" content="Aradığı filmi bulamayanların forumu."/>
 {% endblock %}
 
 {% block body %}
@@ -43,7 +15,7 @@
             {% for post in gonderi %}
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" style="padding-left: 30px">
                     <div class="card mt-5 text-center" style="width: 95%;">
-                        <div style="background-color: #2C333A">
+                        <div style="background-color: #2F3239">
                             <img style="width: 100px;height: 100px;margin: 0 auto; border: 2px groove whitesmoke;border-radius: 50%"
                                  src="/media/{{ post.yayinlayan.profil.profilFoto }}" alt="Profil Fotoğrafı">
                             <div style="color:#EAEDF1">
@@ -53,7 +25,6 @@
                                 <span>{{ post.tarih }}</span>
                             </div>
                         </div>
-                        <!--<hr style="width: 100%" class="second">-->
                         <div class="card-body" style="padding-top: 10px">
                             <h6 class="card-title">{{ post.baslik|upper|truncatechars:52 }}</h6>
                             <hr class="first-style" style="margin-bottom: 5px;margin-top: 0">
@@ -63,9 +34,9 @@
                         </div>
                         <div class="card-footer text-muted">
                             <div class="row justify-content-center">
-                                <a class="btn" style="background: #00B4A4; color: #EAEDF1;" href="{% url 'post-detail' post.slug %}"
-                                   role="button"
-                                >Devamını Gör</a>
+                                <a class="btn" style="background: #3498DB; color: #EAEDF1;"
+                                   href="{% url 'post-detail' post.slug %}"
+                                   role="button">Devamını Gör</a>
                             </div>
                         </div>
                     </div>
@@ -84,10 +55,33 @@
                             {% endif %}
                             {% for page in gonderi.paginator.page_range %}
                                 {% if gonderi.number == page %}
+                                    {% if page|add:-10 > 0 %}
+                                        <a href="?page={{ page|add:-10 }}"><span aria-current="page"
+                                                                                 class="page-numbers">{{ page|add:-10 }}</span></a>
+                                        <span class="page-numbers">...</span>
+                                    {% endif %}
+                                    {% if page|add:-2 > 0 %}
+                                        <a href="?page={{ page|add:-2 }}"><span aria-current="page"
+                                                                                class="page-numbers">{{ page|add:-2 }}</span></a>
+                                    {% endif %}
+                                    {% if page|add:-1 > 0 %}
+                                        <a href="?page={{ page|add:-1 }}"><span aria-current="page"
+                                                                                class="page-numbers">{{ page|add:-1 }}</span></a>
+                                    {% endif %}
                                     <span aria-current="page" class="page-numbers current">{{ page }}</span>
-                                {% else %}
-                                    <a href="?page={{ page }}"><span aria-current="page"
-                                                                     class="page-numbers">{{ page }}</span></a>
+                                    {% if page|add:1 <= gonderi.paginator.num_pages %}
+                                        <a href="?page={{ page|add:1 }}"><span aria-current="page"
+                                                                               class="page-numbers">{{ page|add:1 }}</span></a>
+                                    {% endif %}
+                                    {% if page|add:2 <= gonderi.paginator.num_pages %}
+                                        <a href="?page={{ page|add:2 }}"><span aria-current="page"
+                                                                               class="page-numbers">{{ page|add:2 }}</span></a>
+                                    {% endif %}
+                                    {% if page|add:10 <= gonderi.paginator.num_pages %}
+                                        <span class="page-numbers">...</span>
+                                        <a href="?page={{ page|add:10 }}"><span aria-current="page"
+                                                                                class="page-numbers">{{ page|add:10 }}</span></a>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                             {% if gonderi.has_next %}

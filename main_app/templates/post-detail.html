@@ -2,397 +2,505 @@
 {% load static %}
 
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{% static 'comments.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'leaderboard.css' %}">
+    <title>{{ post.baslik }}</title>
+    <meta name="description" content="{{ post.icerik }}"/>
 
-    <meta property="og:url" content="{% url 'post-detail' post.slug %}"/>
+    <meta property="og:url" content="http://fatihbykl.pythonanywhere.com/gonderiler/sonar/"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:title" content="Your Website Title"/>
-    <meta property="og:description" content="Your description"/>
-    <meta property="og:image" content="https://www.your-domain.com/path/image.jpg"/>
+    <meta property="og:title" content="Başlık"/>
+    <meta property="og:description" content="İçerik"/>
+    <meta property="og:image" content="/media/martian.jpg"/>
 {% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="row" style="margin-top: 20px;">
-            <div class="col-lg-12" style="word-break: break-word">
-                {% include 'messages.html' %}
+    <div class="as">
+        <div class="container">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-lg-12" style="word-break: break-word">
+                    {% include 'messages.html' %}
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-9">
-                <div class="content-wrap">
-                    <div class="comment-item">
-                        <div class="comment-item--inner">
-                            <div class="is-left">
-                                <figure class="avatar">
-                                </figure>
-                            </div>
-                            <div class="is-right">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-lg-12 centered-img">
-                                            <img class="rounded-circle" style="width: 100px;height: 100px;padding: 10px"
-                                                 src="/media/{{ post.yayinlayan.profil.profilFoto }}" alt="">
-                                            <a href="{% url 'profile-info' post.yayinlayan.username %}"
-                                               class="a-post-detail">
-                                                {{ post.yayinlayan.username }}
-                                            </a>
-                                            -
-                                            {{ post.tarih|timesince }} önce
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="content-wrap">
+                        <div class="comment-item">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-12" style="padding: 0">
+                                        <div style="font-weight: bold;padding: 10px 0 0 23px;width: 89%;float: left">
+                                            <i style="font-size: 20px;" class="fas fa-arrow-alt-circle-right"></i>
+                                            {{ post.baslik }}
+                                        </div>
+                                        <div id="post-dropdown">
+                                            <button type="button" class="threedots button-clear"
+                                                    style="margin-top: 9px;"
+                                                    data-toggle="dropdown"></button>
+                                            <div class="dropdown-menu dropdown-menu-right" style="width: 100px;">
+                                                {% if request.user != post.yayinlayan %}
+                                                    <button data-toggle="modal" data-target="#report-post-2"
+                                                            class="dropdown-item"
+                                                            {% if not request.user.is_authenticated %}
+                                                            href="{% url 'login' %}"
+                                                            {% endif %}
+                                                            id="report-post">
+                                                        <img
+                                                                alt="report-post"
+                                                                src="/media/Icons8/icons8-error-48.png">Raporla
+                                                    </button>
+                                                {% endif %}
+                                                {% if request.user.is_authenticated and request.user != post.yayinlayan %}
+                                                    <a class="dropdown-item" id="follow"
+                                                            {% if not request.user.is_authenticated %}
+                                                       href="{% url 'login' %}"
+                                                            {% endif %}>
+                                                        <i class="fas fa-star"></i> Takip Et</a>
+                                                {% endif %}
+                                                {% if request.user == post.yayinlayan %}
+                                                    <a class="dropdown-item" href="{% url 'edit-post' post.slug %}"><img
+                                                            alt="" src="/media/Icons8/edit.png">Düzenle</a>
+                                                {% endif %}
+                                                {% if request.user == post.yayinlayan or request.user.role_user.role == 6 %}
+                                                    <a class="dropdown-item">
+                                                        <button style="background-color: white;border: none;padding: 0"
+                                                                data-toggle="modal"
+                                                                data-target="#postDelete">
+                                                            <img src="/media/Icons8/bin.png">Sil
+                                                        </button>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
-                                    <hr>
-                                    <div class="the--comment">
-                                        <p class="post">{{ post.icerik }}</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12" style="padding-top: 10px">
+                                        <img style="border-radius: 50%;width: 30px"
+                                             src="/media/{{ post.yayinlayan.profil.profilFoto }}">
+                                        <span
+                                                class="post-info-span">{{ post.yayinlayan.username }}</span>
+                                        <i class="far fa-clock post-info-icon"></i><span
+                                            class="post-info-span">{{ post.tarih }}</span>
+                                        <i class="fas fa-eye post-info-icon"></i><span
+                                            class="post-info-span">{{ post.views_count }}</span>
+                                        <i class="far fa-comments post-info-icon"></i><span
+                                            class="post-info-span">{{ comment_count }}</span>
                                     </div>
-                                    <hr>
-                                    <div class="ratings">
-                                        <span class="share share2 sharing-init">
-                                            <img alt="share" src="/media/Icons8/share.svg">
-                                        </span>
-                                        <a {% if request.user.is_authenticated %}id="report-post"
-                                           {% else %}href="{% url 'login' %}" {% endif %}>
-                                            <span class="share sharing-init">
-                                                <img alt="report-post" src="/media/Icons8/icons8-error-48.png">
-                                                <span id="report-post-number"
-                                                      class="badge-number-post">{{ post.report.all.count }}</span>
-                                            </span>
-                                        </a>
-                                        <a {% if request.user.is_authenticated %}id="follow"
-                                           {% else %}href="{% url 'login' %}" {% endif %}>
-                                            <span class="share sharing-init">
-                                                <img alt="follow" src="/media/Icons8/icons8-star-64.png">
-                                                <span id="follow-number"
-                                                      class="badge-number-post">{{ post.followers.all.count }}</span>
-                                            </span>
-                                        </a>
-                                        {% if request.user.role_user.role == 6 or request.user == post.yayinlayan %}
-                                            <button style="background-color: white;border: none;float: left;margin-top: 0;width: 30px;height: 30px"
-                                                    data-toggle="modal"
-                                                    data-target="#postDelete">
-                                                <img style="width: 35px;position: absolute;margin-left: -25px;margin-top: -25px;"
-                                                     src="/media/Icons8/bin.png">
-                                            </button>
-                                        {% elif request.user == post.yayinlayan %}
-                                            <a href="{% url 'edit-post' post.slug %}"
-                                               style="float: left;margin-top: -8px">
-                                                <img style="width: 35px;margin-top: 0px"
-                                                     src="/media/Icons8/edit.png">
-                                            </a>
-                                        {% endif %}
-                                    </div>
+                                </div>
+                                <hr>
+                                <div class="the--comment">
+                                    <p class="post">{{ post.icerik }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- MODAL DELETE POST-->
-                <div class="modal fade" id="postDelete">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
+                    <!-- MODAL DELETE POST-->
+                    <div class="modal fade" id="postDelete">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
 
-                            <!-- Modal Header -->
-                            <div class="modal-header">
-                                <h4 class="modal-title">Dikkat!</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Dikkat!</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <b>Oluşturduğunuz gönderiyi silmek istediğinizden emin misiniz?</b>
+                                </div>
+
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç
+                                    </button>
+                                    <button type="button"
+                                            onclick="location.href='{% url 'delete-post' post.slug %}';"
+                                            class="btn btn-success">
+                                        Sil
+                                    </button>
+                                </div>
+
                             </div>
-
-                            <!-- Modal body -->
-                            <div class="modal-body">
-                                <b>Oluşturduğunuz gönderiyi silmek istediğinizden emin misiniz?</b>
-                            </div>
-
-                            <!-- Modal footer -->
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç
-                                </button>
-                                <button type="button"
-                                        onclick="location.href='{% url 'delete-post' post.slug %}';"
-                                        class="btn btn-success">
-                                    Sil
-                                </button>
-                            </div>
-
                         </div>
                     </div>
-                </div>
-
-                <div class="col-lg-4">
-
-                </div>
-
-
-                <div class="content-wrap" style="box-shadow: none">
-                    <div class="comment-wrap">
-                        <div class="photo">
-                            <div class="avatar"
-                                 style="background-image: url('/media/{{ request.user.profil.profilFoto }}')"></div>
-                        </div>
-                        <div class="comment-block">
-                            <form method="get" onsubmit="preventSubmit(event)">
-                                <div class="row">
-                                    <div class="col-lg-9">
-                                        <input id="search-value" style="width: 100%;" type="text"
+                    <div class="content-wrap" style="box-shadow: none">
+                        <div class="comment-wrap">
+                            <div class="comment-block">
+                                <form id="search-movie" method="get" onsubmit="preventSubmit(event)">
+                                    <div style="width: 100%;position: relative">
+                                        <input id="search-value" style="width: 100%;float: left" type="text"
                                                placeholder="Film ara...">
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <input id="search-movie-button" style="width: 100%;" type="submit" value="Ara">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-9">
-                                        <div id="search-div" class="ajax-search">
+                                        <div style="top: 23px;" id="search-div" class="ajax-search">
                                             <ul id="movie-ul">
 
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3"></div>
-                                </div>
-                            </form>
-                            <hr>
-                            <form action="{% url 'comment' post.slug %}" method="post">
-                                {% csrf_token %}
-                                {{ yorumForm.yorum|safe }}
-                                <input {% if post.found %}disabled{% endif %} class="yorumButonu" type="submit"
-                                       value="Yorum Yap">
-                            </form>
+                                </form>
+                                <hr style="margin-top: 40px">
+                                <form id="form-com" action="" method="post">
+                                    {% csrf_token %}
+                                    {{ yorumForm.yorum }}
+                                    <div id="choosen-movies">
+                                        <span id="movie-hyperlink"></span><span onClick='close_hyperlinks();'
+                                                                                id="close-hyperlink">&times;</span>
+                                    </div>
+                                    <input {% if post.found %}disabled{% endif %} class="btn btn-sm btn-outline-success"
+                                           type="submit" id="submit-button"
+                                           {% if not request.user.is_authenticated %}onclick="location.href ='{% url 'login' %}'" {% endif %}
+                                           value="Yorum Yap" style="margin-left: 10px;float: right;">
+                                    <input class="btn btn-sm btn-outline-success" style="float: right;width: 87px"
+                                           {% if post.found %}disabled{% endif %}
+                                           type="button" id="search-movie-button"
+                                           onclick="{% if request.user.is_authenticated %}$('#search-movie').submit();{% else %}location.href ='{% url 'login' %}'{% endif %}"
+                                           value="Ara">
+                                </form>
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#submit-button').click(function () {
+                                            var a = $('#a_mov');
+                                            var mov_link_href = a.attr("href").split('/')[3];
+                                            var mov_link = a.text();
+                                            var link = '{% url 'comment' post.slug 'mov_link' 'mov_link_id' %}'.replace('mov_link', mov_link).replace('mov_link_id', mov_link_href);
+                                            $('#form-com').attr('action', link);
+                                        });
+                                    });
+                                </script>
+                            </div>
                         </div>
-                    </div>
-                    {% for comment in post.get_comments %}
-                        {% if comment.that_movie %}
+
+                        {% if choosen_comment %}
                             <div class="comment-wrap">
-                                <div class="choosen-photo">
-                                    <div class="avatar"
-                                         style="background-image: url('/media/{{ comment.sahip.profil.profilFoto }}')"></div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"
-                                         style="position: absolute;margin-top: 65px;margin-left: -43px"
-                                         viewBox="0 0 512 512">
-                                        <path fill="limegreen"
-                                              d="M504.1 256C504.1 119 393 7.9 256 7.9S7.9 119 7.9 256 119 504.1 256 504.1 504.1 393 504.1 256z"/>
-                                        <path fill="#fff"
-                                              d="M392.6 172.9c-5.8-15.1-17.7-12.7-30.6-10.1-7.7 1.6-42 11.6-96.1 68.8-22.5 23.7-37.3 42.6-47.1 57-6-7.3-12.8-15.2-20-22.3-22.1-22.1-46.8-37.3-47.8-37.9-10.3-6.3-23.8-3.1-30.2 7.3-6.3 10.3-3.1 23.8 7.2 30.2.2.1 21.4 13.2 39.6 31.5 18.6 18.6 35.5 43.8 35.7 44.1 4.1 6.2 11 9.8 18.3 9.8 1.2 0 2.5-.1 3.8-.3 8.6-1.5 15.4-7.9 17.5-16.3.1-.2 8.8-24.3 54.7-72.7 37-39.1 61.7-51.5 70.3-54.9h.3s.3-.1.8-.4c1.5-.6 2.3-.8 2.3-.8-.4.1-.6.1-.6.1v-.1l11.5-5c11.1-4.8 14.8-16.8 10.4-28z"/>
-                                    </svg>
-                                </div>
                                 <div class="comment-block" style="border: 2px solid limegreen;">
                                     <div class="row">
                                         <div class="col-lg-12">
+                                            <img class="com-img"
+                                                 src="/media/{{ choosen_comment.sahip.profil.profilFoto }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"
+                                                 style="float: right"
+                                                 viewBox="0 0 512 512">
+                                                <path fill="limegreen"
+                                                      d="M504.1 256C504.1 119 393 7.9 256 7.9S7.9 119 7.9 256 119 504.1 256 504.1 504.1 393 504.1 256z"/>
+                                                <path fill="#fff"
+                                                      d="M392.6 172.9c-5.8-15.1-17.7-12.7-30.6-10.1-7.7 1.6-42 11.6-96.1 68.8-22.5 23.7-37.3 42.6-47.1 57-6-7.3-12.8-15.2-20-22.3-22.1-22.1-46.8-37.3-47.8-37.9-10.3-6.3-23.8-3.1-30.2 7.3-6.3 10.3-3.1 23.8 7.2 30.2.2.1 21.4 13.2 39.6 31.5 18.6 18.6 35.5 43.8 35.7 44.1 4.1 6.2 11 9.8 18.3 9.8 1.2 0 2.5-.1 3.8-.3 8.6-1.5 15.4-7.9 17.5-16.3.1-.2 8.8-24.3 54.7-72.7 37-39.1 61.7-51.5 70.3-54.9h.3s.3-.1.8-.4c1.5-.6 2.3-.8 2.3-.8-.4.1-.6.1-.6.1v-.1l11.5-5c11.1-4.8 14.8-16.8 10.4-28z"/>
+                                            </svg>
                                             <a class="a-post-detail"
-                                               href="{% url 'profile-info' comment.sahip.username %}"><span
-                                                    style="font-size: 25px">{{ comment.sahip.username }}</span></a>
-                                            <span class="{{ comment.sahip.role_user.role }}">{{ comment.sahip.role_user.get_role_display }}</span>
+                                               href="{% url 'profile-info' choosen_comment.sahip.username %}"><span
+                                                    class="font-com-user"> {{ choosen_comment.sahip.username }}</span></a>
+                                            <span class="{{ choosen_comment.sahip.role_user.role }}">{{ choosen_comment.sahip.role_user.get_role_display }}</span>
                                         </div>
                                     </div>
-                                    <hr>
-                                    <p class="comment-text">{{ comment.yorum|safe }}</p>
-                                    <hr>
                                     <div class="bottom-comment">
-                                        <div class="comment-date">{{ comment.time|timesince }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                        <!-- MODAL -->
-                        <div class="modal fade" id="movieFound">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-
-                                    <!-- Modal Header -->
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Dikkat!</h4>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-
-                                    <!-- Modal body -->
-                                    <div class="modal-body">
-                                        <b>Aradığınız filmin bu olduğundan emin değilseniz devam etmeyin. Bu işlemin
-                                            geri dönüşü yoktur.</b>
-                                    </div>
-
-                                    <!-- Modal footer -->
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç
-                                        </button>
-                                        <button type="button"
-                                                onclick="location.href='{% url 'that-movie' post.slug comment.id %}';"
-                                                class="btn btn-success">
-                                            Devam
-                                        </button>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {% for comment in post.get_comments %}
-                        <div class="comment-wrap">
-                            <div class="photo">
-                                <div class="avatar"
-                                     style="background-image: url('/media/{{ comment.sahip.profil.profilFoto }}')"></div>
-                            </div>
-                            <div class="comment-block">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <a class="a-post-detail" href="{% url 'profile-info' comment.sahip.username %}"><span
-                                                style="font-size: 25px">{{ comment.sahip.username }}</span></a>
-                                        <span class="{{ comment.sahip.role_user.role }}">
-                                            {{ comment.sahip.role_user.get_role_display }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <hr>
-                                <p class="comment-text">{{ comment.yorum|safe }}</p>
-                                <hr>
-                                <div class="bottom-comment">
-                                    <div class="comment-date">{{ comment.time|timesince }}</div>
-                                    <ul class="comment-actions">
-                                        <li class="complain">
-                                            <a {% if request.user.is_authenticated %}id="comment-like-{{ comment.id }}"
+                                        <div style="padding-top: 10px;font-weight: bold;color: #BDBDBD">{{ choosen_comment.time|timesince }}
+                                            önce
+                                            <span style="font-size: 25px;vertical-align: sub;color: #BDBDBD;">&bull;</span>
+                                            <a {% if request.user.is_authenticated %}id="comment-like-{{ choosen_comment.id }}"
+                                               onclick="choosen_like();choosen_heart();"
                                                {% else %}
                                                href="{% url 'login' %}"
                                                {% endif %}
                                                class="a">
-                                                <img id="like-img-{{ comment.id }}" alt="like"
-                                                     src="/media/Icons8/icons8-facebook-like-48.png">
-                                                <span id="like-number-{{ comment.id }}"
-                                                      class="badge-number">{{ comment.likes.all.count }}</span>
+                                                {% if not choosen_comment.is_liked %}
+                                                    <i id="comm-like-icon-{{ choosen_comment.id }}"
+                                                       style="transition-duration: .5s"
+                                                       class="fas fa-heart"></i>
+                                                {% else %}
+                                                    <i id="comm-like-icon-{{ choosen_comment.id }}"
+                                                       style="transition-duration: .5s;color: red;font-size: 24px;"
+                                                       class="fas fa-heart"></i>
+                                                {% endif %}
+                                                <span id="like-number-{{ choosen_comment.id }}"
+                                                      style="color: #BDBDBD">{{ choosen_comment.likes.all.count }}</span>
                                             </a>
-                                        </li>
 
-                                        <li class="complain">
-                                            <a {% if request.user.is_authenticated %}id="report-comment-{{ comment.id }}"
+                                            <a {% if request.user.is_authenticated %}id="report-comment-{{ choosen_comment.id }}"
                                                {% else %}
                                                href="{% url 'login' %}"
                                                {% endif %}>
-                                                <img alt="report" src="/media/Icons8/icons8-error-48.png">
-                                                <span id="report-count-{{ comment.id }}"
-                                                      class="badge-number">{{ comment.reports.all.count }}</span>
+                                                <button type="button" data-toggle="modal" data-target="#report"
+                                                        style="background-color: white;border: none;padding: 0">
+                                                    <img alt="report" src="/media/Icons8/icons8-error-48.png">
+                                                </button>
                                             </a>
-                                        </li>
-                                        {% if request.user == comment.sahip or request.user.role_user.role == 6 %}
-                                            <li>
-                                                <button style="background-color: white;border: none;float: left;margin-top: 0;width: 30px;height: 30px"
+                                            {% if request.user.username == choosen_comment.sahip.username or request.user.user_role.role == 6 %}
+                                                <span style="font-size: 25px;vertical-align: sub;color: #BDBDBD;">&bull;</span>
+                                                <button style="background-color: white;border: none;padding: 0"
                                                         data-toggle="modal"
                                                         data-target="#commentDelete">
-                                                    <img style="width: 35px;position: absolute;margin-left: -20px;margin-top: -16px;"
-                                                         src="/media/Icons8/bin.png">
+                                                    <img src="/media/Icons8/bin.png">
                                                 </button>
-                                            </li>
-                                        {% endif %}
-                                        {% if not post.found and request.user == post.yayinlayan %}
-                                            <li class="complain">
-                                                <button style="background-color: white;border: none;" type="button"
-                                                        data-toggle="modal"
-                                                        data-target="#movieFound">
-                                                    <img alt="" src="/media/Icons8/check.svg">
-                                                </button>
-                                            </li>
-                                        {% endif %}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal fade" id="commentDelete">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-
-                                    <!-- Modal Header -->
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Dikkat!</h4>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-
-                                    <!-- Modal body -->
-                                    <div class="modal-body">
-                                        <b>{% if request.user == comment.sahip %}Yorumunuzu silmek istediğinizden emin
-                                            misiniz?
-                                        {% else %}
-                                            {{ comment.sahip }} adlı kullanıcının yorumunu silmek istediğinizden emin
-                                            misiniz?
-                                        {% endif %}
-                                        </b>
-                                    </div>
-
-                                    <!-- Modal footer -->
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç
-                                        </button>
-                                        <button type="button"
-                                                onclick="location.href='{% url 'delete-comment' post.slug comment.id %}';"
-                                                class="btn btn-success">
-                                            Sil
-                                        </button>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <script>
-                            $(document).ready(function () {
-                                $('#comment-like-{{ comment.id }}').click(function () {
-                                    $.ajax({
-                                        url: "{% url 'like' post.slug comment.id %}",
-                                        success: function (data) {
-                                            $('#like-number-{{ comment.id }}').text(data);
-                                        }
-                                    });
-                                });
-
-                                $('#report-comment-{{ comment.id }}').click(function () {
-                                    $.ajax({
-                                        url: "{% url 'report' post.slug comment.id %}",
-                                        success: function (data) {
-                                            $('#report-count-{{ comment.id }}').text(data);
-                                        }
-                                    });
-                                });
-
-                            });
-                        </script>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="leaderboard ">
-                    <h2>Leaderboard
-                    </h2>
-                    <ol>
-                        {% for i in post.yayinlayan.role_user.get_leaderboard %}
-                            {% for j in i %}
-                                <li>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <img class="leaderboard-icon rounded-circle"
-                                                 src="/media/{{ j.user.profil.profilFoto }}">
-                                            <a href="{% url 'profile-info' j.user.username %}"><span
-                                                    class="name">{{ j.user.username }} </span></a>
-                                            <p class="leaderboard-point">{{ j.puan }} Puan</p>
+                                            {% endif %}
                                         </div>
                                     </div>
-                                </li>
-                            {% endfor %}
-                        {% endfor %}
-                    </ol>
-                    <p>
-                        <small>Front-End Frameworks 2016</small>
-                    </p>
-                </div>
+                                    <hr>
+                                    <p class="comment-text">{{ choosen_comment.yorum|safe }}</p>
+                                    <div id="comment-mov-div" class="choosen-movies" style="display: block;">
+                                    <span id="comment-mov-hyperlink" class="movie-hyperlink"><a
+                                            href="{% url 'movie' choosen_comment.movie_tag_href choosen_comment.movie_tag %}">{{ choosen_comment.movie_tag }}</a></span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
 
-                <div style="text-align: center" class="bulunamayan-gonderiler">
-                    <span>Bulunamayanlar</span>
-                    <hr style="border-width: 3px">
-                    {% for post in old_posts %}
-                        <a href="{% url 'post-detail' post.slug %}">
-                            <span style="color: #2f3239"><b>{{ post.baslik }}</b></span><br>
-                            <span style="color: #848991">{{ post.icerik|truncatechars:100 }}</span><br>
-                            <hr>
-                        </a>
-                    {% endfor %}
+                        {% for comment in post.get_comments %}
+                            {% if not comment.that_movie %}
+                                <div class="comment-wrap">
+                                    <div class="comment-block">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <img class="com-img" src="/media/{{ comment.sahip.profil.profilFoto }}">
+                                                <a class="a-post-detail"
+                                                   href="{% url 'profile-info' comment.sahip.username %}"><span
+                                                        class="font-com-user">{{ comment.sahip.username }}</span></a>
+                                                <span class="{{ comment.sahip.role_user.role }}">
+                                            {{ comment.sahip.role_user.get_role_display }}
+                                        </span>
+                                            </div>
+                                        </div>
+                                        <div class="bottom-comment">
+                                            <div style="padding-top: 10px;font-weight: bold;color: #BDBDBD">{{ comment.time|timesince }}
+                                                önce
+                                                <span style="font-size: 25px;vertical-align: sub;color: #BDBDBD;">&bull;</span>
+                                                <a {% if request.user.is_authenticated %}id="comment-like-{{ comment.id }}"
+                                                   {% else %}
+                                                   href="{% url 'login' %}"
+                                                   {% endif %}
+                                                   class="a">
+                                                    {% if not comment.is_liked %}
+                                                        <i id="comm-like-icon-{{ comment.id }}"
+                                                           style="transition-duration: .5s"
+                                                           class="fas fa-heart"></i>
+                                                    {% else %}
+                                                        <i id="comm-like-icon-{{ comment.id }}"
+                                                           style="transition-duration: .5s;color: red;font-size: 24px;"
+                                                           class="fas fa-heart"></i>
+                                                    {% endif %}
+                                                    <span id="like-number-{{ comment.id }}"
+                                                          style="color: #BDBDBD">{{ comment.likes.all.count }}</span>
+                                                </a>
+
+                                                <a {% if request.user.is_authenticated %}id="report-comment-{{ comment.id }}"
+                                                   {% else %}
+                                                   href="{% url 'login' %}"
+                                                   {% endif %}>
+                                                    <button type="button" data-toggle="modal" data-target="#report"
+                                                            style="background-color: white;border: none;padding: 0">
+                                                        <img alt="report" src="/media/Icons8/icons8-error-48.png">
+                                                    </button>
+                                                </a>
+                                                {% if request.user.username == comment.sahip.username or request.user.role_user.role == 6 %}
+                                                    <span style="font-size: 25px;vertical-align: sub;color: #BDBDBD;">&bull;</span>
+                                                    <button style="background-color: white;border: none;padding: 0"
+                                                            data-toggle="modal"
+                                                            data-target="#commentDelete">
+                                                        <img src="/media/Icons8/bin.png">
+                                                    </button>
+                                                    <button style="background-color: white;padding: 0;border: none;"
+                                                            type="button"
+                                                            data-toggle="modal"
+                                                            data-target="#movieFound">
+                                                        <img alt="" src="/media/Icons8/check.svg">
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <p class="comment-text">{{ comment.yorum|safe }}</p>
+                                        <div id="comment-mov-div" class="choosen-movies" style="display: block;">
+                                    <span id="comment-mov-hyperlink" class="movie-hyperlink"><a
+                                            href="{% url 'movie' comment.movie_tag_href comment.movie_tag %}">{{ comment.movie_tag }}</a></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#comment-like-{{ comment.id }}').click(function () {
+                                            $.ajax({
+                                                url: "{% url 'like' post.slug comment.id %}",
+                                                success: function (data) {
+                                                    $('#like-number-{{ comment.id }}').text(data);
+                                                }
+                                            });
+                                        });
+
+                                        $('#report-comment-{{ comment.id }}').click(function () {
+                                            $.ajax({
+                                                url: "{% url 'report' post.slug comment.id %}",
+                                                success: function (data) {
+                                                    $('#report-count-{{ comment.id }}').text(data);
+                                                }
+                                            });
+                                        });
+                                        var clicked = {{ comment.is_liked|lower }};
+                                        $('#comment-like-{{ comment.id }}').click(function () {
+                                            if (!clicked) {
+                                                $('#comm-like-icon-{{ comment.id }}').css({
+                                                    'color': 'red',
+                                                    fontSize: '24px'
+                                                }, 400);
+                                                clicked = true;
+                                            } else {
+                                                $('#comm-like-icon-{{ comment.id }}').css({
+                                                    'color': '#BDC3D4',
+                                                    fontSize: '15px'
+                                                });
+                                                clicked = false;
+                                            }
+                                        });
+                                    });
+                                </script>
+                            {% endif %}
+                            <!-- THAT MOVİE MODAL -->
+                            <div class="modal fade" id="movieFound">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Dikkat!</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;
+                                            </button>
+                                        </div>
+
+                                        <!-- Modal body -->
+                                        <div class="modal-body">
+                                            <b>Aradığınız filmin bu olduğundan emin değilseniz devam etmeyin. Bu
+                                                işlemin
+                                                geri dönüşü yoktur.</b>
+                                        </div>
+
+                                        <!-- Modal footer -->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç
+                                            </button>
+                                            <button type="button"
+                                                    onclick="location.href='{% url 'that-movie' post.slug comment.id %}';"
+                                                    class="btn btn-success">
+                                                Devam
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- REPORT MODAL -->
+                            <div class="modal fade" id="report">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Kullanıcıyı Raporla</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;
+                                            </button>
+                                        </div>
+
+                                        <!-- Modal body -->
+                                        <form method="post" action="{% url 'report' post.slug comment.id %}">
+                                            {% csrf_token %}
+                                            <div class="modal-body">
+                                                Kategori Seçin:
+                                                {{ reportForm.reason }}
+                                                Açıklama:
+                                                {{ reportForm.comment }}
+                                            </div>
+
+                                            <!-- Modal footer -->
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                                    Vazgeç
+                                                </button>
+                                                <button type="submit" class="btn btn-success">
+                                                    Raporla
+                                                </button>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- REPORT POST MODAL -->
+                            <div class="modal fade" id="report-post-2">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Kullanıcıyı Raporla</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;
+                                            </button>
+                                        </div>
+
+                                        <!-- Modal body -->
+                                        <form method="post" action="{% url 'report-post' post.slug %}">
+                                            {% csrf_token %}
+                                            <div class="modal-body">
+                                                Kategori Seçin:
+                                                {{ reportForm.reason }}
+                                                Açıklama:
+                                                {{ reportForm.comment }}
+                                            </div>
+
+                                            <!-- Modal footer -->
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                                    Vazgeç
+                                                </button>
+                                                <button type="submit" class="btn btn-success">
+                                                    Raporla
+                                                </button>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="commentDelete">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Dikkat!</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;
+                                            </button>
+                                        </div>
+
+                                        <!-- Modal body -->
+                                        <div class="modal-body">
+                                            <b>{% if request.user == comment.sahip %}Yorumunuzu silmekistediğinizden
+                                                emin
+                                                misiniz?
+                                            {% else %}
+                                                {{ comment.sahip }} adlı kullanıcının yorumunu silmek istediğinizden
+                                                emin
+                                                misiniz?
+                                            {% endif %}
+                                            </b>
+                                        </div>
+
+                                        <!-- Modal footer -->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç
+                                            </button>
+                                            <button type="button"
+                                                    onclick="location.href='{% url 'delete-comment' comment.id post.slug %}';"
+                                                    class="btn btn-success">
+                                                Sil
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    {% include 'sidebar.html' %}
                 </div>
             </div>
         </div>
     </div>
+    <div id="fb-root"></div>
 {% endblock %}
 
 {% block js %}
@@ -413,15 +521,6 @@
                 });
             });
 
-            $('#report-post').click(function () {
-                $.ajax({
-                    url: "{% url 'report-post' post.slug %}",
-                    success: function (data) {
-                        $('#report-post-number').text(data);
-                    }
-                });
-            });
-
             $('#search-movie-button').click(function () {
                 valuee = $('#search-value').val();
                 var ul = $('#movie-ul');
@@ -433,27 +532,73 @@
                         ul.text(" ");
                         for (var i = 0; data[x] != undefined; i++) {
                             ul.append(
-                                "<li onClick='return liClick(this);' id='" + data[x + 3] + "'" + " class='search-li'>" + "<img width='50px' height='50px' src='" + data[x + 2] + "'>" + " " + data[x] + "- (" + data[x + 1] + ")" + "</li>"
+                                "<li onClick='return liClick(this);' id='" + data[x + 3] + "'" + " class='search-li'>" + "<img width='75px' height='90px' src='" + data[x + 2] + "'>" + " " + "<div class='search-text'>" + data[x] + "- (" + data[x + 1] + ")" + "</div>" + "</li><hr>"
                             );
                             x += 4;
                         }
-                        $('#search-div').show(1000);
+                        $('#search-div').show(700);
                     }
                 });
             });
+        });
+
+        $(document).click(function () {
+            $('#search-div').hide(700)
         });
 
         function liClick(obj) {
             var movie_id = $(obj).attr("id");
             var movie_name = $(obj).text().split('-')[0];
             var textarea = $('#id_yorum');
+            var div_hyperlinks = $('#movie-hyperlink');
 
+            $('#choosen-movies').show();
             var current_text = textarea.val();
-            var new_text = current_text + "<a href='" + "{% url 'movie' 's' %}".replace('s', movie_name) + "'>" + movie_name + "</a>"
+            var new_text = "<a id='a_mov' href='" + "{% url 'movie' 's' 'a' %}".replace('a', movie_name).replace('s', movie_id) + "'>" + movie_name + "</a>";
 
-            textarea.html(new_text);
+            div_hyperlinks.html(new_text);
 
             $('#search-div').hide(1000);
+        }
+
+        function close_hyperlinks() {
+            $('#movie-hyperlink').html("");
+            $('#choosen-movies').hide();
+        }
+
+        function comment_hyperlink() {
+            var span_hyper = $('#comment-mov-hyperlink');
+            var div_hyper = $('#comment-mov-div');
+            var cur_hyperlink = $('#movie-hyperlink');
+            var comment = $('#id_yorum');
+
+            if (cur_hyperlink.html() !== "" && comment !== "") {
+                div_hyper.show();
+                span_hyper.html(cur_hyperlink.html());
+            }
+        }
+        {% if post.found %}
+            function choosen_like() {
+                $.ajax({
+                    url: "{% url 'like' post.slug choosen_comment.id %}",
+                    success: function (data) {
+                        $('#like-number-{{ choosen_comment.id }}').text(data);
+                    }
+                });
+            }
+        {% endif %}
+
+        var clicked = {{ choosen_comment.is_liked|lower }};
+
+        function choosen_heart() {
+
+            if (!clicked) {
+                $('#comm-like-icon-{{ choosen_comment.id }}').css({'color': 'red', fontSize: '24px'}, 400);
+                clicked = true;
+            } else {
+                $('#comm-like-icon-{{ choosen_comment.id }}').css({'color': '#BDC3D4', fontSize: '15px'});
+                clicked = false;
+            }
         }
     </script>
 {% endblock %}

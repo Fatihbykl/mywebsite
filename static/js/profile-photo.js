@@ -8,24 +8,10 @@ uploadField.onchange = function () {
 };
 
 $(document).ready(function () {
-    $('.dragdrop').change(function () {
-        $('.area').text(this.files.length + " dosya seçildi.");
-    });
-});
-
-
-function paginate() {
-    var input = document.getElementById('go').value;
-    var button = document.getElementById('go-button');
-
-    button.href = '?page=' + input;
-}
-
-$(document).ready(function () {
 
     $("#photo-open-div").click(function () {
-        $("#photo-open-div").hide(1000);
-        $("#photo").show(1500);
+        $("#photo-open-div").hide();
+        $("#photo").slideDown();
     });
 });
 

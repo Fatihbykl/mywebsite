@@ -1,87 +1,99 @@
 {% extends 'userprofile.html' %}
 
 {% block tabs %}
-    <form method="post" class="edit-form" action="{% url 'settings' request.user.username %}">
-        {% csrf_token %}
-        <div class="row">
-            <div class="col-lg-4">
-                <label>Ad</label>
-            </div>
-            <div class="col-lg-8">
-                {{ editForm.ad }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <label>Soyad</label>
-            </div>
-            <div class="col-lg-8">
-                {{ editForm.soyad }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <label>Doğum Tarihi</label>
-            </div>
-            <div class="col-lg-8">
-                <div class="input-group date">
-                    {{ editForm.dogum_gunu }}
+    <div class="edit-form">
+        <span class="sidebar-title">Bilgileri Düzenle</span>
+        <hr class="sidebar-hr">
+        <form method="post" action="{% url 'settings' request.user.username %}">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Ad</label>
+                </div>
+                <div class="col-lg-8">
+                    {{ editForm.ad }}
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <label>Favori Filmler</label>
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Soyad</label>
+                </div>
+                <div class="col-lg-8">
+                    {{ editForm.soyad }}
+                </div>
             </div>
-            <div class="col-lg-8">
-                {{ editForm.fav_film }}
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Doğum Tarihi</label>
+                </div>
+                <div class="col-lg-8">
+                    <div class="input-group date">
+                        {{ editForm.dogum_gunu }}
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <label>Favori Yönetmenler</label>
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Favori Filmler</label>
+                </div>
+                <div class="col-lg-8">
+                    {{ editForm.fav_film }}
+                </div>
             </div>
-            <div class="col-lg-8">
-                {{ editForm.fav_yonetmen }}
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Favori Yönetmenler</label>
+                </div>
+                <div class="col-lg-8">
+                    {{ editForm.fav_yonetmen }}
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <label>Cinsiyet</label>
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Cinsiyet</label>
+                </div>
+                <div class="col-lg-8">
+                    <span style="float: left;margin-right: 6px">Erkek</span>
+                    <input style="float: left;margin-top: 6px;margin-right: 15px" type="radio" name="cinsiyet" value="erkek">
+                    <span style="float: left;margin-right: 6px">Kadın</span>
+                    <input style="float: left;margin-top: 6px;" type="radio" name="cinsiyet" value="kadin">
+                </div>
             </div>
-            <div class="col-lg-8">
-                {{ editForm.cinsiyet }}
+            <button class="btn btn-sm btn-outline-primary" style="float: right;margin-right: 15px;" type="submit">
+                Kaydet
+            </button>
+        </form>
+        <span class="sidebar-title">Şifre Değiştir</span>
+        <hr class="sidebar-hr">
+        <form method="post" action="{% url 'passchange' %}" style="margin-bottom: 50px">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Eski Şifre</label>
+                </div>
+                <div class="col-lg-8">
+                    {{ passwordForm.old_password }}
+                </div>
             </div>
-        </div>
-        <button style="float: right" type="submit">Kaydet</button>
-    </form>
-    <form class="edit-form" method="post" action="{% url 'passchange' %}" style="margin-bottom: 50px">
-        {% csrf_token %}
-        <hr style="margin-top: 40px;margin-bottom: 60px;border-width: 2px">
-        <div class="row">
-            <div class="col-lg-4">
-                <label>Eski Şifre</label>
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Yeni Şifre</label>
+                </div>
+                <div class="col-lg-8">
+                    {{ passwordForm.new_password1 }}
+                </div>
             </div>
-            <div class="col-lg-8">
-                {{ passwordForm.old_password }}
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Yeni Şifre Tekrar</label>
+                </div>
+                <div class="col-lg-8">
+                    {{ passwordForm.new_password2 }}
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <label>Yeni Şifre</label>
-            </div>
-            <div class="col-lg-8">
-                {{ passwordForm.new_password1 }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <label>Yeni Şifre Tekrar</label>
-            </div>
-            <div class="col-lg-8">
-                {{ passwordForm.new_password2 }}
-            </div>
-        </div>
-        <button style="float: right" type="submit">Şifreyi Değiştir</button>
-    </form>
+            <button class="btn btn-sm btn-outline-primary" style="float: right;margin-right: 15px;" type="submit">
+                Şifreyi Değiştir
+            </button>
+        </form>
+    </div>
 {% endblock %}

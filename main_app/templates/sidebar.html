@@ -1,0 +1,90 @@
+<div class="wrapper">
+    <div class="wrapper__header">
+        <div class="b_logo"><img
+                src="https://images.vexels.com/media/users/3/135313/isolated/lists/9c44517fa04da541c35888362bce2d1b-award-trophy-icon.png"
+                width="40" alt=""/></div>
+        <div class="b_caption">
+            <a href="{% url 'score' %}"><p>Sıralama</p></a>
+        </div>
+    </div>
+    <div class="wrapper__content">
+        <ul>
+            {% for i in leaderboard_5 %}
+                {% for j in i %}
+                    <li>
+                        <div class="graphic">
+                            <a href="{% url 'profile-info' j.user.username %}">
+                                <img src="/media/{{ j.user.profil.profilFoto }}" alt=""/>
+                            </a>
+                        </div>
+                        <div class="name">
+                            <span class="header">
+                                <a href="{% url 'profile-info' j.user.username %}">{{ j.user.username }}</a>
+                            </span>
+                            <span class="stat">{{ j.puan }}</span>
+                            <span class="sub">Puan</span>
+                        </div>
+                    </li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="bulunamayan-gonderiler">
+    <span class="sidebar-title">İstatistikler</span>
+    <hr class="sidebar-hr">
+    <div class="sidebar-statistics">
+        <i class="fas fa-question-circle"></i><span
+            style="font-weight: bold"> Gönderiler - {{ statistics.post }}</span>
+    </div>
+    <div class="sidebar-statistics">
+        <i class="fas fa-comment"></i><span
+            style="font-weight: bold"> Yorumlar - {{ statistics.comment }}</span>
+    </div>
+    <div class="sidebar-statistics">
+        <i class="fas fa-check-circle"></i><span
+            style="font-weight: bold"> Bulunan Filmler - {{ statistics.found }}</span>
+    </div>
+    <div class="sidebar-statistics">
+        <i class="fas fa-user"></i><span
+            style="font-weight: bold"> Kullanıcılar - {{ statistics.users }}</span>
+    </div>
+</div>
+<div class="bulunamayan-gonderiler">
+    <span class="sidebar-title">Bulunamayan Filmler</span>
+    <hr class="sidebar-hr">
+    {% for post in old_posts %}
+        <div class="row">
+            <div class="col-lg-12">
+                <a href="{% url 'post-detail' post.slug %}">
+                    <p style="font-weight: bold;word-break: break-all">
+                        <i style="color: #3558DB;font-size: 20px;vertical-align: middle;" class="fas fa-angle-double-right"></i>
+                        <span style="color: black;margin-bottom: 10px;">{{ post.baslik }}</span>
+                    </p>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" style="color: #BDBDBD;">
+                <i style="color: #BDBDBD;margin: 10px 7px"
+                   class="fas fa-user"></i>{{ post.yayinlayan.username }}
+                <i style="color: #BDBDBD;margin: 10px 7px" class="far fa-clock"></i>{{ post.tarih }}
+            </div>
+        </div>
+        <hr>
+    {% endfor %}
+</div>
+<div class="bulunamayan-gonderiler">
+    <span class="sidebar-title">Son Yorumlar</span>
+    <hr class="sidebar-hr">
+    {% for comment in last_comments %}
+        <a href="{% url 'post-detail' comment.post.slug %}">
+            <p style="font-weight: bold">
+                <i style="color: #3558DB;font-size: 20px;vertical-align: middle;" class="fas fa-angle-double-right"></i>
+                <span style="color: black"> {{ comment.yorum|truncatewords:10|safe }}</span>
+            </p>
+        </a>
+        <hr>
+    {% endfor %}
+</div>

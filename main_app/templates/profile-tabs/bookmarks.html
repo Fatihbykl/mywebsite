@@ -1,31 +1,66 @@
 {% extends 'userprofile.html' %}
 
 {% block tabs %}
-    <div class="row">
-        {% for posts in bookmark %}
-            <div class="col-lg-12" style="padding: 0">
-
-                <a href="{% url 'post-detail' posts.slug %}">
-                    <div class="row notif-content-like notify-body">
-                        <div class="col-lg-12">
-                            <img style="width: 60px;float: left;border-radius: 50%;margin-right: 25px"
-                                 src="/media/{{ posts.yayinlayan.profil.profilFoto }}">
-                            <p><b>{{ posts.yayinlayan.username }}</b> tarafından <b>{{ posts.tarih|timesince }}</b>
-                                önce</p>
-                            <small>{{ posts.icerik|truncatechars:100 }}</small>
-                        </div>
-                    </div>
-                </a>
-                <hr style="margin: 0">
-            </div>
-        {% empty %}
-            <div class="col-lg-12 notify-body" style="text-align: center">
-                <img style="display: block;margin: auto;width: 60px;"
-                     src="/media/Icons8/empty.png">
-                <p><b>{% if request.user.username == profil.username %}Takip ettiğiniz gönderi yok.{% else %}Bu kullanıcı hiçbir
-                    gönderiyi takip etmiyor.{% endif %}</b></p>
-                <hr>
-            </div>
-        {% endfor %}
+    <div style="text-align: center;padding-top: 10px">
+        <span class="sidebar-title">Takiplerim</span>
+        <hr class="sidebar-hr">
     </div>
+        <div class="row">
+            <div style="min-height: 735px;width: 100%">
+                {% for posts in bookmark %}
+                    <div class="col-lg-12" style="padding: 0">
+
+                        <a href="{% url 'post-detail' posts.slug %}">
+                            <div class="row notif-content-like notify-body">
+                                <div class="col-lg-12">
+                                    <img style="width: 60px;float: left;border-radius: 50%;margin-right: 25px"
+                                         src="/media/{{ posts.yayinlayan.profil.profilFoto }}">
+                                    <p><b>{{ posts.yayinlayan.username }}</b> tarafından
+                                        <b>{{ posts.tarih|timesince }}</b>
+                                        önce</p>
+                                    <small>{{ posts.icerik|truncatechars:100 }}</small>
+                                </div>
+                            </div>
+                        </a>
+                        <hr style="margin: 0">
+
+                    </div>
+                {% empty %}
+                    <div class="col-lg-12 notify-body" style="text-align: center">
+                        <img style="display: block;margin: auto;width: 60px;"
+                             src="/media/Icons8/empty.png">
+                        <p><b>{% if request.user.username == profil.username %}Takip ettiğiniz gönderi yok.{% else %}Bu
+                            kullanıcı hiçbir
+                            gönderiyi takip etmiyor.{% endif %}</b></p>
+                        <hr>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" style="margin: 30px 10px">
+                <div style="margin: auto;text-align: center">
+                    {% if bookmark.has_previous %}
+                        <button onclick="window.location.href = '?page={{ bookmark.previous_page_number }}'"
+                                type="button" class="btn btn-sm btn-primary pagination-button">Önceki
+                        </button>{% else %}
+                        <button type="button" class="btn btn-sm btn-primary pagination-button" disabled>Önceki</button>
+                    {% endif %}
+                    {% for page in bookmark.paginator.page_range %}
+                        {% if bookmark.number == page %}
+                            <input value="{{ page }}" class="pagination-input" style="display: inline"
+                                   id="go" onkeyup="paginate()" type="text"> / {{ bookmark.paginator.num_pages }}
+                        {% endif %}
+                    {% endfor %}
+                    {% if bookmark.has_next %}
+                        <button type="button"
+                                onclick="window.location.href = '?page={{ bookmark.next_page_number }}'"
+                                class="btn btn-sm btn-primary pagination-button" id="go-button" href="#">Sonraki
+                        </button>{% else %}
+                        <button type="button" disabled class="btn btn-sm btn-primary pagination-button" href="#">Sonraki
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
 {% endblock %}

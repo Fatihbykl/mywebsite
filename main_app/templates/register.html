@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>Kaydol</title>
+    <meta name="description" content=""/>
 
     <style>
         li {
@@ -66,6 +67,7 @@
                         <small>{{ registerForm.password_confirm.errors }}</small>
                     {% endif %}
                 </div>
+                <p style="font-size: 12px;">* Kayıt olarak <a style="font-size: 12px" href="{% url 'rules' %}">site kurallarını</a> kabul etmiş sayılırsınız.</p>
                 <button type="submit">Kayıt Ol</button>
                 <a href="{% url 'login' %}"><p> Zaten hesabın var mı? Giriş yap </p></a>
             </div>

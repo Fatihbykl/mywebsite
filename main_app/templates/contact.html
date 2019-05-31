@@ -1,0 +1,38 @@
+{% extends 'navbar-background.html' %}
+{% load static %}
+
+{% block head %}
+    <title>İletişim</title>
+    <meta name="description" content="Bizimle iletişime geçin."/>
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9" style="padding-top: 80px">
+                <div class="contact-background">
+                    <span style="font-size: 20px" class="sidebar-title">İletişim</span>
+                    <hr class="sidebar-hr">
+                    <form method="post" action="{% url 'contact' %}" onsubmit="submit_check_contact(event)">
+                        {% csrf_token %}
+                        Ad: <span style="color: red;font-weight: bold">*</span>{{ contactForm.ad }}
+                        Soyad: <span style="color: red;font-weight: bold">*</span>{{ contactForm.soyad }}
+                        E-Posta: <span style="color: red;font-weight: bold">*</span>{{ contactForm.email }}
+                        <p style="color: red;font-weight: bold" id="message-email"></p>
+                        Mesaj Başlığı: <span style="color: red;font-weight: bold">*</span>{{ contactForm.secenek }}
+                        Mesajınız: <span style="color: red;font-weight: bold">*</span>{{ contactForm.mesaj }}
+                        <button onclick="validate_email()" type="submit"
+                                class="btn btn-lg btn-outline-primary float-right">Gönder
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                {% include 'sidebar.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/validation.js' %}"></script>
+{% endblock %}

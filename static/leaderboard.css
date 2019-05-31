@@ -1,119 +1,130 @@
-/*
-* {
-  outline: none;
-  user-select: none;
-}
-*/
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,700");
 
-.leaderboard {
-    background-color: #123;
-    color: #eee;
-    width: 300px;
-    border-radius: 5px;
-    top: 20%;
-    box-shadow: 2px 5px 15px rgba(17, 34, 51, 0.5);
-    text-align: left;
-    display: inline-block;
-    vertical-align: middle;
-    margin-top: 5em;
-}
-
-.leaderboard h2 {
-    padding: 15px 0;
-    margin: 0;
-    text-align: center;
-}
-
-.leaderboard p {
-    margin: 3px 10px;
-    text-align: right;
-    color: palegreen;
-}
-
-.leaderboard ol {
-    list-style-type: none;
-    margin: 0;
+.wrapper * {
     padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
-.leaderboard ol li {
-    counter-increment: leaderboard-num;
-    padding: 15px 20px;
-    position: relative;
-    transition-duration: 0.3s;
+.wrapper {
+    width: 300px;
+    margin-top: 80px;
+    margin-bottom: 20px;
 }
 
-.leaderboard ol li:nth-of-type(1) {
-    background-color: #4d5e6f;
+.wrapper .wrapper__header {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background: #3558db;
+    padding: 27px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.leaderboard ol li:nth-of-type(2) {
-    background-color: #435465;
+.wrapper .wrapper__header .b_caption p {
+    color: #dae0fb;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 2px;
 }
 
-.leaderboard ol li:nth-of-type(3) {
-    background-color: #394a5b;
+.wrapper .wrapper__header .b_caption p span {
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 8px;
 }
 
-.leaderboard ol li:nth-of-type(4) {
-    background-color: #2f4051;
+.wrapper .wrapper__content {
+    background: #fff;
+    padding: 10px;
 }
 
-.leaderboard ol li:nth-of-type(5) {
-    background-color: #253647;
+.wrapper .wrapper__content ul {
+    list-style: none;
 }
 
-.leaderboard ol li:nth-of-type(6) {
-    background-color: #1b2c3d;
+.wrapper .wrapper__content ul li {
+    background: #fefefe;
+    padding: 10px 5px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.leaderboard ol li .percent {;
-    float: right;
+.wrapper .wrapper__content ul li:not(:last-child) {
+    margin-bottom: 10px;
 }
 
-.leaderboard ol li:hover {
-    transform: scale(1.1);
-}
-
-.leaderboard ol:hover li:not(:hover) {
-    opacity: 0.3;
-}
-
-.leaderboard-icon {
+.wrapper .wrapper__content ul li .graphic {
     width: 50px;
     height: 50px;
+    border-radius: 50%;
+    background: #ebeef3;
+    overflow: hidden;
+    padding: 5px;
 }
 
-.leaderboard-point {
-    float: right;
-    font-size: 15px;
-    padding-top: 11px;
-    padding-bottom: 11px;
+.wrapper .wrapper__content ul li .graphic img {
+    width: 100%;
+    border-radius: 50%;
 }
 
-
-@media (max-width: 768px) {
-    .leaderboard {
-        width: 100%;
-    }
-
-    .leaderboard-point {
-        padding-top: 20px;
-        padding-bottom: 20px;
-    }
-
-    .leaderboard-icon {
-        width: 70px;
-        height: 70px;
-    }
+.wrapper .wrapper__content ul li .name span {
+    vertical-align: middle;
 }
+
+.wrapper .wrapper__content ul li .name span.header {
+    color: #979cb0;
+    font-weight: 700;
+    margin-right: 15px;
+    vertical-align: middle;
+}
+
+.wrapper .wrapper__content ul li .name span.stat {
+    color: #35d8ac;
+    font-weight: 700;
+    font-size: 25px;
+}
+
+.wrapper .wrapper__content ul li .name span.sub {
+    color: #35d8ac;
+    font-weight: 700;
+    font-size: 10px;
+    vertical-align: sub;
+}
+
 
 .bulunamayan-gonderiler {
     width: 300px;
     background-color: white;
-    height: 680px;
-    margin-top: 20px;
+    margin-bottom: 20px;
     border-radius: 5px;
     word-break: break-word;
-    padding: 10px;
+    padding: 10px 20px 15px 20px;
+}
+
+.wrapper a {
+    color: #979cb0;
+}
+
+.wrapper a:hover {
+    transition-duration: 0.4s;
+    color: #3558DB;
+}
+
+@media screen and (max-width: 769px) {
+    .wrapper, .bulunamayan-gonderiler {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1025px){
+    .wrapper, .bulunamayan-gonderiler {
+        width: 255px;
+    }
 }

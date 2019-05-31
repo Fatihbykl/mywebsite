@@ -1,33 +1,21 @@
 {% load static %}
 <!DOCTYPE html>
-<!--[if IE 7]>
-<html class="ie ie7 no-js" lang="en-US">
-<![endif]-->
-<!--[if IE 8]>
-<html class="ie ie8 no-js" lang="en-US">
-<![endif]-->
-<!--[if !(IE 7) | !(IE 8)  ]><!-->
-<html lang="en" class="no-js">
 
-<!-- seriessingle11:03-->
 <head>
-    <!-- Basic need -->
     <title>{{ title }}</title>
     <meta charset="UTF-8">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="author" content="">
-    <link rel="profile" href="#">
+    <meta name="description" content="{{ plot }}">
 
-    <!--Google Font-->
     <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Dosis:400,700,500|Nunito:300,400,600'/>
-    <!-- Mobile specific meta -->
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <meta name="format-detection" content="telephone-no">
 
-    <!-- CSS files -->
+    <meta name=viewport content="width=device-width, initial-scale=1">
+
+
     <link rel="stylesheet" href="{% static 'movie/css/plugins.css' %}">
     <link rel="stylesheet" href="{% static 'movie/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
 </head>
 <body>
@@ -39,9 +27,9 @@
         <span></span>
     </div>
 </div>
-<!--end of preloading-->
 
-<div class="hero sr-single-hero sr-single" style="height: 416px">
+
+<div class="hero sr-single-hero sr-single" style="height: 416px;width: 0;">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -81,8 +69,7 @@
                         </div>
                         <div class="rate"
                              style="border-right: 1px solid #405266;padding-right: 20px;margin-right: 20px;">
-                            MetaScore -
-                            <i class="ion-android-star"></i>
+                            <img style="height:35px;" src="/media/Icons8/ms.png">
                             <p><span>{{ metascore }}</span><br>
                             </p>
                         </div>
@@ -129,13 +116,12 @@
                                             <!-- movie cast -->
                                             <div class="mvcast-item">
                                                 {% for actor in actors %}
-                                                <div class="cast-it">
-                                                    <div class="cast-left">
-                                                        <img src="images/uploads/cast1.jpg" alt="">
-                                                        <a href="#">{{ actor }}</a>
+                                                    <div class="cast-it">
+                                                        <div class="cast-left">
+                                                            <img src="images/uploads/cast1.jpg" alt="">
+                                                            <a href="#">{{ actor }}</a>
+                                                        </div>
                                                     </div>
-                                                    <p>... Robert Downey Jr.</p>
-                                                </div>
                                                 {% endfor %}
                                             </div>
                                         </div>
@@ -159,7 +145,7 @@
                                             </div>
                                             <div class="sb-it">
                                                 <h6>Film Süresi:</h6>
-                                                <p>{{ runtime }}</p>
+                                                <p>{{ runtime }} dakika</p>
                                             </div>
 
                                             <div class="ads">
@@ -176,6 +162,54 @@
         </div>
     </div>
 </div>
+<footer class="footer-bs" style="margin: 0;background-color: #233A50;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 footer-brand animated fadeInLeft">
+                <h2>Logo</h2>
+                <p>*****.com, daha önce izlediği veya bir yerde gördüğü bir filmin adını arayanların buluştuğu bir web
+                    sitesidir.</p>
+            </div>
+            <div class="col-md-4 footer-nav animated fadeInUp">
+                <h4>Hızlı Linkler —</h4>
+                <div>
+                    <ul class="pages">
+                        <li><a href="{% url 'gonderiler' %}"><i class="fas fa-home"></i> Ana Sayfa</a></li>
+                        <li><a href="{% url 'score' %}"><i class="fas fa-trophy"></i> Puanlama</a></li>
+                        <li><a href="{% url 'rules' %}"><i class="fas fa-file-contract"></i> Sİte Kuralları</a></li>
+                        {% if not request.user.is_authenticated %}
+                            <li>
+                                <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Giriş Yap</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Kayıt Ol</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 footer-ns animated fadeInRight">
+                <h4>İletişime Geçin</h4>
+                <p>Bize site hakkında geri bildirimde bulunun.</p>
+
+                <div class="input-group">
+                        <span class="input-group-btn">
+                        <button onclick="window.location.href ={% url 'contact' %};"
+                                style="background-color: rgba(0,0,0,0);border: 1px solid white;" type="button">
+                            <span><i class="fas fa-envelope"></i><b style="margin-left: 10px;">İLETİŞİM</b></span>
+                        </button>
+                        </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
 
 <script src="{% static 'movie/js/jquery.js' %}"></script>
 <script src="{% static 'movie/js/plugins.js' %}"></script>

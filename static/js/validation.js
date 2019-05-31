@@ -4,20 +4,31 @@ function validate_email() {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (!re.test(email.value)) {
-        msg.innerHTML = "Lütfen geçerli bir email girin."
+        msg.innerHTML = "Lütfen geçerli bir email girin.";
+        return false;
     } else {
         msg.innerHTML = "";
+        return true;
     }
 }
+
+function submit_check_contact(event) {
+    if (!validate_email()) {
+        event.preventDefault();
+    }
+}
+
 
 function validate_pass() {
     var pass1 = document.getElementById('id_password');
     var pass2 = document.getElementById('id_password_confirm');
-    var msg = document.getElementById('message-pass')
+    var msg = document.getElementById('message-pass');
     if (pass1.value.localeCompare(pass2.value)) {
-        msg.innerHTML = "Şifreler eşleşmiyor."
+        msg.innerHTML = "Şifreler eşleşmiyor.";
+        return false
     } else {
         msg.innerHTML = "";
+        return true
     }
 }
 
@@ -27,8 +38,9 @@ function validate_username_length() {
 
     if (username.value.length < 8) {
         msg.innerHTML = "Kullanıcı adı en az 8 harf olmalı. ( " + username.value.length + " )";
-    }
-    else {
+        return false
+    } else {
         msg.innerHTML = "";
+        return true
     }
 }

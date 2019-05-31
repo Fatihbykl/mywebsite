@@ -20,30 +20,7 @@ hr.first-style {
     color: black;
 }
 
-address {
-    margin-bottom: 0;
-}
-
 .row {
     margin-right: 0;
-}
-
-hr.second {
-    overflow: visible; /* For IE */
-    padding: 0;
-    border: none;
-    border-top: medium double #333;
-    color: #333;
-    text-align: center;
-}
-
-hr.second:after {
-    content: "§";
-    display: inline-block;
-    position: relative;
-    top: -0.7em;
-    font-size: 1.5em;
-    padding: 0 0.25em;
-    background: white;
 }
 

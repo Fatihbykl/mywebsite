@@ -2,110 +2,126 @@
 {% load static %}
 
 {% block tabs %}
+    <div style="padding-top: 10px;text-align: center">
+        <span class="sidebar-title">Bildirimler</span>
+        <hr class="sidebar-hr">
+    </div>
     <div class="row">
-        {% for notify in notifications %}
-            <div class="col-lg-12" style="padding: 0">
-                {% if notify.notification_type == 'comment' %}
-                    <a href="{% url 'post-detail' notify.which_post_slug %}">
-                        <div class="row notif-content-comment notify-body">
-                            <div class="col-lg-12">
-                                <img style="float: left; margin-right: 30px" alt="comment" width="50px"
-                                     src="/media/Icons8/comment.svg">
+        <div style="min-height: 735px;width: 100%">
+            {% for notify in notifications %}
+                <div class="col-lg-12" style="padding: 0">
+                    {% if notify.notification_type == 'comment' %}
+                        <a href="{% url 'post-detail' notify.which_post_slug %}">
+                            <div class="row notif-content-comment notify-body">
+                                <div class="col-lg-12">
+                                    <img style="float: left; margin-right: 30px" alt="comment" width="50px"
+                                         src="/media/Icons8/comment.svg">
 
-                                <p>{{ notify.message|safe|truncatechars:110 }}</p>
-                                <small>{{ notify.created|timesince }}</small>
+                                    <p>{{ notify.message|safe|truncatechars:110 }}</p>
+                                    <small>{{ notify.created|timesince }}</small>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                    <hr style="margin: 0">
-                {% endif %}
-                {% if notify.notification_type == 'report' %}
-                    <a href="{% url 'post-detail' notify.which_post_slug %}">
-                        <div class="row notif-content-report notify-body">
-                            <div class="col-lg-12">
-                                <img style="float: left; margin-right: 30px" src="/media/Icons8/icons8-error-48.png"
-                                     width="50px"
-                                     alt="exclamation">
-                                <p>{{ notify.message|safe|truncatechars:110 }}</p>
-                                <small>{{ notify.created|timesince }}</small>
+                        </a>
+                        <hr style="margin: 0">
+                    {% endif %}
+                    {% if notify.notification_type == 'report' %}
+                        <a href="{% url 'post-detail' notify.which_post_slug %}">
+                            <div class="row notif-content-report notify-body">
+                                <div class="col-lg-12">
+                                    <img style="float: left; margin-right: 30px"
+                                         src="/media/Icons8/icons8-error-48.png"
+                                         width="50px"
+                                         alt="exclamation">
+                                    <p>{{ notify.message|safe }}</p>
+                                    <small>{{ notify.created|timesince }}</small>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                    <hr style="margin: 0">
-                {% endif %}
-                {% if notify.notification_type == 'movieFound' %}
-                    <a href="{% url 'post-detail' notify.which_post_slug %}">
-                        <div class="row notif-content-movie notify-body">
-                            <div class="col-lg-12">
-                                <img style="float: left; margin-right: 30px" alt="found" width="50px"
-                                     src="/media/Icons8/check.svg">
+                        </a>
+                        <hr style="margin: 0">
+                    {% endif %}
+                    {% if notify.notification_type == 'movieFound' %}
+                        <a href="{% url 'post-detail' notify.which_post_slug %}">
+                            <div class="row notif-content-movie notify-body">
+                                <div class="col-lg-12">
+                                    <img style="float: left; margin-right: 30px" alt="found" width="50px"
+                                         src="/media/Icons8/check.svg">
 
-                                <p>{{ notify.message|safe|truncatechars:110 }}</p>
-                                <small>{{ notify.created|timesince }}</small>
+                                    <p>{{ notify.message|safe|truncatechars:110 }}</p>
+                                    <small>{{ notify.created|timesince }}</small>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                    <hr style="margin: 0">
-                {% endif %}
-                {% if notify.notification_type == 'like' %}
-                    <a href="{% url 'post-detail' notify.which_post_slug %}">
-                        <div class="row notif-content-like notify-body">
-                            <div class="col-lg-12">
-                                <img style="float: left; margin-right: 30px" alt="like" width="50px"
-                                     src="/media/Icons8/icons8-facebook-like-48.png">
-                                <p>{{ notify.message|safe|truncatechars:110 }}</p>
-                                <small>{{ notify.created|timesince }}</small>
+                        </a>
+
+                        <hr style="margin: 0">
+                    {% endif %}
+                    {% if notify.notification_type == 'like' %}
+                        <a href="{% url 'post-detail' notify.which_post_slug %}">
+                            <div class="row notif-content-like notify-body">
+                                <div class="col-lg-12">
+                                    <img style="float: left; margin-right: 30px" alt="like" width="50px"
+                                         src="/media/Icons8/icons8-facebook-like-48.png">
+                                    <p>{{ notify.message|safe|truncatechars:110 }}</p>
+                                    <small>{{ notify.created|timesince }}</small>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                    <hr style="margin: 0">
-                {% endif %}
-                {% if notify.notification_type == 'follow' %}
-                    <a href="{% url 'post-detail' notify.which_post_slug %}">
-                        <div class="row notif-content-follow notify-body">
-                            <div class="col-lg-12">
-                                <img style="float: left; margin-right: 30px" alt="follow" width="50px"
-                                     src="/media/Icons8/icons8-star-64.png">
-                                <p>{{ notify.message|safe|truncatechars:110 }}</p>
-                                <small>{{ notify.created|timesince }}</small>
+                        </a>
+                        <hr style="margin: 0">
+                    {% endif %}
+                    {% if notify.notification_type == 'follow' %}
+                        <a href="{% url 'post-detail' notify.which_post_slug %}">
+                            <div class="row notif-content-follow notify-body">
+                                <div class="col-lg-12">
+                                    <img style="float: left; margin-right: 30px" alt="follow" width="50px"
+                                         src="/media/Icons8/icons8-star-64.png">
+                                    <p>{{ notify.message|safe|truncatechars:110 }}</p>
+                                    <small>{{ notify.created|timesince }}</small>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                    <hr style="margin: 0">
-                {% endif %}
-            </div>
-        {% empty %}
-            <div class="col-lg-12 notify-body" style="text-align: center">
-                <img style="display: block;margin: auto;width: 60px;"
-                     src="/media/Icons8/empty.png">
-                <p><b>Hiç bildiriminiz yok.</b></p>
-                <hr>
-            </div>
-        {% endfor %}
+                        </a>
+                        <hr style="margin: 0">
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div class="col-lg-12 notify-body" style="text-align: center">
+                    <img style="display: block;margin: auto;width: 60px;"
+                         src="/media/Icons8/empty.png">
+                    <p><b>Hiç bildiriminiz yok.</b></p>
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
     </div>
     <div class="row">
         <div class="col-lg-12" style="margin: 30px 10px">
-            {% if gonderi.has_other_pages %}
-                {% if gonderi.has_previous %}
-                    <a class="page-numbers" href="?page={{ gonderi.previous_page_number }}">prev</a>
-                {% else %}
-                    <a disabled class="page-numbers">prev</a>
+            <div style="margin: auto;text-align: center">
+                {% if notifications.has_previous %}
+                    <button onclick="window.location.href = '?page={{ notifications.previous_page_number }}'"
+                            type="button" class="btn btn-sm btn-primary pagination-button">Önceki
+                    </button>{% else %}
+                    <button type="button" class="btn btn-sm btn-primary pagination-button" disabled>Önceki</button>
                 {% endif %}
-                {% for page in gonderi.paginator.page_range %}
-                    {% if gonderi.number == page %}
-                        <span aria-current="page"
-                              class="page-numbers current">{{ page }}/{{ gonderi.paginator.num_pages }}</span>
+                {% for page in notifications.paginator.page_range %}
+                    {% if notifications.number == page %}
+                        <input value="{{ page }}" class="pagination-input" style="display: inline"
+                               id="go" onkeyup="paginate()" type="text"> / {{ notifications.paginator.num_pages }}
                     {% endif %}
                 {% endfor %}
-                {% if gonderi.has_next %}
-                    <a class="page-numbers" href="?page={{ gonderi.next_page_number }}">next</a>
-                {% else %}
-                    <a disabled class="page-numbers">next</a>
+                {% if notifications.has_next %}
+                    <button type="button"
+                            onclick="window.location.href = '?page={{ notifications.next_page_number }}'"
+                            class="btn btn-sm btn-primary pagination-button" id="go-button" href="#">Sonraki
+                    </button>{% else %}
+                    <button type="button" disabled class="btn btn-sm btn-primary pagination-button" href="#">Sonraki
+                    </button>
                 {% endif %}
-            {% endif %}
-            <input id="go" onkeyup="paginate()" type="text">
-            <a id="go-button" href="#">saddas</a>
+            </div>
         </div>
     </div>
-
+    <script>
+        $(document).ready(function () {
+            $('#badge').fadeOut(500, function () {
+                $(this).text('0').fadeIn(500);
+            })
+        })
+    </script>
 {% endblock %}

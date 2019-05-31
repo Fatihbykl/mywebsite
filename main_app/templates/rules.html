@@ -1,0 +1,59 @@
+{% extends 'navbar-background.html' %}
+{% load static %}
+{% block head %}
+    <style>
+        #rules-ol li {
+            margin-bottom: 10px;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9" style="padding-top: 80px">
+                <div class="contact-background" style="height: auto;">
+                    <span class="sidebar-title">Site Kuralları</span>
+                    <hr class="sidebar-hr">
+                    <ol id="rules-ol" style="font-weight: bold;">
+                        <li>Sitede herhangi bir konuyla ilgili öneri, şikayet ve diğer bildirimlerinizi
+                            "İletişim" sayfasını kullanarak kolayca iletebilirsiniz.
+                        </li>
+                        <li>Yeni bir konu açarken başlıkların konuya uygun ve açıklayıcı olması şarttır. "Yardım",
+                            "İmdat", "Acil" gibi başlıklar yerine daha anlamlı başlıklar seçilmelidir.
+                        </li>
+                        <li>Site adminleri kurallara uymayan kullanıcıların gönderilerini veya yorumlarını uyarı olmaksızın silebilir.
+                        Eğer kullanıcı kurallara uymamaya devam ederse hesabı tamamen silinebilir.</li>
+                        <li>Kazanç elde etmek amaçlı kısaltılmış linklerin kullanılması yasaktır. ( Link.TL vb.)</li>
+                        <li>Başlık ve mesaj içeriği Türkçe yazım kurallarına uygun olmalıdır.
+                            Mesaj içeriğinin tamamı büyük harf olmamalıdır. "Örnek Başlık" ya da
+                            "Örnek başlık" şeklinde yazılabilir.
+                        </li>
+                        <li>Forumda küfür, argo, hakaret, küçük düşürücü, aşağılayıcı, rencide edici tüm kelimelerin;
+                            din, dil, ırk ayrımına yönelik veya forum huzurunu kaçıracak her türlü söylev, yazı, resim,
+                            diğer tüm materyallerin kullanımı yasaktır.
+                        </li>
+                        <li>Siteyi reklam aracı olarak kullanmak yasaktır.</li>
+                        <li>Telif haklarını zedeleyen dosyalara (crack, serial, warez) link verilmesi ve sitede
+                            paylaşılması yasaktır.
+                        </li>
+                        <li>Forumda pornografik resimlerin ve linklerin yayınlanması yasaktır.</li>
+                        <li>Üyelerin birden fazla hesap açması yasaktır.</li>
+                        <li>Küfür, slogan, pornografik içerik veya parti logosu içeren avatar kullanmak yasaktır.</li>
+                        <li>Sitede açılan konulardan ve içeriklerden söz konusu içeriği giren kullanıcı
+                            sorumludur, bu site doğabilecek sıkıntılardan sorumluluk kabul etmez.
+                        </li>
+                        <li>Hesap güvenliği ile ilgili her kullanıcının kendi hesabından sorumludur.</li>
+
+                        <li>Bu site yasal zorunluluk olmadığı sürece kesinlikle bilgilerinizi 3. şahıs/kurumlarla
+                            paylaşmaz.
+                        </li>
+                        <li>Siteye üye olan herkes yukarıda belirtilmiş olan kuralları kabul etmiş sayılır.</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                {% include 'sidebar.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

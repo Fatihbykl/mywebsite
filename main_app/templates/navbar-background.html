@@ -4,10 +4,12 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}">
+
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'navbar.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'notifications.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'leaderboard.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'comments.css' %}">
 
     <script type="text/javascript" src="{% static 'bootstrap/js/jquery.js' %}"></script>
 
@@ -18,226 +20,199 @@
     {% endblock %}
     <script>
         $(document).ready(function () {
-            $('#navbardrop').click(function () {
-                $('#dropdown').toggle();
+            $('#notifications').click(function () {
+                $('#dropdown').toggle(400);
             });
         });
     </script>
 </head>
 <body style="background-color: #F1EFE6">
 
-
-<nav class="navbar navbar-expand-md navbar-dark shrink" id="banner" style="background-color: #2C3E50">
-    <div class="container">
-        <!-- Brand -->
-        <a class="navbar-brand" href="#"><span>Logo</span></a>
-        <ul>
-            {% if request.user.is_authenticated %}
-                <li class="nav-item dropdown" style="margin-left: 0">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop">
-                        <i class="fas fa-bell"></i>#404040
-                    </a>
-                    <div id="dropdown" class="dropdown-menu dropdown-menu-right">
-                        <div class="dropdown-item" href="#">
-                            <div class="row" style="margin: 0">
-                                <div class="col-lg-12" style="text-align: center">
-                                    <span>Bildirimler</span>
-                                </div>
-                            </div>
-                            <hr>
-                            {% for notify in msg %}
-                                {% if notify.notification_type == 'comment' %}
-                                    <div id="notif-{{ notify.id }}" class="row notif-content-comment notify-body">
-                                        <div class="col-lg-3">
-                                            <img alt="comment" width="50px"
-                                                 src="/media/Icons8/comment.svg">
-                                        </div>
-                                        <div class="col-lg-9">
-                                            <a href="{% url 'post-detail' notify.which_post_slug %}">
-                                                <pre>{{ notify.message|safe|truncatechars:85 }}</pre>
-                                                <small>{{ notify.created|timesince }}</small>
-                                            </a>
-                                        </div>
-                                        <div class="">
-                                        <span id="delete-notif-{{ notify.id }}"
-                                              class="delete-notification">&times;</span>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                {% endif %}
-                                {% if notify.notification_type == 'report' %}
-
-                                    <div id="notif-{{ notify.id }}" class="row notif-content-report notify-body">
-
-                                        <div class="col-lg-3">
-                                            <img src="/media/Icons8/icons8-error-48.png" width="50px"
-                                                 alt="exclamation">
-                                        </div>
-                                        <div class="col-lg-9">
-                                            <a href="{% url 'post-detail' notify.which_post_slug %}">
-                                                <pre>{{ notify.message|safe|truncatechars:85 }}</pre>
-                                                <small>{{ notify.created|timesince }}</small>
-                                            </a>
-                                        </div>
-
-                                        <div class="">
-
-                                        <span id="delete-notif-{{ notify.id }}"
-                                              class="delete-notification">&times;</span>
-                                        </div>
-                                    </div>
-
-                                    <hr>
-                                {% endif %}
-                                {% if notify.notification_type == 'movieFound' %}
-                                    <div id="notif-{{ notify.id }}" class="row notif-content-movie notify-body">
-                                        <div class="col-lg-3">
-                                            <img alt="found" width="50px" src="/media/Icons8/check.svg">
-                                        </div>
-                                        <div class="col-lg-9">
-                                            <a href="{% url 'post-detail' notify.which_post_slug %}">
-                                                <pre>{{ notify.message|safe|truncatechars:85 }}</pre>
-                                                <small>{{ notify.created|timesince }}</small>
-                                            </a>
-                                        </div>
-                                        <div class="">
-                                        <span id="delete-notif-{{ notify.id }}"
-                                              class="delete-notification">&times;</span>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                {% endif %}
-                                {% if notify.notification_type == 'like' %}
-                                    <div id="notif-{{ notify.id }}" class="row notif-content-like notify-body">
-                                        <div class="col-lg-3">
-                                            <img alt="like" width="50px"
-                                                 src="/media/Icons8/icons8-facebook-like-48.png">
-                                        </div>
-                                        <div class="col-lg-9">
-                                            <a href="{% url 'post-detail' notify.which_post_slug %}">
-                                                <pre>{{ notify.message|safe|truncatechars:85 }}</pre>
-                                                <small>{{ notify.created|timesince }}</small>
-                                            </a>
-                                        </div>
-                                        <div class="">
-                                        <span id="delete-notif-{{ notify.id }}"
-                                              class="delete-notification">&times;</span>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                {% endif %}
-                                {% if notify.notification_type == 'follow' %}
-                                    <div id="notif-{{ notify.id }}" class="row notif-content-follow notify-body">
-                                        <div class="col-lg-3">
-                                            <img alt="follow" width="50px" src="/media/Icons8/icons8-star-64.png">
-                                        </div>
-                                        <div class="col-lg-9">
-                                            <a href="{% url 'post-detail' notify.which_post_slug %}">
-                                                <pre>{{ notify.message|safe|truncatechars:85 }}</pre>
-                                                <small>{{ notify.created|timesince }}</small>
-                                            </a>
-                                        </div>
-                                        <div class="">
-                                        <span id="delete-notif-{{ notify.id }}"
-                                              class="delete-notification">&times;</span>
-                                        </div>
-                                    </div>
-
-                                    <hr>
-                                {% endif %}
-                                <script>
-                                    $(document).ready(function () {
-                                        $('#delete-notif-{{ notify.id }}').click(function () {
-                                            $.ajax({
-                                                url: "{% url 'messages' notify.id %}",
-                                                success: function () {
-                                                    $('#notif-{{ notify.id }}').hide();
-                                                }
-                                            })
-                                        })
-                                    })
-                                </script>
-                            {% empty %}
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        Hiç bildirimin yok.
-                                        <hr>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                            <div class="row" style="margin: 0;">
-                                <div class="col-lg-12" style="text-align: center">
-                                    <a href="{% url 'profile-notifications' request.user.username %}">Tümünü
-                                        Görüntüle</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item dropdown" style="margin-left: 0">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                        <img style="border-radius: 50%;border: 1px solid white" width="30px" height="30px" alt="pp"
-                             src="/media/{{ request.user.profil.profilFoto }}">
-                    </a>
-                    <div style="width: 200px" class="dropdown-menu dropdown-menu-right">
-                        <div class="dropdown-item dropdown-list">
-                            <a href="{% url 'profile-info' request.user.username %}"><img
-                                    src="/media/Icons8/icons8-administrator-male-26.png">Profil</a><br>
-                            <a href="{% url 'settings' request.user.username %}"><img
-                                    src="/media/Icons8/icons8-edit-50.png">Profil Düzenle</a><br>
-                            <a href="{% url 'my-posts' request.user.username %}"><img
-                                    src="/media/Icons8/icons8-analyze-50.png">Gönderilerim</a><br>
-                            <a href="{% url 'bookmarks' request.user.username %}"><img
-                                    src="/media/Icons8/icons8-bookmark-page-50.png">Takip Ettiklerim</a><br>
-                            <div class="dropdown-divider"></div>
-                            <a href="{% url 'logout' %}"><img src="/media/Icons8/icons8-exit-32.png">Çıkış Yap</a>
-                        </div>
-                    </div>
-                </li>
-            {% else %}
-                <li style="list-style: none;">
-                    <button onclick="location.href='{% url 'login' %}'" style="margin-top: 15px"
-                            class="btn btn-sm btn-outline-success">Giriş Yap
-                    </button>
-                    <button onclick="location.href='{% url 'register' %}'" style="margin-top: 15px;margin-left: 15px"
-                            class="btn btn-sm btn-outline-light">Üye Ol
-                    </button>
-                </li>
-            {% endif %}
-        </ul>
-    </div>
-</nav>
-<!--MODAL-->
-<div class="modal fade" id="myModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">İletişim Formu</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+<header id="header-top">
+    <section>
+        <div class="row">
+            <div class="col-lg-12">
+                <ul>
+                    <li><a href="{% url 'gonderiler' %}"><i class="fas fa-home"></i> Ana Sayfa</a></li>
+                    <li><a href="{% url 'score' %}"><i class="fas fa-trophy"></i> Puanlama</a></li>
+                    <li><a href="{% url 'contact' %}"><i class="fas fa-envelope"></i> İletişim</a></li>
+                    <li><a href="{% url 'rules' %}"><i class="fas fa-file-contract"></i> Site Kuralları</a></li>
+                    {% if not request.user.is_authenticated %}
+                        <li style="float: right;">
+                            <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Giriş Yap</a>
+                        </li>
+                        <li style="float: right;margin-right: 20px;">
+                            <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Kayıt Ol</a>
+                        </li>
+                    {% else %}
+                        <li style="float: right;">
+                            <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
-
-            <!-- Modal body -->
-            <form action="{% url 'contact' %}" method="post">
-                {% csrf_token %}
-                <div class="modal-body">
-                    {{ contactForm.secenek }}
-                    {{ contactForm.mesaj }}
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <input type="submit" class="btn btn-success">
-                </div>
-            </form>
-
         </div>
+    </section>
+</header>
+<section id="sidebar">
+    <div style="display: flow-root">
+        <span style="float: right;"><i id="close-sidebar" style="font-size: 30px;" class="fas fa-times"></i></span>
     </div>
-</div>
+    <ul>
+        <li><a href="{% url 'gonderiler' %}"><i class="fas fa-home"></i> Ana Sayfa</a></li>
+        {% if request.user.is_authenticated %}
+            <li>
+                <a {% if request.user.is_authenticated %}href="{% url 'post-create' %}"
+                   {% else %}href="{% url 'login' %}"{% endif %}>
+                    <i class="fas fa-plus-circle"></i> Gönderi Oluştur
+                </a>
+            </li>
+            <li><a href="{% url 'my-posts' request.user.username %}"><i class="fas fa-archive"></i>
+                Gönderilerim</a></li>
+            <li><a href="{% url 'bookmarks' request.user.username %}"><i class="fas fa-bookmark"></i> Takip
+                Ettiklerim</a></li>
+            <li><a href="{% url 'profile-info' request.user.username %}"><i class="fas fa-user"></i> Profil</a>
+            </li>
+            <li><a href="{% url 'profile-notifications' request.user.username %}"><i class="fas fa-bell"></i> <span
+                    style="font-size: 12px;" class="badge badge-light">12</span></a></li>
+            <hr>
+        {% endif %}
+        <li><a><i class="fas fa-trophy"></i> Puanlama</a></li>
+        <li><a href="{% url 'contact' %}"><i class="fas fa-envelope"></i> İletişim</a></li>
+        <li><a href="{% url 'rules' %}"><i class="fas fa-file-contract"></i> Site Kuralları</a></li>
+        <hr>
+        {% if not request.user.is_authenticated %}
+            <li>
+                <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Giriş Yap</a>
+            </li>
+            <li>
+                <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Kayıt Ol</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a>
+            </li>
+        {% endif %}
+    </ul>
+</section>
+<header id="header-bot">
+    <section>
+        <div class="row" style="{% if not request.user.is_authenticated %}padding: 0{% endif %}">
+            {% if request.user.is_authenticated %}
+                <div class="col-lg-2" style="padding-top: 33px;">
+                    <span style="color: white;">LOGO</span>
+                </div>
+                <div class="col-lg-10">
+                    <ul>
+                        <li class="a">
+                            <a {% if request.user.is_authenticated %}href="{% url 'post-create' %}"
+                               {% else %}href="{% url 'login' %}"{% endif %}>
+                                <i class="fas fa-plus-circle"></i> Gönderi Oluştur
+                            </a>
+                        </li>
+                        <li class="a"><a href="{% url 'my-posts' request.user.username %}"><i
+                                class="fas fa-archive"></i>
+                            Gönderilerim</a></li>
+                        <li class="a"><a href="{% url 'bookmarks' request.user.username %}"><i
+                                class="fas fa-bookmark"></i>
+                            Takiplerim
+                        </a></li>
+                        <li class="a"><a href="{% url 'profile-info' request.user.username %}"><i
+                                class="fas fa-user"></i> Profil</a>
+                        </li>
+                        <li class="a">
+                            <a href="{% url 'profile-notifications' request.user.username %}">
+                                <i class="fas fa-bell"></i>
+                                <span style="font-size: 12px;" id="badge" class="badge badge-light">{{ msg }}
+                            </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span style="margin-right: 30px;margin-top: -25px" id="sidebar-button"><i
+                            style="font-size: 30px;color: white" class="fas fa-bars"></i></span>
+                </div>
+            {% else %}
+                <div class="col-lg-12" style="padding: 33px 50px 0 50px;text-align: center;">
+                    <span style="color: white;">LOGO</span>
+                    <span id="sidebar-button"><i style="font-size: 30px;color: white" class="fas fa-bars"></i></span>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</header>
+
 {% block body %}
 {% endblock %}
+
+<footer class="footer-bs" style="margin: 0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 footer-brand animated fadeInLeft">
+                <h2>Logo</h2>
+                <p>*****.com, daha önce izlediği veya bir yerde gördüğü bir filmin adını arayanların buluştuğu bir web
+                    sitesidir.</p>
+            </div>
+            <div class="col-md-4 footer-nav animated fadeInUp">
+                <h4>Hızlı Linkler —</h4>
+                <div>
+                    <ul class="pages">
+                        <li><a href="{% url 'gonderiler' %}"><i class="fas fa-home"></i> Ana Sayfa</a></li>
+                        <li><a href="{% url 'score' %}"><i class="fas fa-trophy"></i> Puanlama</a></li>
+                        <li><a href="{% url 'rules' %}"><i class="fas fa-file-contract"></i> Sİte Kuralları</a></li>
+                        {% if not request.user.is_authenticated %}
+                            <li>
+                                <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Giriş Yap</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Kayıt Ol</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <!--
+                <div class="col-md-6">
+                    <ul class="list">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contacts</a></li>
+                        <li><a href="#">Terms & Condition</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>-->
+            </div>
+            <!--
+            <div class="col-md-2 footer-social animated fadeInDown">
+                <h4>Follow Us</h4>
+                <ul>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">RSS</a></li>
+                </ul>
+            </div>-->
+            <div class="col-md-4 footer-ns animated fadeInRight">
+                <h4>İletişime Geçin</h4>
+                <p>Bize site hakkında geri bildirimde bulunun.</p>
+
+                <div class="input-group">
+                        <span class="input-group-btn">
+                        <button onclick="window.location.href ={% url 'contact' %};"
+                                class="btn btn-sm btn-outline-light" type="button">
+                            <span><i class="fas fa-envelope"></i><b style="margin-left: 10px;">İLETİŞİM</b></span>
+                        </button>
+                        </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
 <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/sidebar.js' %}"></script>
 {% block js %}
 {% endblock %}
 </body>

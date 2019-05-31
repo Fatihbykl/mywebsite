@@ -3,37 +3,45 @@
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{% static 'input.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'leaderboard.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'comments.css' %}">
+
+    <title>Gönderi Düzenle</title>
 {% endblock %}
 
 {% block body %}
     <div class="container">
         <div class="row">
-            <div class="col-lg-9" style="margin-top: 50px">
+            <div class="col-lg-9" style="margin-top: 80px;background-color: white;height: 750px;box-shadow: 0 0 15px 5px rgba(0, 0, 0, .1);">
+                <div style="margin-top: 20px;" class="messages alert alert-info">
+                    <div class="row">
+                        <div class="col-lg-1" style="padding-left: 0">
+                            <i style="font-size: 85px;margin-top: 20px;color: orange"
+                               class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="col-lg-11">
+                            <ul style="font-weight: bold">
+                                Gönderi Oluştururken dikkat etmeniz gerekenler:
+                                <li>Başlığınız içerikle uyumlu ve anlamlı olmalı. (ör: Clint Eastwood'lu Boks Filmi)
+                                </li>
+                                <li>İçeriğiniz argo, küfür vb. kelimeler içermemeli.</li>
+                                <li>İçeriğiniz noktalama işaretlerin uygun ve okunabilir olmalı.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <form action="{% url 'edit-post' post.slug %}" method="post">
                     {% csrf_token %}
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <span style="font-family: Roboto;color: dodgerblue;font-weight: bold">{{ form.baslik.label|upper }}</span>{{ form.baslik }}
                             <span style="font-family: Roboto;color: dodgerblue;font-weight: bold">{{ form.icerik.label|upper }}</span>{{ form.icerik }}
                             <input type="submit" class="btn btn-sm gonderi" value="Düzenle">
-                        </div>
-                        <div class="col-lg-6">
-                            <img style="height: 370px;padding-left: 50px; margin-top: 5px" src="/media/icons/png1.png"
-                                 alt="Buldum!">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="col-lg-3">
-                <div style="text-align: center" class="bulunamayan-gonderiler">
-                    <span>Bulunamayanlar</span>
-                    <hr style="border-width: 3px">
-                    {% for post in post_old %}
-                        <span style="color: #2f3239"><b>{{ post.baslik }}</b></span><br>
-                        <span style="color: #848991">{{ post.icerik|truncatechars:100 }}</span><br>
-                        <hr>
-                    {% endfor %}
-                </div>
+                {% include 'sidebar.html' %}
             </div>
         </div>
     </div>

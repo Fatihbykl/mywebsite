@@ -28,7 +28,8 @@ class Roles(models.Model):
         (3, 'Filmsever'),
         (4, 'Film Uzmanı'),
         (5, 'Profesyonel'),
-        (6, 'Admin')
+        (6, 'Admin'),
+        (7, 'Usta'),
     )
     user = models.OneToOneField(User, related_name='role_user', on_delete=models.CASCADE, default=uuid.uuid1)
     role = models.PositiveSmallIntegerField(choices=ROLES, default=1)
@@ -39,22 +40,24 @@ class Roles(models.Model):
 
     def __str__(self):
         return "Kullanıcı Adı : %s , Puanı : %s , Seviyesi : %s" % (
-        self.user.username, self.puan, self.get_role_display())
+            self.user.username, self.puan, self.get_role_display())
 
     def check_role(self):
         if not self.role == 6:
-            if self.puan <= 5:
+            if self.puan < 20:
                 self.role = 1
-            elif self.puan <= 25:
+            elif self.puan < 70:
                 self.role = 2
-            elif self.puan <= 50:
+            elif self.puan < 200:
                 self.role = 3
-            elif self.puan <= 50:
+            elif self.puan < 500:
                 self.role = 4
-            elif self.puan > 50:
+            elif self.puan < 1000:
                 self.role = 5
+            else:
+                self.role = 7
 
-    def get_leaderboard(self):
+    def get_leaderboard_full(self):
         points = Roles.objects.all()
         list = []
         for i in points:
@@ -66,6 +69,13 @@ class Roles(models.Model):
         for j in list:
             obj_list.append(Roles.objects.filter(puan=j))
         return obj_list
+
+    def get_leaderboard_5(self):
+        return self.get_leaderboard_full()[:5]
+
+    def get_user_place(self, user):
+        place = Roles.objects.get(user=user)
+        return place
 
 
 class kullaniciProfili(models.Model):

@@ -1,0 +1,182 @@
+{% extends 'navbar-background.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="score-page">
+                    <span class="sidebar-title">Sıralama</span>
+                    <hr class="sidebar-hr">
+                    <div class="wrapper" style="margin: 0;width: auto;">
+                        <div class="wrapper__content">
+                            <ul>
+                                {% for i in leaderboard %}
+                                    {% for j in i %}
+                                        <li>
+                                            <div class="graphic">
+                                                <a href="{% url 'profile-info' j.user.username %}">
+                                                    <img src="/media/{{ j.user.profil.profilFoto }}" alt=""/>
+                                                </a>
+                                            </div>
+                                            <div class="name">
+                                                <span class="header">
+                                                    <a href="{% url 'profile-info' j.user.username %}">{{ j.user.username }}</a>
+                                                </span>
+                                                <span class="stat">{{ j.puan }}</span>
+                                                <span class="sub">Puan</span>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                            {% if request.user.is_authenticated %}
+                                <div class="threedots" style="text-align: center;margin: 20px 0;"></div>
+                                <ul>
+                                    <li>
+                                        <div class="graphic">
+                                            <a href="{% url 'profile-info' user_place.user.username %}">
+                                                <img src="/media/{{ user_place.user.profil.profilFoto }}" alt=""/>
+                                            </a>
+                                        </div>
+                                        <div class="name">
+                                                <span class="header">
+                                                    <a href="{% url 'profile-info' user_place.user.username %}">{{ user_place.user.username }}</a>
+                                                </span>
+                                            <span class="stat">{{ user_place.puan }}</span>
+                                            <span class="sub">Puan</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if leaderboard.has_other_pages %}
+                        <div class="row">
+                            <div class="col-lg-12" style="margin: 30px 10px">
+                                <div style="margin: auto;text-align: center">
+                                    {% if leaderboard.has_previous %}
+                                        <button onclick="window.location.href = '?page={{ leaderboard.previous_page_number }}'"
+                                                type="button" class="btn btn-sm btn-primary pagination-button">Önceki
+                                        </button>{% else %}
+                                        <button type="button" class="btn btn-sm btn-primary pagination-button" disabled>
+                                            Önceki
+                                        </button>
+                                    {% endif %}
+                                    {% for page in leaderboard.paginator.page_range %}
+                                        {% if leaderboard.number == page %}
+                                            <input value="{{ page }}" class="pagination-input" style="display: inline"
+                                                   id="go" onkeyup="paginate()" type="text"> /
+                                            {{ leaderboard.paginator.num_pages }}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if leaderboard.has_next %}
+                                        <button type="button"
+                                                onclick="window.location.href = '?page={{ leaderboard.next_page_number }}'"
+                                                class="btn btn-sm btn-primary pagination-button" id="go-button"
+                                                href="#">Sonraki
+                                        </button>{% else %}
+                                        <button type="button" disabled class="btn btn-sm btn-primary pagination-button"
+                                                href="#">
+                                            Sonraki
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div id="role-borders" class="score-page">
+                    <span class="sidebar-title">Seviyeler</span>
+                    <hr class="sidebar-hr">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="1">Yenİ Üye <i class="fas fa-long-arrow-alt-right"></i>
+                                0 - 20 Puan
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="2">Çaylak <i class="fas fa-long-arrow-alt-right"></i>
+                                20 - 70 Puan
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="3">Fİlmsever <i class="fas fa-long-arrow-alt-right"></i>
+                                70 - 200 Puan
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="1">Fİlm Uzmanı <i class="fas fa-long-arrow-alt-right"></i>
+                                200 - 500 Puan
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-lg-6">
+                            <div class="2">Profesyonel <i class="fas fa-long-arrow-alt-right"></i>
+                                500 - 1000 Puan
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="3">usta <i class="fas fa-long-arrow-alt-right"></i>
+                                1000+ Puan
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="scores" class="score-page">
+                    <span class="sidebar-title">Puanlama</span>
+                    <hr class="sidebar-hr">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="sidebar-statistics">Yorum Yap <i class="fas fa-long-arrow-alt-right"></i>
+                                5 Puan
+                            </div>
+
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="sidebar-statistics">Gönderi Oluştur <i class="fas fa-long-arrow-alt-right"></i>
+                                10 Puan
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="sidebar-statistics">Film Bul <i class="fas fa-long-arrow-alt-right"></i>
+                                25 Puan
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="sidebar-statistics">Gönderi Takip Et <i class="fas fa-long-arrow-alt-right"></i>
+                                3 Puan
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="sidebar-statistics">İlk Kez Profil Düzenleme <i
+                                    class="fas fa-long-arrow-alt-right"></i>
+                                10 Puan
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="sidebar-statistics">Email Onayla <i class="fas fa-long-arrow-alt-right"></i>
+                                10 Puan
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                {% include 'sidebar.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

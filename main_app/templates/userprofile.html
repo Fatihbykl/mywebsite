@@ -3,6 +3,9 @@
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'pagination.css' %}">
+
+    <title>{{ request.user.username }} - Profili</title>
+    <meta name="description" content="{{ request.user.username }} adlı kullanıcının profili."/>
 {% endblock %}
 
 {% block body %}
@@ -13,8 +16,8 @@
             </div>
         </div>
         <div class="row" style="margin-top: 20px">
-            <div class="col-lg-3 col-md-4">
-                <div class="text-center card-box">
+            <div id="left-profile" class="col-lg-3 col-md-4">
+                <div class="text-center card-box" style="padding-bottom: 32px;">
                     <div class="member-card">
                         <div class="thumb-xl member-thumb m-b-10 center-block">
                             <img id="user-photo" style="height: 190px;width:200px"
@@ -22,12 +25,12 @@
                                  class="img-circle img-thumbnail" alt="profile-image">
                         </div>
 
-                        <div class="">
+                        <div style="word-break: break-all;">
                             <h4 class="m-b-5">{{ profil.username }}</h4>
                         </div>
 
-                        <div
-                                class="{{ profil.role_user.role }}">{{ profil.role_user.get_role_display }}</div>
+                        <div class="{{ profil.role_user.role }}">{{ profil.role_user.get_role_display }}
+                        </div>
                         <hr>
                         {% if request.user.is_authenticated %}
                             {% if request.user.username == profil.username %}
@@ -60,7 +63,7 @@
                                 <hr>
                             {% endif %}
                         {% endif %}
-                        <div class="text-left m-t-40">
+                        <div class="text-left" style="padding: 0 7px;">
                             <p class="text-muted font-13"><strong>Puan :</strong> <span
                                     class="m-l-15">{{ profil.role_user.puan }}</span></p>
                             <p class="text-muted font-13"><strong>Gönderi : </strong><span
@@ -73,23 +76,25 @@
                         <hr>
 
                         <ul style="list-style: none; text-align: left; padding-left: 0">
-                            <li>
+                            <li class="tab-button">
                                 <a href="{% url 'profile-info' profil.username %}">
                                     {% if request.user.username == profil.username %}Bilgilerim{% else %}
                                         Bilgileri{% endif %}
                                 </a>
                             </li>
                             {% if request.user.username == profil.username %}
-                                <li><a href="{% url 'settings' profil.username %}">Bilgileri Düzenle</a></li>
-                                <li><a href="{% url 'profile-notifications' profil.username %}">Bildirimler</a></li>
+                                <li class="tab-button"><a href="{% url 'settings' profil.username %}">Bilgileri
+                                    Düzenle</a></li>
+                                <li class="tab-button"><a href="{% url 'profile-notifications' profil.username %}">Bildirimler</a>
+                                </li>
                             {% endif %}
-                            <li>
+                            <li class="tab-button">
                                 <a href="{% url 'my-posts' profil.username %}">
                                     {% if request.user.username == profil.username %}Gönderilerim{% else %}
                                         Gönderileri{% endif %}
                                 </a>
                             </li>
-                            <li>
+                            <li class="tab-button">
                                 <a href="{% url 'bookmarks' profil.username %}">
                                     {% if request.user.username == profil.username %}Takip Ettiklerim{% else %}Takip
                                         Ettikleri{% endif %}
@@ -99,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-8 col-lg-9" style="background-color: white">
+            <div class="col-md-8 col-lg-9 profile-background-right">
                 {% block tabs %}
                 {% endblock %}
             </div>

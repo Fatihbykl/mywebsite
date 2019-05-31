@@ -1,8 +1,9 @@
-from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse
+from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404
 from user.forms import registerForm, loginForm, profilModel, ChangePhotoForm, PasswordChange
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from .models import kullaniciProfili
 from django.contrib.auth.models import User
+from django.http import HttpResponseBadRequest
 from django.contrib import messages
 from user.models import Roles
 from main_app.models import Notifications, Posts
@@ -43,8 +44,13 @@ def Login(request):
         regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
         print(username)
         if re.match(regex, username):
-            user_email = User.objects.get(email=username)
-            username = user_email.username
+            try:
+                user_email = User.objects.get(email=username)
+                username = user_email.username
+            except:
+                messages.add_message(request, messages.ERROR, "Girdiğiniz email sistemde kayıtlı değil.",
+                                     extra_tags='danger')
+                return render(request, 'login.html', context={'loginForm': form})
         user = authenticate(request, username=username, password=password)
         if user is not None:
             if user.is_active:
@@ -88,6 +94,8 @@ def choose_photo(request, username):
 def password_change(request):
     passwordForm = PasswordChange(user=request.user, data=request.POST or None)
     if passwordForm.is_valid():
+        if request.method == "GET":
+            return HttpResponseBadRequest()
         user = passwordForm.save()
         update_session_auth_hash(request, user)
         messages.success(request, 'Şifreniz başarıyla değiştirildi!', extra_tags='success')
@@ -99,27 +107,22 @@ def password_change(request):
 
 
 @login_required(login_url='/kullanici/giris-yap')
-def mark_as_read(request, pk):
-    message = get_object_or_404(Notifications, pk=pk)
-    message.delete()
-    return HttpResponse('')
-
-
-@login_required(login_url='/kullanici/giris-yap')
 def profile_settings(request, username):
-    notifications = Notifications.objects.filter(user=request.user).order_by('-created')[:5]
     user = get_object_or_404(User, username=username)
+    notifications = Notifications.objects.filter(is_read=False, user=user).count()
     editprof = profilModel(instance=user.profil, data=request.POST or None, files=request.FILES or None)
     passwordForm = PasswordChange(user=request.user, data=request.POST or None)
     form = ChangePhotoForm(data=request.POST or None, files=request.FILES or None)
     Profil = get_object_or_404(User, username=username)
     if editprof.is_valid():
+        if request.method == "GET":
+            return HttpResponseBadRequest()
         ad = editprof.cleaned_data.get('ad', None)
         soyad = editprof.cleaned_data.get('soyad', None)
         film = editprof.cleaned_data.get('fav_film', None)
         yonet = editprof.cleaned_data.get('fav_yonetmen', None)
         dogum_tarihi = editprof.cleaned_data.get('dogum_gunu', None)
-        cinsiyet = editprof.cleaned_data.get('cinsiyet', None)
+        cinsiyet = request.POST['cinsiyet']
 
         Profil.profil.ad = ad
         Profil.profil.soyad = soyad
@@ -143,7 +146,7 @@ def profile_info(request, username):
     if not request.user.is_authenticated:
         return render(request, 'profile-tabs/user-info.html',
                       context={'profil': Profil, 'photoForm': form_photo})
-    notifications = Notifications.objects.filter(user=request.user).order_by('-created')[:5]
+    notifications = Notifications.objects.filter(user=request.user, is_read=False).count()
     return render(request, 'profile-tabs/user-info.html',
                   context={'profil': Profil, 'msg': notifications, 'photoForm': form_photo})
 
@@ -153,22 +156,40 @@ def my_posts(request, username):
     user = get_object_or_404(User, username=username)
     posts = Posts.objects.filter(yayinlayan=user)
     form_photo = ChangePhotoForm(data=request.POST or None, files=request.FILES or None)
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(posts, 8)
+    try:
+        post = paginator.page(page)
+    except PageNotAnInteger:
+        post = paginator.page(1)
+    except EmptyPage:
+        post = paginator.page(paginator.num_pages)
+
     if not request.user.is_authenticated:
         return render(request, 'profile-tabs/myposts.html',
-                      context={'posts': posts, 'profil': Profil, 'photoForm': form_photo})
-    notifications = Notifications.objects.filter(user=request.user).order_by('-created')[:5]
+                      context={'posts': post, 'profil': Profil, 'photoForm': form_photo})
+    notifications = Notifications.objects.filter(user=request.user, is_read=False).count()
     return render(request, 'profile-tabs/myposts.html',
-                  context={'posts': posts, 'profil': Profil, 'msg': notifications, 'photoForm': form_photo})
+                  context={'posts': post, 'profil': Profil, 'msg': notifications, 'photoForm': form_photo})
 
 
 @login_required(login_url='/kullanici/giris-yap')
 def profile_notifications(request, username):
-    notif = Notifications.objects.filter(user=request.user).order_by('-created')[:5]
-    notifications = Notifications.objects.filter(user=request.user).order_by('-created')[:5]
+    notif = Notifications.objects.filter(user=request.user, is_read=False).count()
+    notifications = Notifications.objects.filter(user=request.user).order_by('-created')
     Profil = get_object_or_404(User, username=username)
     form_photo = ChangePhotoForm(data=request.POST or None, files=request.FILES or None)
     page = request.GET.get('page', 1)
-    paginator = Paginator(notifications, 10)
+    paginator = Paginator(notifications, 8)
+
+    if Profil.username == request.user.username:
+        notifs = Notifications.objects.filter(user=request.user, is_read=False)
+        if notifs:
+            for i in notifs:
+                i.is_read = True
+                i.save()
+
     try:
         post = paginator.page(page)
     except PageNotAnInteger:
@@ -176,18 +197,27 @@ def profile_notifications(request, username):
     except EmptyPage:
         post = paginator.page(paginator.num_pages)
     return render(request, 'profile-tabs/profile-notifications.html',
-                  context={'profil': Profil, 'msg': notif, 'notifications': post, 'gonderi': post,
-                           'photoForm': form_photo})
+                  context={'profil': Profil, 'msg': notif, 'notifications': post, 'photoForm': form_photo})
 
 
 def bookmarks(request, username):
     Profil = get_object_or_404(User, username=username)
     bookmark = Posts.objects.filter(followers=Profil)
     form_photo = ChangePhotoForm(data=request.POST or None, files=request.FILES or None)
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(bookmark, 8)
+    try:
+        post = paginator.page(page)
+    except PageNotAnInteger:
+        post = paginator.page(1)
+    except EmptyPage:
+        post = paginator.page(paginator.num_pages)
+
     if not request.user.is_authenticated:
         return render(request, 'profile-tabs/bookmarks.html',
-                      context={'bookmark': bookmark, 'profil': Profil, 'photoForm': form_photo})
+                      context={'bookmark': post, 'profil': Profil, 'photoForm': form_photo})
 
-    notifications = Notifications.objects.filter(user=request.user).order_by('-created')[:5]
+    notifications = Notifications.objects.filter(user=request.user, is_read=False).count()
     return render(request, 'profile-tabs/bookmarks.html',
-                  context={'bookmark': bookmark, 'msg': notifications, 'profil': Profil, 'photoForm': form_photo})
+                  context={'bookmark': post, 'msg': notifications, 'profil': Profil, 'photoForm': form_photo})
