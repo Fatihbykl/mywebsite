@@ -2,7 +2,7 @@ $(document).ready(function () {
     var status = false;
     $('#sidebar-button').click(function () {
         if (status) {
-            $('#sidebar').animate({left: '-250px'}, "swing");
+            $('#sidebar').animate({left: '-100%'}, "swing");
             status = false;
         } else {
             $('#sidebar').animate({left: '0'}, "swing");
@@ -11,7 +11,7 @@ $(document).ready(function () {
     });
 
     $('#close-sidebar').click(function () {
-        $('#sidebar').animate({left: '-250px'}, "swing");
+        $('#sidebar').animate({left: '-100%'}, "swing");
         status = false;
     });
 });

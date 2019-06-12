@@ -10,8 +10,7 @@ uploadField.onchange = function () {
 $(document).ready(function () {
 
     $("#photo-open-div").click(function () {
-        $("#photo-open-div").hide();
-        $("#photo").slideDown();
+        $("#photo").slideToggle();
     });
 });
 

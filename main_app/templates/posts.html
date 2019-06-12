@@ -20,8 +20,9 @@
                                  src="/media/{{ post.yayinlayan.profil.profilFoto }}" alt="Profil Fotoğrafı">
                             <div style="color:#EAEDF1">
                                 <a class="link"
-                                   href="{% url 'profile-info' post.yayinlayan.username %}"><span
-                                        style="font-weight: bold;font-family: Roboto;">{{ post.yayinlayan.username }}</span></a><br>
+                                   href="{% url 'profile-info' post.yayinlayan.username %}">
+                                    <span class="card-username">{{ post.yayinlayan.username }}</span>
+                                </a><br>
                                 <span>{{ post.tarih }}</span>
                             </div>
                         </div>

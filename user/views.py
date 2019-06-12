@@ -30,7 +30,9 @@ def register(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect(reverse('gonderiler'))
+                msg = "Profiline hoşgeldin! Buradan profilini güncelleyebilirsin."
+                messages.add_message(request, message=msg, extra_tags='info', level=messages.INFO)
+                return HttpResponseRedirect(reverse('settings', kwargs={'username': username}))
     return render(request, 'register.html', context={'registerForm': form})
 
 

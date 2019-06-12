@@ -13,7 +13,6 @@
 
     <link rel="stylesheet" href="{% static 'movie/css/plugins.css' %}">
     <link rel="stylesheet" href="{% static 'movie/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar.css' %}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
           integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
@@ -47,11 +46,13 @@
                         <div class="btn-transform transform-vertical">
                             <div>
                                 <a href="https://www.imdb.com/title/{{ imdb_id }}/" class="item item-1 yellowbtn">
-                                    Daha Fazla Bilgi
+                                    Daha Fazla Bİlgİ
                                 </a>
                             </div>
                             <div>
-                                <a href="https://www.imdb.com/title/{{ imdb_id }}/" class="item item-2 yellowbtn"></a>
+                                <a href="https://www.imdb.com/title/{{ imdb_id }}/" class="item item-2 yellowbtn">
+                                    Daha Fazla BİLGİ
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -91,25 +92,6 @@
                                     <div class="row">
                                         <div class="col-md-8 col-sm-12 col-xs-12">
                                             <p>{{ plot }}</p>
-                                            <!-- movie cast -->
-                                            <!--
-                                            <div class="mvsingle-item ov-item">
-                                                <a class="img-lightbox" data-fancybox-group="gallery"
-                                                   href="images/uploads/image41.jpg"><img
-                                                        src="images/uploads/image4.jpg" alt=""></a>
-                                                <a class="img-lightbox" data-fancybox-group="gallery"
-                                                   href="images/uploads/image51.jpg"><img
-                                                        src="images/uploads/image5.jpg" alt=""></a>
-                                                <a class="img-lightbox" data-fancybox-group="gallery"
-                                                   href="images/uploads/image61.jpg"><img
-                                                        src="images/uploads/image6.jpg" alt=""></a>
-                                                <div class="vd-it">
-                                                    <img class="vd-img" src="images/uploads/image7.jpg" alt="">
-                                                    <a class="fancybox-media hvr-grow"
-                                                       href="https://www.youtube.com/embed/o-0hcF97wy0"><img
-                                                            src="images/uploads/play-vd.png" alt=""></a>
-                                                </div>
-                                            </div>-->
                                             <div class="title-hd-sm">
                                                 <h4>Oyuncular</h4>
                                             </div>
@@ -118,7 +100,8 @@
                                                 {% for actor in actors %}
                                                     <div class="cast-it">
                                                         <div class="cast-left">
-                                                            <img src="images/uploads/cast1.jpg" alt="">
+                                                            <i style="color: #DCF836;font-size: 20px;margin-right: 10px;margin-left: 2px;"
+                                                               class="fas fa-user-circle"></i>
                                                             <a href="#">{{ actor }}</a>
                                                         </div>
                                                     </div>
@@ -162,53 +145,6 @@
         </div>
     </div>
 </div>
-<footer class="footer-bs" style="margin: 0;background-color: #233A50;">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 footer-brand animated fadeInLeft">
-                <h2>Logo</h2>
-                <p>*****.com, daha önce izlediği veya bir yerde gördüğü bir filmin adını arayanların buluştuğu bir web
-                    sitesidir.</p>
-            </div>
-            <div class="col-md-4 footer-nav animated fadeInUp">
-                <h4>Hızlı Linkler —</h4>
-                <div>
-                    <ul class="pages">
-                        <li><a href="{% url 'gonderiler' %}"><i class="fas fa-home"></i> Ana Sayfa</a></li>
-                        <li><a href="{% url 'score' %}"><i class="fas fa-trophy"></i> Puanlama</a></li>
-                        <li><a href="{% url 'rules' %}"><i class="fas fa-file-contract"></i> Sİte Kuralları</a></li>
-                        {% if not request.user.is_authenticated %}
-                            <li>
-                                <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Giriş Yap</a>
-                            </li>
-                            <li>
-                                <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Kayıt Ol</a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-4 footer-ns animated fadeInRight">
-                <h4>İletişime Geçin</h4>
-                <p>Bize site hakkında geri bildirimde bulunun.</p>
-
-                <div class="input-group">
-                        <span class="input-group-btn">
-                        <button onclick="window.location.href ={% url 'contact' %};"
-                                style="background-color: rgba(0,0,0,0);border: 1px solid white;" type="button">
-                            <span><i class="fas fa-envelope"></i><b style="margin-left: 10px;">İLETİŞİM</b></span>
-                        </button>
-                        </span>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</footer>
 
 
 <script src="{% static 'movie/js/jquery.js' %}"></script>

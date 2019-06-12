@@ -12,11 +12,9 @@
             {% for i in leaderboard_5 %}
                 {% for j in i %}
                     <li>
-                        <div class="graphic">
-                            <a href="{% url 'profile-info' j.user.username %}">
-                                <img src="/media/{{ j.user.profil.profilFoto }}" alt=""/>
-                            </a>
-                        </div>
+                        <a href="{% url 'profile-info' j.user.username %}">
+                            <img class="rounded-circle" width="60px" src="/media/{{ j.user.profil.profilFoto }}" alt=""/>
+                        </a>
                         <div class="name">
                             <span class="header">
                                 <a href="{% url 'profile-info' j.user.username %}">{{ j.user.username }}</a>
@@ -59,7 +57,8 @@
             <div class="col-lg-12">
                 <a href="{% url 'post-detail' post.slug %}">
                     <p style="font-weight: bold;word-break: break-all">
-                        <i style="color: #3558DB;font-size: 20px;vertical-align: middle;" class="fas fa-angle-double-right"></i>
+                        <i style="color: #3558DB;font-size: 20px;vertical-align: middle;"
+                           class="fas fa-angle-double-right"></i>
                         <span style="color: black;margin-bottom: 10px;">{{ post.baslik }}</span>
                     </p>
                 </a>
@@ -69,7 +68,7 @@
             <div class="col-lg-12" style="color: #BDBDBD;">
                 <i style="color: #BDBDBD;margin: 10px 7px"
                    class="fas fa-user"></i>{{ post.yayinlayan.username }}
-                <i style="color: #BDBDBD;margin: 10px 7px" class="far fa-clock"></i>{{ post.tarih }}
+                <i style="color: #BDBDBD;margin: 10px 7px" class="far fa-clock"></i>{{ post.tarih|date }}
             </div>
         </div>
         <hr>

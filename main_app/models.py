@@ -18,6 +18,7 @@ class Posts(models.Model):
     found = models.BooleanField(default=0)
     followers = models.ManyToManyField(User, related_name='followers')
     views_count = models.IntegerField(default=0)
+    is_followed = models.BooleanField(default=0)
 
     def __str__(self):
         return 'Gönderi Başlığı : %s' % self.baslik
@@ -49,6 +50,9 @@ class Posts(models.Model):
     def get_comments(self):
         return self.comment.all().order_by('-id')
 
+    def follow(self):
+        return self.is_followed
+
 
 class Comments(models.Model):
     post = models.ForeignKey(Posts, related_name='comment', on_delete=models.CASCADE)
@@ -59,8 +63,8 @@ class Comments(models.Model):
     likes = models.ManyToManyField(User, related_name='likes')
     is_liked = models.BooleanField(default=0)
     that_movie = models.BooleanField(default=0)
-    movie_tag = models.CharField(editable=False, max_length=120, default=2)
-    movie_tag_href = models.CharField(editable=False, max_length=250, default=3)
+    movie_tag = models.CharField(editable=False, max_length=120, default=2, blank=True)
+    movie_tag_href = models.CharField(editable=False, max_length=250, default=3, blank=True)
 
     def __str__(self):
         return 'Başlık : {0} || Kullanıcı Adı: {1} || Beğeniler : {2}'.format(self.post.baslik,

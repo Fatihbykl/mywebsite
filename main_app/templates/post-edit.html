@@ -11,34 +11,36 @@
 {% block body %}
     <div class="container">
         <div class="row">
-            <div class="col-lg-9" style="margin-top: 80px;background-color: white;height: 750px;box-shadow: 0 0 15px 5px rgba(0, 0, 0, .1);">
-                <div style="margin-top: 20px;" class="messages alert alert-info">
-                    <div class="row">
-                        <div class="col-lg-1" style="padding-left: 0">
-                            <i style="font-size: 85px;margin-top: 20px;color: orange"
-                               class="fas fa-exclamation-circle"></i>
-                        </div>
-                        <div class="col-lg-11">
-                            <ul style="font-weight: bold">
-                                Gönderi Oluştururken dikkat etmeniz gerekenler:
-                                <li>Başlığınız içerikle uyumlu ve anlamlı olmalı. (ör: Clint Eastwood'lu Boks Filmi)
-                                </li>
-                                <li>İçeriğiniz argo, küfür vb. kelimeler içermemeli.</li>
-                                <li>İçeriğiniz noktalama işaretlerin uygun ve okunabilir olmalı.</li>
-                            </ul>
+            <div class="col-lg-9" style="margin-top: 80px;">
+                <div class="contact-background" style="height: auto;">
+                    <div style="margin-top: 20px;" class="messages alert alert-info">
+                        <div class="row">
+                            <div class="col-lg-1" style="padding-left: 0">
+                                <i style="font-size: 85px;margin-top: 20px;color: orange"
+                                   class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <div class="col-lg-11">
+                                <ul style="font-weight: bold">
+                                    Gönderi Oluştururken dikkat etmeniz gerekenler:
+                                    <li>Başlığınız içerikle uyumlu ve anlamlı olmalı. (ör: Clint Eastwood'lu Boks Filmi)
+                                    </li>
+                                    <li>İçeriğiniz argo, küfür vb. kelimeler içermemeli.</li>
+                                    <li>İçeriğiniz noktalama işaretlerin uygun ve okunabilir olmalı.</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
+                    <form action="{% url 'edit-post' post.slug %}" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <span style="font-family: Roboto;color: dodgerblue;font-weight: bold">{{ form.baslik.label|upper }}</span>{{ form.baslik }}
+                                <span style="font-family: Roboto;color: dodgerblue;font-weight: bold">{{ form.icerik.label|upper }}</span>{{ form.icerik }}
+                                <input type="submit" class="btn btn-sm gonderi" value="Düzenle">
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <form action="{% url 'edit-post' post.slug %}" method="post">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <span style="font-family: Roboto;color: dodgerblue;font-weight: bold">{{ form.baslik.label|upper }}</span>{{ form.baslik }}
-                            <span style="font-family: Roboto;color: dodgerblue;font-weight: bold">{{ form.icerik.label|upper }}</span>{{ form.icerik }}
-                            <input type="submit" class="btn btn-sm gonderi" value="Düzenle">
-                        </div>
-                    </div>
-                </form>
             </div>
             <div class="col-lg-3">
                 {% include 'sidebar.html' %}

@@ -202,8 +202,8 @@ header a, header a:hover {
 
 #sidebar {
     height: 100%;
-    width: 250px;
-    left: -250px;
+    width: 100%;
+    left: -100%;
     position: fixed;
     top: 0;
     background-color: #3498DB;
@@ -291,7 +291,7 @@ header a, header a:hover {
 
 .footer-bs {
     background-color: #3c3d41;
-    padding: 60px 40px;
+    padding: 20px 40px;
     color: rgba(255, 255, 255, 1.00);
     margin-bottom: 20px;
 }
@@ -414,4 +414,16 @@ header a, header a:hover {
 .pagination-button {
     padding: 8px 16px;
     border-radius: 10px;
+}
+
+#sidebar ul li {
+    margin-bottom: 20px;
+}
+
+#close-sidebar:hover {
+    cursor: pointer;
+}
+
+#sidebar-button:hover {
+    cursor: pointer;
 }

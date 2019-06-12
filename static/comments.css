@@ -364,8 +364,9 @@ p.post {
 .content-wrap {
     max-width: 930px;
     width: 100%;
-    margin-top: 5em;
-    box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 60px;
+    /*box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.1);*/
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
 }
 
 .comment-item {
@@ -608,11 +609,10 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 }
 
 
-@media (max-width: 320px) {
-    [class = "1"], [class = "2"], [class = "3"], [class = "4"], [class = "5"], [class = "6"], span.sahip {
-        font-size: 12px;
-    }
+[class = "1"], [class = "2"], [class = "3"], [class = "4"], [class = "5"], [class = "6"], [class = "7"], span.sahip {
+    font-size: 12px;
 }
+
 
 .share img, .complain img {
     font-size: 30px;
@@ -636,50 +636,51 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 [class = "1"] {
     padding: 4px 7px;
     color: white;
-    text-transform: uppercase;
     border-radius: 7px;
-    background-color: #5cb85c;
+    background-color: black;
 }
 
 [class = "2"] {
     padding: 4px 7px;
     color: white;
-    text-transform: uppercase;
     border-radius: 7px;
-    background-color: #5cb85c;
+    background-color: #7100E2;
 }
 
 [class = "3"] {
     padding: 4px 7px;
     color: white;
-    text-transform: uppercase;
     border-radius: 7px;
-    background-color: #5cb85c;
+    background-color: #0066BF;
 }
 
 [class = "4"] {
     padding: 4px 7px;
     color: white;
-    text-transform: uppercase;
     border-radius: 7px;
-    background-color: #5cb85c;
+    background-color: #00BA09;
 }
 
 [class = "5"] {
     padding: 4px 7px;
     color: white;
-    text-transform: uppercase;
     border-radius: 7px;
-    background-color: #5cb85c;
+    background-color: #DD8500;
     width: 140px;
 }
 
 [class = "6"] {
     padding: 4px 7px;
     color: white;
-    text-transform: uppercase;
     border-radius: 7px;
     background-color: #5cb85c;
+}
+
+[class = "7"] {
+    padding: 4px 7px;
+    color: white;
+    border-radius: 7px;
+    background-color: #DD0000;
 }
 
 button:focus {
@@ -743,7 +744,12 @@ button:hover {
 }
 
 .font-com-user {
-    font-size: 22px;
+    font-size: 16px;
+}
+
+.font-com-user:hover {
+    color: #3498DB;
+    transition-duration: .4s;
 }
 
 @media screen and (max-width: 426px) {
@@ -765,10 +771,6 @@ button:hover {
 
     .as .container {
         padding: 0;
-    }
-
-    .font-com-user {
-        font-size: 18px;
     }
 
     .com-img {
@@ -859,7 +861,7 @@ a:hover {
 .score-page {
     width: 100%;
     padding: 40px 20px;
-    margin-top: 80px;
+    margin-top: 60px;
     background-color: white;
     box-shadow: 0 0 15px 5px rgba(0, 0, 0, .1);
 }
@@ -876,7 +878,7 @@ header i {
     margin-bottom: 25px
 }
 
-#role-borders [class = '1'], #role-borders [class = '2'], #role-borders [class = '3'], #role-borders [class = '4'], #role-borders [class = '5'] {
+#role-borders [class = '1'], #role-borders [class = '2'], #role-borders [class = '3'], #role-borders [class = '4'], #role-borders [class = '5'], #role-borders [class = '7'] {
     width: 100%;
     border-radius: unset;
 }
@@ -890,11 +892,16 @@ header i {
 }
 
 #movie-hyperlink, .movie-hyperlink {
-    padding: 5px 7px;
+    padding: 8px;
     font-weight: bold;
-    color: deepskyblue;
-    border-radius: 5px;
-    background-color: #e2dede;
+    color: white;
+    background-color: #4CAF50;
+}
+
+.movie-hyperlink a {
+    color: white;
+    font-weight: 500;
+    font-size: 15px;
 }
 
 #close-hyperlink {
@@ -920,4 +927,34 @@ header i {
     #excla-ul {
         padding: 0;
     }
+}
+
+.zero-comment i {
+    font-size: 20px;
+    margin-right: 10px;
+    color: black;
+}
+
+.no-comment .fa-facebook-f {
+    color: #4267B2;
+}
+
+.no-comment .fa-twitter {
+    color: #00ACED;
+}
+
+.no-comment .fa-envelope {
+    color: #DD8500;
+}
+
+.no-comment .fa-link:hover {
+    cursor: pointer;
+}
+
+.no-comment .fa-link {
+    color: #DD0000;
+}
+
+.dropdown-share div {
+    padding: 5px 10px;
 }

@@ -13,8 +13,7 @@ from googletrans import Translator
 
 
 def deneme(request):
-    selam = 'selam'
-    return render(request, template_name='main-temp.html', context={'selam': selam})
+    return HttpResponseRedirect(reverse('gonderiler'))
 
 
 def post_views(request):
@@ -76,6 +75,7 @@ def post_detail(request, slug):
     post = get_object_or_404(Posts, slug=slug)
     eski_gonderi = Posts.objects.filter(found=0).order_by('tarih')[:5]
     last_comments = Comments.objects.all().order_by('-id')[:5]
+    follow_count = post.followers.all().count()
     statistics = {
         'comment': Comments.objects.all().count(),
         'post': Posts.objects.all().count(),
@@ -97,7 +97,7 @@ def post_detail(request, slug):
         post.save()
     if not request.user.is_authenticated:
         return render(request, 'post-detail.html',
-                      context={'post': post, 'yorumForm': yorum,
+                      context={'post': post, 'yorumForm': yorum, 'follow_count': follow_count,
                                'old_posts': eski_gonderi,
                                'last_comments': last_comments, 'statistics': statistics, 'leaderboard_5': leaderboard})
 
@@ -105,7 +105,7 @@ def post_detail(request, slug):
     notifications = Notifications.objects.filter(user=request.user, is_read=False).count()
     comment_count = Comments.objects.filter(post=post).count()
     return render(request, 'post-detail.html',
-                  context={'post': post, 'yorumForm': yorum, 'msg': notifications,
+                  context={'post': post, 'yorumForm': yorum, 'msg': notifications, 'follow_count': follow_count,
                            'role': user_role, 'reportForm': report_form, 'choosen_comment': choosen_comment,
                            'old_posts': eski_gonderi, 'comment_count': comment_count,
                            'last_comments': last_comments, 'statistics': statistics, 'leaderboard_5': leaderboard})
@@ -222,8 +222,9 @@ def report(request, slug, id):
 
         for admin in User.objects.filter(role_user__role=6):
             msg = "Rapor Özeti:<br> Raporlayan: %s <br>Raporlanan: %s <br> Neden: %s <br> Açıklama: %s" % (
-            user.username, post.yayinlayan.username, pk.get_reason_display(), pk.comment)
-            Notifications.objects.create(user=admin, message=msg, notification_type='report', which_post_slug=com.post.slug)
+                user.username, post.yayinlayan.username, pk.get_reason_display(), pk.comment)
+            Notifications.objects.create(user=admin, message=msg, notification_type='report',
+                                         which_post_slug=com.post.slug)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -291,7 +292,11 @@ def follow(request, slug):
     if request.user != post.yayinlayan:
         if user in post.followers.all():
             post.followers.remove(user)
+            post.is_followed = 0
+            post.save()
         else:
+            post.is_followed = 1
+            post.save()
             post.followers.add(user)
             message = "<b>%s</b> adlı kullanıcı gönderini takip ediyor." % user.username
             Notifications.objects.create(user=post.yayinlayan, message=message, notification_type='follow',
@@ -311,7 +316,7 @@ def delete_post(request, slug):
 
 @login_required(login_url='/kullanici/giris-yap')
 def edit_post(request, slug):
-    mess = Notifications.objects.filter(user=request.user).order_by('-created')[:5]
+    notifications = Notifications.objects.filter(user=request.user, is_read=False).count()
     post = get_object_or_404(Posts, slug=slug)
     form = PostsModel(instance=post, data=request.POST or None)
     eski_gonderi = Posts.objects.filter(found=0).order_by('tarih')[:5]
@@ -332,9 +337,10 @@ def edit_post(request, slug):
             return HttpResponseRedirect(reverse('post-detail', kwargs={'slug': slug}))
     elif request.user != post.yayinlayan:
         return HttpResponseForbidden()
-    return render(request, 'post-edit.html', context={'form': form, 'post': post, 'msg': mess, 'post_old': eski_gonderi,
-                                                      'last_comments': last_comments,
-                                                      'statistics': statistics, 'leaderboard_5': leaderboard})
+    return render(request, 'post-edit.html',
+                  context={'form': form, 'post': post, 'msg': notifications, 'old_posts': eski_gonderi,
+                           'last_comments': last_comments,
+                           'statistics': statistics, 'leaderboard_5': leaderboard})
 
 
 @login_required(login_url='/kullanici/giris-yap')

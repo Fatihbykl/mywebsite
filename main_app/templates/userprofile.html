@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'pagination.css' %}">
 
-    <title>{{ request.user.username }} - Profili</title>
+    <title>{{ profil.username }} - Profili</title>
     <meta name="description" content="{{ request.user.username }} adlı kullanıcının profili."/>
 {% endblock %}
 
@@ -23,20 +23,22 @@
                             <img id="user-photo" style="height: 190px;width:200px"
                                  src="/media/{{ profil.profil.profilFoto }}"
                                  class="img-circle img-thumbnail" alt="profile-image">
+                            {% if request.user.username == profil.username %}
+                                <div class="profile-change-img">
+                                    <button id="photo-open-div" class="profile-change-img-button"><i
+                                            class="fas fa-image" style="font-size: 20px;"></i></button>
+                                </div>
+                            {% endif %}
                         </div>
 
                         <div style="word-break: break-all;">
                             <h4 class="m-b-5">{{ profil.username }}</h4>
                         </div>
-
                         <div class="{{ profil.role_user.role }}">{{ profil.role_user.get_role_display }}
                         </div>
                         <hr>
                         {% if request.user.is_authenticated %}
                             {% if request.user.username == profil.username %}
-                                <button id="photo-open-div" class="photo-button" style="width: 75%;margin-bottom: 13px">
-                                    Fotoğrafı Değiştir
-                                </button>
                                 <div id="photo">
                                     <form method="post" action="{% url 'choose-photo' request.user.username %}"
                                           enctype="multipart/form-data">
@@ -50,17 +52,20 @@
                                             <option value="6">6</option>
                                             <option value="7">7</option>
                                         </select>
-                                        <input class="photo-button" type="submit" value="Seç">
+                                        <input class="btn btn-sm btn-info" style="margin-top: 15px;" type="submit"
+                                               value="Seç">
                                     </form>
                                     <hr style="width: 50%">
                                     <form method="post" action="{% url 'change-photo' request.user.username %}"
                                           enctype="multipart/form-data">
                                         {% csrf_token %}
                                         {{ photoForm.profilFoto }}
-                                        <input class="photo-button" type="submit" value="Yükle">
+                                        <input class="btn btn-sm btn-info"
+                                               style="margin-top: 15px;margin-left: auto;margin-right:auto;"
+                                               type="submit" value="Yükle">
                                     </form>
-                                </div>
                                 <hr>
+                                </div>
                             {% endif %}
                         {% endif %}
                         <div class="text-left" style="padding: 0 7px;">

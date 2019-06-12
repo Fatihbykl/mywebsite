@@ -367,16 +367,6 @@ tr {
     padding: 5px;
 }
 
-.photo-button {
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 4px 16px;
-    border: none;
-    border-radius: 5px;
-    margin-top: 15px;
-}
-
 .profile-table td {
     word-break: break-word;
 }
@@ -396,4 +386,21 @@ tr {
     #left-profile {
         padding: 0;
     }
+}
+
+.profile-change-img {
+    background-color: rgba(0, 0, 0, .2);
+    margin: auto;
+    width: 200px;
+}
+
+.profile-change-img:hover {
+    transition-duration: .4s;
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.profile-change-img-button {
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    width: 100%;
 }

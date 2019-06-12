@@ -9,8 +9,10 @@ class PostsModel(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PostsModel, self).__init__(*args, **kwargs)
-        self.fields['baslik'].widget.attrs = {'class': 'text-style', 'maxlength': '70'}
-        self.fields['icerik'].widget.attrs = {'class': 'text-style', 'maxlength': '2278'}
+        self.fields['baslik'].widget.attrs = {'class': 'form-control', 'maxlength': '70',
+                                              'style': 'margin-bottom:35px;'}
+        self.fields['icerik'].widget.attrs = {'class': 'form-control', 'maxlength': '2278',
+                                              'style': 'height:200px;margin-bottom:20px'}
 
 
 class CommentModel(forms.ModelForm):
@@ -20,8 +22,7 @@ class CommentModel(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CommentModel, self).__init__(*args, **kwargs)
-        for field in self.fields:
-            self.fields[field].widget.attrs = {'placeholder': 'Fikrini belirt...'}
+        self.fields['yorum'].widget.attrs = {'placeholder': 'Fikrini belirt...'}
 
 
 class ContactForms(forms.ModelForm):
