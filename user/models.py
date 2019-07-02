@@ -79,16 +79,6 @@ class Roles(models.Model):
 
 
 class kullaniciProfili(models.Model):
-    CHOOSE = (
-        (1, 'default_avatars/avatar.jpg'),
-        (2, 'default_avatars/javier.jpg'),
-        (3, 'default_avatars/joker.png'),
-        (4, 'default_avatars/pennywise.jpg'),
-        (5, 'default_avatars/scarface.jpg'),
-        (6, 'default_avatars/unknown.jpg'),
-        (7, 'default_avatars/yoda.jpg'),
-    )
-
     k_adi2 = models.CharField(max_length=30, editable=False, default=1)
     profil = models.OneToOneField(User, default=uuid.uuid1, on_delete=models.CASCADE, related_name='profil')
     ad = models.CharField(blank=True, max_length=30)
@@ -100,7 +90,7 @@ class kullaniciProfili(models.Model):
     cinsiyet = models.CharField(max_length=10, default='?', blank=True)
     buldugu_film = models.IntegerField(default=0)
     date_joined = models.DateField(default=now())
-    choose_photo = models.PositiveSmallIntegerField(choices=CHOOSE, blank=True, default=1)
+    is_updated = models.BooleanField(default=0)
 
     class Meta:
         verbose_name_plural = 'Kullanıcı Profilleri'

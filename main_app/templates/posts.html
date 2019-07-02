@@ -96,4 +96,51 @@
             </div>
         </div>
     </div>
+    {% if not request.user.is_authenticated %}
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <img style="display: block;margin: auto" src="/media/logo/logo3.png" height="70px">
+                        <button type="button" class="close" id="close-modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body" style="text-align: center;font-weight: bold;">
+                        Hoşgeldin! <br><br> Hala üye değil misin? Bir dakikanı ayırarak hemen aramıza katılabilirsin!
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <ul style="margin: auto;list-style: none;padding: 0">
+                            <li>
+                                <button style="" onclick="location.href='{% url 'register' %}'" type="button"
+                                        class="btn btn-success">Üye Ol
+                                </button>
+                            </li>
+                            <li style="margin-top: 5px;"><a style="margin-left: -20px;" href="{% url 'login' %}">Hesabın var mı?</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            if (localStorage.getItem('popUp') !== 'Opened') {
+                $('#myModal').show(700);
+                localStorage.setItem('popUp', 'Opened');
+            }
+
+            $('#close-modal').click(function () {
+                $('#myModal').hide(700);
+            })
+        })
+    </script>
 {% endblock %}

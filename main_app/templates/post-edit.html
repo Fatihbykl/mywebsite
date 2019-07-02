@@ -9,18 +9,18 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="container as">
         <div class="row">
-            <div class="col-lg-9" style="margin-top: 80px;">
+            <div class="col-lg-9" style="margin-top: 60px;">
                 <div class="contact-background" style="height: auto;">
                     <div style="margin-top: 20px;" class="messages alert alert-info">
                         <div class="row">
                             <div class="col-lg-1" style="padding-left: 0">
-                                <i style="font-size: 85px;margin-top: 20px;color: orange"
+                                <i style="font-size: 85px;margin-top: 20px;color: orange" id="excla"
                                    class="fas fa-exclamation-circle"></i>
                             </div>
                             <div class="col-lg-11">
-                                <ul style="font-weight: bold">
+                                <ul style="font-weight: bold" id="excla-ul">
                                     Gönderi Oluştururken dikkat etmeniz gerekenler:
                                     <li>Başlığınız içerikle uyumlu ve anlamlı olmalı. (ör: Clint Eastwood'lu Boks Filmi)
                                     </li>
@@ -36,7 +36,7 @@
                             <div class="col-lg-12">
                                 <span style="font-family: Roboto;color: dodgerblue;font-weight: bold">{{ form.baslik.label|upper }}</span>{{ form.baslik }}
                                 <span style="font-family: Roboto;color: dodgerblue;font-weight: bold">{{ form.icerik.label|upper }}</span>{{ form.icerik }}
-                                <input type="submit" class="btn btn-sm gonderi" value="Düzenle">
+                                <input type="submit" class="btn btn-sm btn-outline-info float-right" value="Düzenle">
                             </div>
                         </div>
                     </form>

@@ -13,7 +13,7 @@
                 {% for j in i %}
                     <li>
                         <a href="{% url 'profile-info' j.user.username %}">
-                            <img class="rounded-circle" width="60px" src="/media/{{ j.user.profil.profilFoto }}" alt=""/>
+                            <img class="rounded-circle" height="60px" width="60px" src="/media/{{ j.user.profil.profilFoto }}" alt=""/>
                         </a>
                         <div class="name">
                             <span class="header">

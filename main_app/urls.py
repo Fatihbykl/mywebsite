@@ -1,6 +1,6 @@
 from django.urls import path
 from main_app.views import post_views, post_create, post_detail, comment, like, report, that_movie, \
-    follow, delete_post, edit_post, delete_comment, movie, search_movie, report_post
+    follow, delete_post, edit_post, delete_comment, movie, search_movie, report_post, check_like, choosen_check_like
 
 urlpatterns = [
     path('', post_views, name='gonderiler'),
@@ -17,4 +17,6 @@ urlpatterns = [
     path('<slug>/post_takip_et', follow, name="follow"),
     path('<slug>/gonderi_sil', delete_post, name='delete-post'),
     path('<slug>/gonderi-duzenle', edit_post, name='edit-post'),
+    path('<slug>/<id>/begendi_mi', check_like, name='check-like'),
+    path('<id>/begendi_mi_secili', choosen_check_like, name='check-like-choosen'),
 ]

@@ -94,6 +94,11 @@ class ChangePhotoForm(forms.ModelForm):
         model = kullaniciProfili
         fields = ['profilFoto']
 
+    def __init__(self, *args, **kwargs):
+        super(ChangePhotoForm, self).__init__(*args, **kwargs)
+
+        self.fields['profilFoto'].widget.attrs = {'class': 'upload_photo'}
+
 
 class PasswordChange(PasswordChangeForm):
     def __init__(self, user, *args, **kwargs):

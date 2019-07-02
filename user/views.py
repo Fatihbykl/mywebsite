@@ -124,7 +124,10 @@ def profile_settings(request, username):
         film = editprof.cleaned_data.get('fav_film', None)
         yonet = editprof.cleaned_data.get('fav_yonetmen', None)
         dogum_tarihi = editprof.cleaned_data.get('dogum_gunu', None)
-        cinsiyet = request.POST['cinsiyet']
+        try:
+            cinsiyet = request.POST['cinsiyet']
+        except:
+            cinsiyet = ""
 
         Profil.profil.ad = ad
         Profil.profil.soyad = soyad
@@ -132,6 +135,11 @@ def profile_settings(request, username):
         Profil.profil.fav_yonetmen = yonet
         Profil.profil.dogum_gunu = dogum_tarihi
         Profil.profil.cinsiyet = cinsiyet
+
+        if not Profil.profil.is_updated:
+            Profil.profil.is_updated = 1
+            Profil.role_user.puan += 20
+            Profil.role_user.save()
 
         Profil.profil.save()
         msg = "Profil bilgileriniz güncellendi."

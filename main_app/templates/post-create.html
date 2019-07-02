@@ -9,10 +9,10 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="container as">
         <div class="row">
             <div class="col-lg-9"
-                 style="margin-top: 80px;">
+                 style="margin-top: 60px;">
                 <div class="contact-background" style="height: auto;">
                     <div style="margin-top: 20px;" class="messages alert alert-info">
                         <div class="row">
@@ -37,7 +37,7 @@
                             <div class="col-lg-12">
                                 <span style="color: dodgerblue;font-weight: bold">{{ createForm.baslik.label|upper }}</span>{{ createForm.baslik }}
                                 <span style="color: dodgerblue;font-weight: bold">İÇERİK</span>{{ createForm.icerik }}
-                                <input type="submit" class="btn btn-sm gonderi" value="Gönderi Oluştur">
+                                <input type="submit" class="btn btn-sm btn-outline-info float-right" value="Gönderi Oluştur">
                             </div>
                         </div>
                     </form>

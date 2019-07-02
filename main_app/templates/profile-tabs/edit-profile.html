@@ -54,9 +54,9 @@
                 </div>
                 <div class="col-lg-8">
                     <span style="float: left;margin-right: 6px">Erkek</span>
-                    <input style="float: left;margin-top: 6px;margin-right: 15px" type="radio" name="cinsiyet" value="erkek">
+                    <input {% if profil.profil.cinsiyet == "erkek" %}checked{% endif %} style="float: left;margin-top: 6px;margin-right: 15px" type="radio" name="cinsiyet" value="erkek">
                     <span style="float: left;margin-right: 6px">Kadın</span>
-                    <input style="float: left;margin-top: 6px;" type="radio" name="cinsiyet" value="kadin">
+                    <input {% if profil.profil.cinsiyet == "kadin" %}checked{% endif %} style="float: left;margin-top: 6px;" type="radio" name="cinsiyet" value="kadin">
                 </div>
             </div>
             <button class="btn btn-sm btn-outline-primary" style="float: right;margin-right: 15px;" type="submit">

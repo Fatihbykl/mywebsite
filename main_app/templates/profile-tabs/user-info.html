@@ -3,6 +3,14 @@
 {% block tabs %}
     <div class="user-info-right">
         <div class="profile-table">
+            <span class="sidebar-title">
+                {% if request.user.username == profil.username %}
+                    Bilgilerim
+                {% else %}
+                    Bilgiler
+                {% endif %}
+            </span>
+            <hr class="sidebar-hr">
             <table>
                 <tr>
                     <th>Ad</th>

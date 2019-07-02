@@ -60,16 +60,13 @@ class Comments(models.Model):
     sahip = models.ForeignKey(User, related_name='sahip', on_delete=models.CASCADE)
     yorum = models.TextField(max_length=1000, blank=False, null=True, verbose_name='Yorumunuz')
     time = models.DateTimeField(auto_now_add=True, auto_now=False)
-    likes = models.ManyToManyField(User, related_name='likes')
-    is_liked = models.BooleanField(default=0)
     that_movie = models.BooleanField(default=0)
     movie_tag = models.CharField(editable=False, max_length=120, default=2, blank=True)
     movie_tag_href = models.CharField(editable=False, max_length=250, default=3, blank=True)
+    likes = models.ManyToManyField(User, related_name='comment_likes')
 
     def __str__(self):
-        return 'Başlık : {0} || Kullanıcı Adı: {1} || Beğeniler : {2}'.format(self.post.baslik,
-                                                                              self.k_adi,
-                                                                              self.likes.all().count())
+        return 'Başlık : {0} || Kullanıcı Adı: {1}'.format(self.post.baslik, self.k_adi, )
 
     class Meta:
         verbose_name_plural = 'Yorumlar'

@@ -610,7 +610,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 
 
 [class = "1"], [class = "2"], [class = "3"], [class = "4"], [class = "5"], [class = "6"], [class = "7"], span.sahip {
-    font-size: 12px;
+    font-size: 15px;
 }
 
 
@@ -765,12 +765,12 @@ button:hover {
         margin: auto;
     }
 
-    .as .col-lg-9 {
+    .as .col-lg-9, .as .col-lg-3 {
         padding: 0;
     }
 
     .as .container {
-        padding: 0;
+        padding: 0 15px;
     }
 
     .com-img {
@@ -840,9 +840,9 @@ a:hover {
 
 .sidebar-statistics {
     margin-bottom: 10px;
-    height: 50px;
-    padding: 12px 10px;
+    padding: 10px 7px;
     background-color: #EAEAEB;
+    font-size: 15px;
 }
 
 .sidebar-statistics i {
@@ -855,7 +855,7 @@ a:hover {
     height: 800px;
     background: white;
     padding: 40px 20px;
-    box-shadow: 0 0 15px 5px rgba(0, 0, 0, .1);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
 }
 
 .score-page {
@@ -863,7 +863,7 @@ a:hover {
     padding: 40px 20px;
     margin-top: 60px;
     background-color: white;
-    box-shadow: 0 0 15px 5px rgba(0, 0, 0, .1);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
 }
 
 .row {

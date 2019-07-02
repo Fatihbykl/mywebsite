@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="container as">
         <div class="row">
             <div class="col-lg-9">
                 <div class="score-page">
@@ -16,11 +16,10 @@
                                 {% for i in leaderboard %}
                                     {% for j in i %}
                                         <li>
-                                            <div class="graphic">
-                                                <a href="{% url 'profile-info' j.user.username %}">
-                                                    <img src="/media/{{ j.user.profil.profilFoto }}" alt=""/>
-                                                </a>
-                                            </div>
+                                            <a href="{% url 'profile-info' j.user.username %}">
+                                                <img width="60px" height="60px" style="border-radius: 50%;"
+                                                     src="/media/{{ j.user.profil.profilFoto }}" alt=""/>
+                                            </a>
                                             <div class="name">
                                                 <span class="header">
                                                     <a href="{% url 'profile-info' j.user.username %}">{{ j.user.username }}</a>
@@ -36,11 +35,10 @@
                                 <div class="threedots" style="text-align: center;margin: 20px 0;"></div>
                                 <ul>
                                     <li>
-                                        <div class="graphic">
-                                            <a href="{% url 'profile-info' user_place.user.username %}">
-                                                <img src="/media/{{ user_place.user.profil.profilFoto }}" alt=""/>
-                                            </a>
-                                        </div>
+                                        <a href="{% url 'profile-info' user_place.user.username %}">
+                                            <img width="60px" height="60px" style="border-radius: 50%;"
+                                                 src="/media/{{ user_place.user.profil.profilFoto }}" alt=""/>
+                                        </a>
                                         <div class="name">
                                                 <span class="header">
                                                     <a href="{% url 'profile-info' user_place.user.username %}">{{ user_place.user.username }}</a>
@@ -93,7 +91,7 @@
                     <hr class="sidebar-hr">
                     <div class="row">
                         <div class="col-lg-6">
-                            <div class="1">Yenİ Üye <i class="fas fa-long-arrow-alt-right"></i>
+                            <div class="1">Yeni Üye <i class="fas fa-long-arrow-alt-right"></i>
                                 0 - 20 Puan
                             </div>
                         </div>
@@ -106,12 +104,12 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
-                            <div class="3">Fİlmsever <i class="fas fa-long-arrow-alt-right"></i>
+                            <div class="3">Filmsever <i class="fas fa-long-arrow-alt-right"></i>
                                 70 - 200 Puan
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <div class="4">Fİlm Uzmanı <i class="fas fa-long-arrow-alt-right"></i>
+                            <div class="4">Film Uzmanı <i class="fas fa-long-arrow-alt-right"></i>
                                 200 - 500 Puan
                             </div>
                         </div>
@@ -124,7 +122,7 @@
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <div class="7">usta <i class="fas fa-long-arrow-alt-right"></i>
+                            <div class="7">Usta <i class="fas fa-long-arrow-alt-right"></i>
                                 1000+ Puan
                             </div>
                         </div>
@@ -163,14 +161,15 @@
                         <div class="col-lg-6">
                             <div class="sidebar-statistics">İlk Kez Profil Düzenleme <i
                                     class="fas fa-long-arrow-alt-right"></i>
-                                10 Puan
+                                20 Puan
                             </div>
                         </div>
+                        <!--
                         <div class="col-lg-6">
                             <div class="sidebar-statistics">Email Onayla <i class="fas fa-long-arrow-alt-right"></i>
                                 10 Puan
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>

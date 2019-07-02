@@ -7,7 +7,7 @@
     <meta name="description" content="{{ post.icerik }}"/>
     <script type="text/javascript">
         function copy_current_url() {
-            var valText = "{{ request.META.HTTP_HOST }}{{ request.get_full_path }}";
+            var valText = "{{ request.build_absolute_uri }}";
             const el = document.createElement('textarea');
             el.value = valText;
             el.setAttribute('readonly', '');
@@ -19,13 +19,17 @@
             document.body.removeChild(el);
             alert("Link kopyalandı.");
         }
+
+        $(document).click(function () {
+            $('#search-div').hide(700)
+        });
     </script>
 {% endblock %}
 
 {% block body %}
     <div class="as">
         <div class="container">
-            <div class="row" >
+            <div class="row">
                 <div class="col-lg-12" style="word-break: break-word">
                     {% include 'messages.html' %}
                 </div>
@@ -47,8 +51,8 @@
                                     <div class="col-lg-12" style="padding-top: 10px">
                                         <img style="border-radius: 50%;width: 30px"
                                              src="/media/{{ post.yayinlayan.profil.profilFoto }}">
-                                        <span
-                                                class="post-info-span">{{ post.yayinlayan.username }}</span>
+                                        <a href="{% url 'profile-info' post.yayinlayan.username %}"><span
+                                                class="post-info-span">{{ post.yayinlayan.username }}</span></a>
                                         <i class="far fa-clock post-info-icon"></i><span
                                             class="post-info-span">{{ post.tarih }}</span>
                                         <i class="fas fa-eye post-info-icon"></i><span
@@ -70,9 +74,9 @@
                         <div class="comment-item pl-4 pt-2 pb-2 pr-4">
                             <div class="no-comment zero-comment">
                                 <span class="font-weight-bold pr-2"></span>
-                                {% post_to_facebook 'LİNK' %}
-                                {% post_to_twitter 'LİNK' %}
-                                {% send_email 'Aradığım filmi bulmama yardımcı olabilir misin?' 'LİNK' %}
+                                {% post_to_facebook request.build_absolute_uri %}
+                                {% post_to_twitter request.build_absolute_uri %}
+                                {% send_email 'Aradığım filmi bulmama yardımcı olabilir misin?' request.build_absolute_uri %}
                                 <i onclick="copy_current_url()" class="fas fa-link"></i>
                                 {% if request.user != post.yayinlayan and request.user.is_authenticated %}
                                     <button data-toggle="modal" data-target="#report-post-2"
@@ -84,11 +88,13 @@
                                 {% if request.user.is_authenticated and request.user != post.yayinlayan %}
                                     <a id="follow-{{ post.slug }}" class="float-right" data-toggle="tooltip"
                                        title="Takip Et">
-                                        {% if post.follow %}
-                                            <i id="follow-i-{{ post.slug }}" style="color: #FFCB1C;transition: color 1s;"
+                                        {% if is_followed %}
+                                            <i id="follow-i-{{ post.slug }}"
+                                               style="color: #FFCB1C;transition: color 1s;"
                                                class="fas fa-star"></i>
                                         {% else %}
-                                            <i id="follow-i-{{ post.slug }}" style="color: #bfbfbf;transition: color 1s;"
+                                            <i id="follow-i-{{ post.slug }}"
+                                               style="color: #bfbfbf;transition: color 1s;"
                                                class="fas fa-star"></i>
                                         {% endif %}
                                     </a>
@@ -170,7 +176,7 @@
                                                location.href ='{% url 'login' %}'{% endif %}">
                                 </form>
                                 <script>
-                                    var is_followed = {{ post.is_followed|lower }};
+                                    var is_followed = {{ is_followed|lower }};
                                     $(document).ready(function () {
                                         $('#follow-{{ post.slug }}').click(function () {
                                             $.ajax({
@@ -271,7 +277,8 @@
                                             <a class="a-post-detail"
                                                href="{% url 'profile-info' choosen_comment.sahip.username %}"><span
                                                     class="font-com-user"> {{ choosen_comment.sahip.username }}</span></a>
-                                            <span class="{{ choosen_comment.sahip.role_user.role }}">{{ choosen_comment.sahip.role_user.get_role_display }}</span>
+                                            <span style="padding: 4px 7px;"
+                                                  class="{{ choosen_comment.sahip.role_user.role }}">{{ choosen_comment.sahip.role_user.get_role_display }}</span>
                                         </div>
                                     </div>
                                     <div class="bottom-comment">
@@ -281,19 +288,15 @@
                                             <a {% if request.user.is_authenticated %}id="comment-like-{{ choosen_comment.id }}"
                                                onclick="choosen_like();choosen_heart();"
                                                {% else %}
-                                               href="{% url 'login' %}"
+                                               href="{% url 'login' %}" style="color: grey;"
                                                {% endif %}
                                                data-toggle="tooltip" title="Beğen"
                                                class="a">
-                                                {% if not choosen_comment.is_liked %}
-                                                    <i id="comm-like-icon-{{ choosen_comment.id }}"
-                                                       style="transition-duration: .5s"
-                                                       class="fas fa-heart"></i>
-                                                {% else %}
-                                                    <i id="comm-like-icon-{{ choosen_comment.id }}"
-                                                       style="transition-duration: .5s;color: red;font-size: 24px;"
-                                                       class="fas fa-heart"></i>
-                                                {% endif %}
+
+                                                <i id="comm-like-icon-{{ choosen_comment.id }}"
+                                                   style="transition-duration: .5s"
+                                                   class="fas fa-heart"></i>
+
                                                 <span id="like-number-{{ choosen_comment.id }}"
                                                       style="color: #BDBDBD">{{ choosen_comment.likes.all.count }}</span>
                                             </a>
@@ -322,7 +325,8 @@
                                     {% if not choosen_comment.movie_tag == 'none' %}
                                         <div id="comment-mov-div" class="choosen-movies" style="display: block;">
                                     <span id="comment-mov-hyperlink" class="movie-hyperlink">
-                                        <a href="{% url 'movie' choosen_comment.movie_tag_href choosen_comment.movie_tag %}">
+                                        <a target="_blank"
+                                           href="{% url 'movie' choosen_comment.movie_tag_href choosen_comment.movie_tag %}">
                                             <i style="margin-right: 5px; vertical-align: sub; font-size: 20px;"
                                                class="fas fa-film"></i>
                                             {{ choosen_comment.movie_tag }}
@@ -344,7 +348,8 @@
                                                 <a class="a-post-detail"
                                                    href="{% url 'profile-info' comment.sahip.username %}"><span
                                                         class="font-com-user">{{ comment.sahip.username }}</span></a>
-                                                <span class="{{ comment.sahip.role_user.role }}">
+                                                <span style="padding: 4px 7px;"
+                                                      class="{{ comment.sahip.role_user.role }}">
                                             {{ comment.sahip.role_user.get_role_display }}
                                         </span>
                                             </div>
@@ -355,18 +360,14 @@
                                                 <span style="font-size: 25px;vertical-align: sub;color: #BDBDBD;">&bull;</span>
                                                 <a {% if request.user.is_authenticated %}id="comment-like-{{ comment.id }}"
                                                    {% else %}
-                                                   href="{% url 'login' %}"
+                                                   href="{% url 'login' %}" style="color: grey"
                                                    {% endif %} data-toggle="tooltip" title="Beğen"
                                                    class="a">
-                                                    {% if not comment.is_liked %}
-                                                        <i id="comm-like-icon-{{ comment.id }}"
-                                                           style="transition-duration: .5s"
-                                                           class="fas fa-heart"></i>
-                                                    {% else %}
-                                                        <i id="comm-like-icon-{{ comment.id }}"
-                                                           style="transition-duration: .5s;color: red;font-size: 24px;"
-                                                           class="fas fa-heart"></i>
-                                                    {% endif %}
+
+                                                    <i id="comm-like-icon-{{ comment.id }}"
+                                                       style="transition-duration: .5s"
+                                                       class="fas fa-heart"></i>
+
                                                     <span id="like-number-{{ comment.id }}"
                                                           style="color: #BDBDBD">{{ comment.likes.all.count }}</span>
                                                 </a>
@@ -380,18 +381,21 @@
                                                         <img alt="report" src="/media/Icons8/icons8-error-48.png">
                                                     </button>
                                                 </a>
+                                                {% if request.user.username == post.yayinlayan.username or request.user.role_user.role == 6 %}
+                                                    {% if comment.sahip.username != request.user.username %}
+                                                        <button style="background-color: white;padding: 0;border: none;"
+                                                                type="button"
+                                                                data-toggle="modal"
+                                                                data-target="#movieFound">
+                                                            <img alt="" src="/media/Icons8/check.svg">
+                                                        </button>
+                                                    {% endif %}
+                                                {% endif %}
                                                 {% if request.user.username == comment.sahip.username or request.user.role_user.role == 6 %}
-                                                    <span style="font-size: 25px;vertical-align: sub;color: #BDBDBD;">&bull;</span>
                                                     <button style="background-color: white;border: none;padding: 0"
                                                             data-toggle="modal"
                                                             data-target="#commentDelete">
-                                                        <img src="/media/Icons8/bin.png">
-                                                    </button>
-                                                    <button style="background-color: white;padding: 0;border: none;"
-                                                            type="button"
-                                                            data-toggle="modal"
-                                                            data-target="#movieFound">
-                                                        <img alt="" src="/media/Icons8/check.svg">
+                                                        <img alt="" src="/media/Icons8/bin.png">
                                                     </button>
                                                 {% endif %}
                                             </div>
@@ -414,11 +418,31 @@
                                 </div>
                                 <script>
                                     $(document).ready(function () {
+                                        var clicked;
+
+                                        $.ajax({
+                                            url: "{% url 'check-like' post.slug comment.id %}",
+                                            success: function (data) {
+                                                if (data === 'true') {
+                                                    clicked = data;
+                                                    $('#comm-like-icon-{{ comment.id }}').css({
+                                                        'color': 'red',
+                                                        fontSize: '24px'
+                                                    }, 400);
+                                                } else {
+                                                    clicked = 'false';
+                                                }
+                                            }
+                                        });
+
+
                                         $('#comment-like-{{ comment.id }}').click(function () {
                                             $.ajax({
                                                 url: "{% url 'like' post.slug comment.id %}",
+                                                dataType: 'json',
                                                 success: function (data) {
-                                                    $('#like-number-{{ comment.id }}').text(data);
+                                                    $('#like-number-{{ comment.id }}').text(data['like_count']);
+                                                    clicked = data['is_liked'];
                                                 }
                                             });
                                         });
@@ -431,9 +455,9 @@
                                                 }
                                             });
                                         });
-                                        var clicked = {{ comment.is_liked|lower }};
+
                                         $('#comment-like-{{ comment.id }}').click(function () {
-                                            if (!clicked) {
+                                            if (clicked === 'false') {
                                                 $('#comm-like-icon-{{ comment.id }}').css({
                                                     'color': 'red',
                                                     fontSize: '24px'
@@ -621,11 +645,6 @@
             e.preventDefault();
         }
 
-        $(document).click(function () {
-            $('#search-div').hide(700)
-        });
-
-
         function comment_hyperlink() {
             var span_hyper = $('#comment-mov-hyperlink');
             var div_hyper = $('#comment-mov-div');
@@ -638,28 +657,40 @@
             }
         }
         {% if post.found %}
+            var clicked;
+            $(document).ready(function () {
+                $.ajax({
+                    url: "{% url 'check-like-choosen' choosen_comment.id %}",
+                    success: function (data) {
+                        if (data === 'true'){
+                            clicked = data;
+                            $('#comm-like-icon-{{ choosen_comment.id }}').css({'color': 'red', fontSize: '24px'}, 400);
+                        }else {
+                            clicked = 'false';
+                        }
+                    }
+                })
+            });
+
             function choosen_like() {
                 $.ajax({
                     url: "{% url 'like' post.slug choosen_comment.id %}",
                     success: function (data) {
-                        $('#like-number-{{ choosen_comment.id }}').text(data);
+                        $('#like-number-{{ choosen_comment.id }}').text(data['like_count']);
                     }
                 });
             }
-        {% endif %}
 
-        var clicked = {{ choosen_comment.is_liked|lower }};
+            function choosen_heart() {
 
-        function choosen_heart() {
-
-            if (!clicked) {
-                $('#comm-like-icon-{{ choosen_comment.id }}').css({'color': 'red', fontSize: '24px'}, 400);
-                clicked = true;
-            } else {
-                $('#comm-like-icon-{{ choosen_comment.id }}').css({'color': '#BDC3D4', fontSize: '15px'});
-                clicked = false;
+                if (clicked === 'false') {
+                    $('#comm-like-icon-{{ choosen_comment.id }}').css({'color': 'red', fontSize: '24px'}, 400);
+                    clicked = 'true';
+                } else {
+                    $('#comm-like-icon-{{ choosen_comment.id }}').css({'color': '#BDC3D4', fontSize: '15px'});
+                    clicked = 'false';
+                }
             }
-        }
-
+        {% endif %}
     </script>
 {% endblock %}

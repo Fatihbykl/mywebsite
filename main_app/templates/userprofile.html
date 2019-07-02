@@ -25,8 +25,9 @@
                                  class="img-circle img-thumbnail" alt="profile-image">
                             {% if request.user.username == profil.username %}
                                 <div class="profile-change-img">
-                                    <button id="photo-open-div" class="profile-change-img-button"><i
-                                            class="fas fa-image" style="font-size: 20px;"></i></button>
+                                    <i class="fas fa-image" style="font-size: 20px;color: #3498DB;"><span style="font-size: 18px;margin-left: 5px">Resim Yükle</span></i>
+
+                                    {{ photoForm.profilFoto }}
                                 </div>
                             {% endif %}
                         </div>
@@ -37,37 +38,7 @@
                         <div class="{{ profil.role_user.role }}">{{ profil.role_user.get_role_display }}
                         </div>
                         <hr>
-                        {% if request.user.is_authenticated %}
-                            {% if request.user.username == profil.username %}
-                                <div id="photo">
-                                    <form method="post" action="{% url 'choose-photo' request.user.username %}"
-                                          enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        <select id="choose-photo" name="select" onchange="try_photo()">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                        </select>
-                                        <input class="btn btn-sm btn-info" style="margin-top: 15px;" type="submit"
-                                               value="Seç">
-                                    </form>
-                                    <hr style="width: 50%">
-                                    <form method="post" action="{% url 'change-photo' request.user.username %}"
-                                          enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        {{ photoForm.profilFoto }}
-                                        <input class="btn btn-sm btn-info"
-                                               style="margin-top: 15px;margin-left: auto;margin-right:auto;"
-                                               type="submit" value="Yükle">
-                                    </form>
-                                <hr>
-                                </div>
-                            {% endif %}
-                        {% endif %}
+
                         <div class="text-left" style="padding: 0 7px;">
                             <p class="text-muted font-13"><strong>Puan :</strong> <span
                                     class="m-l-15">{{ profil.role_user.puan }}</span></p>

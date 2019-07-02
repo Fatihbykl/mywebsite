@@ -7,6 +7,7 @@ from user.models import Roles
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.urls import resolve
 import omdb
 import config
 from googletrans import Translator
@@ -98,16 +99,19 @@ def post_detail(request, slug):
     if not request.user.is_authenticated:
         return render(request, 'post-detail.html',
                       context={'post': post, 'yorumForm': yorum, 'follow_count': follow_count,
-                               'old_posts': eski_gonderi,
+                               'old_posts': eski_gonderi, 'choosen_comment': choosen_comment,
                                'last_comments': last_comments, 'statistics': statistics, 'leaderboard_5': leaderboard})
 
+    is_followed = False
+    if post.followers.filter(username=request.user.username).exists():
+        is_followed = True
     user_role = get_object_or_404(Roles, user=request.user).role
     notifications = Notifications.objects.filter(user=request.user, is_read=False).count()
     comment_count = Comments.objects.filter(post=post).count()
     return render(request, 'post-detail.html',
                   context={'post': post, 'yorumForm': yorum, 'msg': notifications, 'follow_count': follow_count,
                            'role': user_role, 'reportForm': report_form, 'choosen_comment': choosen_comment,
-                           'old_posts': eski_gonderi, 'comment_count': comment_count,
+                           'old_posts': eski_gonderi, 'comment_count': comment_count, 'is_followed': is_followed,
                            'last_comments': last_comments, 'statistics': statistics, 'leaderboard_5': leaderboard})
 
 
@@ -189,19 +193,38 @@ def like(request, slug, id):
     user = request.user
     com = get_object_or_404(Comments, id=id)
     if user in com.likes.all():
+        is_liked = 'false'
         com.likes.remove(user)
-        com.is_liked = 0
         com.save()
     else:
         com.likes.add(user)
-        com.is_liked = 1
+        is_liked = 'true'
         com.save()
         if com.sahip != user:
             message = "<b>%s</b> yorumunu beğendi:<br>%s" % (user.username, com.yorum)
             Notifications.objects.create(user=com.sahip, message=message, notification_type='like',
                                          which_post_slug=com.post.slug)
     like_count = com.likes.all().count()
-    return HttpResponse(like_count)
+    data = {}
+    data['is_liked'] = is_liked
+    data['like_count'] = like_count
+    return JsonResponse(data)
+
+
+def check_like(request, slug, id):
+    com = get_object_or_404(Comments, id=id)
+    if request.user in com.likes.all():
+        return HttpResponse('true')
+    else:
+        return HttpResponse('false')
+
+
+def choosen_check_like(request, id):
+    com = get_object_or_404(Comments, id=id)
+    if request.user in com.likes.all():
+        return HttpResponse('true')
+    else:
+        return HttpResponse('false')
 
 
 def report(request, slug, id):
@@ -366,6 +389,8 @@ def movie(request, imdb_id, movie_name):
     year = movie['year']
     released_en = movie['released'].split(' ')
     released_t = t.translate(released_en[1], dest='tr').text.capitalize()
+    if released_en[1] == 'Mar':
+        released_t = 'Mart'
     released = released_en[0] + " " + released_t + " " + released_en[2]
     runtime = movie['runtime'].split(' ')[0]
     genre_en = movie['genre']
